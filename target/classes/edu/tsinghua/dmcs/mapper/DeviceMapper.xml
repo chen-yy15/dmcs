@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.tsinghua.dmcs.mapper.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.Device" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="devimage" property="devimage" jdbcType="VARCHAR" />
+    <result column="devid" property="devid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="parameters" property="parameters" jdbcType="VARCHAR" />
+    <result column="vendor" property="vendor" jdbcType="VARCHAR" />
+    <result column="guranteeFrom" property="guranteeFrom" jdbcType="TIMESTAMP" />
+    <result column="owner" property="owner" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, devimage, devid, name, type, parameters, vendor, guranteeFrom, owner
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from device
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from device
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.Device" >
+    insert into device (id, devimage, devid, 
+      name, type, parameters, 
+      vendor, guranteeFrom, owner
+      )
+    values (#{id,jdbcType=BIGINT}, #{devimage,jdbcType=VARCHAR}, #{devid,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parameters,jdbcType=VARCHAR}, 
+      #{vendor,jdbcType=VARCHAR}, #{guranteeFrom,jdbcType=TIMESTAMP}, #{owner,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.Device" >
+    insert into device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="devimage != null" >
+        devimage,
+      </if>
+      <if test="devid != null" >
+        devid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="parameters != null" >
+        parameters,
+      </if>
+      <if test="vendor != null" >
+        vendor,
+      </if>
+      <if test="guranteeFrom != null" >
+        guranteeFrom,
+      </if>
+      <if test="owner != null" >
+        owner,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="devimage != null" >
+        #{devimage,jdbcType=VARCHAR},
+      </if>
+      <if test="devid != null" >
+        #{devid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="parameters != null" >
+        #{parameters,jdbcType=VARCHAR},
+      </if>
+      <if test="vendor != null" >
+        #{vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="guranteeFrom != null" >
+        #{guranteeFrom,jdbcType=TIMESTAMP},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.Device" >
+    update device
+    <set >
+      <if test="devimage != null" >
+        devimage = #{devimage,jdbcType=VARCHAR},
+      </if>
+      <if test="devid != null" >
+        devid = #{devid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="parameters != null" >
+        parameters = #{parameters,jdbcType=VARCHAR},
+      </if>
+      <if test="vendor != null" >
+        vendor = #{vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="guranteeFrom != null" >
+        guranteeFrom = #{guranteeFrom,jdbcType=TIMESTAMP},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.Device" >
+    update device
+    set devimage = #{devimage,jdbcType=VARCHAR},
+      devid = #{devid,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      parameters = #{parameters,jdbcType=VARCHAR},
+      vendor = #{vendor,jdbcType=VARCHAR},
+      guranteeFrom = #{guranteeFrom,jdbcType=TIMESTAMP},
+      owner = #{owner,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

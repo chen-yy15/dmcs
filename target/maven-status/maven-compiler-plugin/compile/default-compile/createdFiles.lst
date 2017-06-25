@@ -1,0 +1,10 @@
+edu/tsinghua/dmcs/mapper/RoleMapper.class
+edu/tsinghua/dmcs/entity/Device.class
+edu/tsinghua/dmcs/mapper/UserMapper.class
+edu/tsinghua/dmcs/entity/User.class
+edu/tsinghua/dmcs/entity/Role.class
+edu/tsinghua/dmcs/mapper/GroupMapper.class
+edu/tsinghua/dmcs/entity/Group.class
+edu/tsinghua/dmcs/Application.class
+edu/tsinghua/dmcs/mapper/DeviceMapper.class
+edu/tsinghua/dmcs/web/UserRestController.class
