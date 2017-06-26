@@ -23,13 +23,6 @@
 			targetProject="/Users/chenning/Documents/workspace/dmcs/src/main/java">
 		</javaClientGenerator>
 
-		<table tableName="user" domainObjectName="User"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
-			<property name="useActualColumnNames" value="true" />
-		</table>
-
 		<table tableName="group" domainObjectName="Group"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
