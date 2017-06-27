@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.UserMapper;
 
@@ -19,13 +20,13 @@ public class UserRestController {
 	private UserMapper userMapper;
 	
 	@RequestMapping("checkExistence")
-	public boolean checkExistence(@RequestParam String username) {
+	public Response checkExistence(@RequestParam String username) {
 		User user = userMapper.selectByUserName(username);
-		return user != null;
+		return Response.returnData(user != null);
 	}
 	
 	@RequestMapping("/register")
-	public User register(@RequestParam String username,
+	public Response register(@RequestParam String username,
 			@RequestParam String realname,
 			@RequestParam String title,
 			@RequestParam String idcard,
@@ -54,26 +55,26 @@ public class UserRestController {
 		u.setRegtime(new Date());
 		userMapper.insert(u);
 		
-		return u;
+		return Response.returnData(u);
 		
 	}
 	
 	@RequestMapping("/login")
-	public boolean login(@RequestParam String username,
+	public Response login(@RequestParam String username,
 			@RequestParam String password) {
 		
 		User u = userMapper.selectByUserName(username);
 		if(u != null) {
 			if(u.getPassword().equals(password))
-				return true;
+				return Response.returnData(true);
 		}
 		
-		return false;
+		return Response.returnData(false);
 		
 	}
 	
 	@RequestMapping("/update")
-	public User update(@RequestParam String username,
+	public Response update(@RequestParam String username,
 			@RequestParam String realname,
 			@RequestParam String title,
 			@RequestParam String idcard,
@@ -101,8 +102,8 @@ public class UserRestController {
 			u.setEmail(email);
 			u.setMobile(mobile);
 		}
-		userMapper.updateByPrimaryKey(u);
-		return u;
+		int num = userMapper.updateByPrimaryKey(u);
+		return Response.returnData(num);
 		
 	}
 }

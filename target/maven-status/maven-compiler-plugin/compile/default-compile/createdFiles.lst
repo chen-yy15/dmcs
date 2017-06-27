@@ -1,6 +1,8 @@
+edu/tsinghua/dmcs/web/DeviceRestController.class
 edu/tsinghua/dmcs/mapper/RoleMapper.class
 edu/tsinghua/dmcs/entity/Device.class
 edu/tsinghua/dmcs/mapper/UserMapper.class
+edu/tsinghua/dmcs/web/GroupRestController.class
 edu/tsinghua/dmcs/entity/User.class
 edu/tsinghua/dmcs/entity/Role.class
 edu/tsinghua/dmcs/mapper/GroupMapper.class
