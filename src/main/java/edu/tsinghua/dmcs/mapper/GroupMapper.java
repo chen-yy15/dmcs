@@ -1,7 +1,9 @@
 package edu.tsinghua.dmcs.mapper;
 
 import edu.tsinghua.dmcs.entity.Group;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface GroupMapper {
     int deleteByPrimaryKey(Long id);
 

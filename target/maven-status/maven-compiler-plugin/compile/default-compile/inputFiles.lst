@@ -1,12 +1,14 @@
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Response.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/GroupRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Application.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/Role.java
-/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/UserRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/DeviceMapper.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/Device.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/UserRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/GroupMapper.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Constants.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/Group.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/DeviceRestController.java
-/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/Device.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/User.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/RoleMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/UserMapper.java

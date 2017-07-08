@@ -18,7 +18,7 @@ public class GroupRestController {
 	@Autowired
 	private GroupMapper groupMapper;
 	
-	@RequestMapping("checkExistence")
+	@RequestMapping("checkGrpExistence")
 	public Response checkExistence(@RequestParam String groupName) {
 		Group group = groupMapper.selectByGroupName(groupName);
 		return Response.returnData(group != null);
@@ -65,8 +65,5 @@ public class GroupRestController {
 		return Response.returnData(g);
 		
 	}
-
-	
-	
 
 }

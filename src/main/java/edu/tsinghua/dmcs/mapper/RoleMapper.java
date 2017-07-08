@@ -2,6 +2,9 @@ package edu.tsinghua.dmcs.mapper;
 
 import edu.tsinghua.dmcs.entity.Role;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface RoleMapper {
     int deleteByPrimaryKey(Long id);
 
