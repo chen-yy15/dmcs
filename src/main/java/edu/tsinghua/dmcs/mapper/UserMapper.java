@@ -12,7 +12,7 @@ public interface UserMapper {
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(Integer id);
+    User selectByPrimaryKey(Long id);
     
     User selectByUserName(String userName);
 

@@ -8,15 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.tsinghua.dmcs.Constants;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Device;
+import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.DeviceMapper;
+import edu.tsinghua.dmcs.mapper.UserMapper;
 
 @RestController
 public class DeviceRestController {
 
 	@Autowired
 	DeviceMapper deviceMapper;
+	
+	@Autowired
+	UserMapper userMapper;
 	
 	@RequestMapping("/addDevice")
 	public Response addDevice(@RequestParam Long id,
@@ -81,6 +87,27 @@ public class DeviceRestController {
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
 		List<Device> devices = deviceMapper.queryDeviceByGroupId(groupId);
 		return Response.returnData(devices);
+	}
+	
+	@RequestMapping("/assignOwnerForDevice")
+	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
+		
+		User user = userMapper.selectByPrimaryKey(userId);
+		Device d = deviceMapper.selectByPrimaryKey(deviceId);
+		if(user == null) {
+			return Response.NEW().setErrcode(Constants.RC_FAIL_USER_NO_EXIST_CODE).setMsg(Constants.RC_FAIL_USER_NO_EXIST_MSG);
+		}
+		if(d == null) {
+			return Response.NEW().setErrcode(Constants.RC_FAIL_DEVICE_NO_EXIST_CODE).setMsg(Constants.RC_FAIL_DEVICE_NO_EXIST_MSG);
+		}
+		
+		// 是否已绑定用户，已绑定抛错
+		d.setOwner(userId);
+		int count = deviceMapper.updateByPrimaryKey(d);
+		if(count == 0) {
+			return Response.NEW().setErrcode(Constants.RC_FAIL_DEVICE_UPDATE_CODE).setMsg(Constants.RC_FAIL_DEVICE_UPDATE_MSG);
+		}
+		return Response.SUCCESS();
 	}
 	
 }
