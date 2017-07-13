@@ -10,19 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Group;
 import edu.tsinghua.dmcs.mapper.GroupMapper;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping(value="/group")
 public class GroupRestController {
 
 	
 	@Autowired
 	private GroupMapper groupMapper;
 	
+    @ApiOperation(value="查询指定群组是否存在", notes="")
 	@RequestMapping("checkGrpExistence")
 	public Response checkExistence(@RequestParam String groupName) {
 		Group group = groupMapper.selectByGroupName(groupName);
 		return Response.returnData(group != null);
 	}
+    
+    @ApiOperation(value="添加群组", notes="")
 	@RequestMapping("/addGroup")
 	public Response addGroup(
 			@RequestParam Long id,
@@ -44,7 +49,7 @@ public class GroupRestController {
 	}
 	
 
-	
+    @ApiOperation(value="更新群组信息", notes="")
 	@RequestMapping("/updateGroup")
 	public Response update(
 			@RequestParam Long id,

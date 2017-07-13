@@ -10,21 +10,25 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.UserMapper;
+import io.swagger.annotations.ApiOperation;
 
 
 
 @RestController
+@RequestMapping(value="/user")
 public class UserRestController {
 	
 	@Autowired
 	private UserMapper userMapper;
 	
-	@RequestMapping("checkExistence")
+    @ApiOperation(value="查询用户名是否存在", notes="")
+	@RequestMapping("checkUserExistence")
 	public Response checkExistence(@RequestParam String username) {
 		User user = userMapper.selectByUserName(username);
 		return Response.returnData(user != null);
 	}
 	
+    @ApiOperation(value="注册新用户", notes="")
 	@RequestMapping("/register")
 	public Response register(@RequestParam String username,
 			@RequestParam String realname,
@@ -59,6 +63,7 @@ public class UserRestController {
 		
 	}
 	
+    @ApiOperation(value="用户登陆", notes="")
 	@RequestMapping("/login")
 	public Response login(@RequestParam String username,
 			@RequestParam String password) {
@@ -73,6 +78,7 @@ public class UserRestController {
 		
 	}
 	
+    @ApiOperation(value="更新用户信息", notes="")
 	@RequestMapping("/update")
 	public Response update(@RequestParam String username,
 			@RequestParam String realname,

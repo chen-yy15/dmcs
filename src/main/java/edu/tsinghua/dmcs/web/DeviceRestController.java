@@ -14,8 +14,10 @@ import edu.tsinghua.dmcs.entity.Device;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.DeviceMapper;
 import edu.tsinghua.dmcs.mapper.UserMapper;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
+@RequestMapping(value="/device")
 public class DeviceRestController {
 
 	@Autowired
@@ -24,6 +26,7 @@ public class DeviceRestController {
 	@Autowired
 	UserMapper userMapper;
 	
+    @ApiOperation(value="绑定设备", notes="")
 	@RequestMapping("/addDevice")
 	public Response addDevice(@RequestParam Long id,
 			@RequestParam String devimage,
@@ -49,6 +52,7 @@ public class DeviceRestController {
 		return Response.returnData(num);
 	}
 	
+    @ApiOperation(value="更新设备信息", notes="")
 	@RequestMapping("/updateDevice")
 	public Response updateDevice(@RequestParam Long id,
 			@RequestParam String devimage,
@@ -75,6 +79,7 @@ public class DeviceRestController {
 		return Response.returnData(num);
 	}
 	
+    @ApiOperation(value="删除设备", notes="")
 	@RequestMapping("/deleteDevice")
 	public Response deleteDevice(@RequestParam Long id) {
 		
@@ -82,13 +87,15 @@ public class DeviceRestController {
 		
 		return Response.returnData(num);
 	}
-	
+    
+    @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping("/queryDeviceByGroupId")
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
 		List<Device> devices = deviceMapper.queryDeviceByGroupId(groupId);
 		return Response.returnData(devices);
 	}
 	
+    @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping("/assignOwnerForDevice")
 	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
 		

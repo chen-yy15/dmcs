@@ -1,4 +1,5 @@
 edu/tsinghua/dmcs/web/DeviceRestController.class
+edu/tsinghua/dmcs/Swagger2.class
 edu/tsinghua/dmcs/mapper/RoleMapper.class
 edu/tsinghua/dmcs/entity/Device.class
 edu/tsinghua/dmcs/mapper/UserMapper.class
