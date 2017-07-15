@@ -8,7 +8,7 @@ public class Response {
 	
 	private String msg;
 	
-	private String data;
+	private Object data;
 	
 	
 	public int getErrcode() {
@@ -41,15 +41,16 @@ public class Response {
 
 
 
-	public String getData() {
+	public Object getData() {
 		return data;
 	}
 
 
 
 
-	public void setData(String data) {
+	public Response setData(Object data) {
 		this.data = data;
+		return this;
 	}
 
 
@@ -68,16 +69,16 @@ public class Response {
 	
 	public static Response returnData(Object object) {
 		Response r = SUCCESS();
-		r.setData(JSONObject.toJSONString(object));
+		r.setData(object);
 		return r;
 	}
 	
-	public static Response returnFail(int rc, String errmsg, Object object) {
+	public Response returnFail(int rc, String errmsg, Object object) {
 		Response r = new Response();
 		r.setErrcode(rc);
 		r.setMsg(errmsg);
 		if(object != null) {
-			r.setData(JSONObject.toJSONString(object));
+			r.setData(object);
 		}
 		return r;
 	}

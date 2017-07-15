@@ -2,6 +2,8 @@ package edu.tsinghua.dmcs.web;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.UserMapper;
+import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 
@@ -18,13 +21,16 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value="/user")
 public class UserRestController {
 	
-	@Autowired
-	private UserMapper userMapper;
+	Logger logger = LoggerFactory.getLogger(UserRestController.class);
 	
-    @ApiOperation(value="查询用户名是否存在", notes="")
+	@Autowired
+	private UserService userService;
+	
+    @ApiOperation(value="查询用户名是否存在", notes="data中true or false代表用户是否已存在")
 	@RequestMapping("checkUserExistence")
 	public Response checkExistence(@RequestParam String username) {
-		User user = userMapper.selectByUserName(username);
+    	logger.trace("checkExistence");
+		User user = userService.checkExistence(username);
 		return Response.returnData(user != null);
 	}
 	
@@ -57,18 +63,17 @@ public class UserRestController {
 		u.setEmail(email);
 		u.setMobile(mobile);
 		u.setRegtime(new Date());
-		userMapper.insert(u);
-		
-		return Response.returnData(u);
+		int num = userService.addUser(u);
+		return Response.returnData(num);
 		
 	}
 	
-    @ApiOperation(value="用户登陆", notes="")
+    @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping("/login")
 	public Response login(@RequestParam String username,
 			@RequestParam String password) {
 		
-		User u = userMapper.selectByUserName(username);
+    	User u = userService.checkExistence(username);
 		if(u != null) {
 			if(u.getPassword().equals(password))
 				return Response.returnData(true);
@@ -78,7 +83,7 @@ public class UserRestController {
 		
 	}
 	
-    @ApiOperation(value="更新用户信息", notes="")
+    @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
 	@RequestMapping("/update")
 	public Response update(@RequestParam String username,
 			@RequestParam String realname,
@@ -91,10 +96,8 @@ public class UserRestController {
 			@RequestParam String icon,
 			@RequestParam String email,
 			@RequestParam String mobile) {
-		
-		User u = new User();
-		
-		u = userMapper.selectByUserName(username);
+    	int num = 0;
+		User u = userService.checkExistence(username);
 		if(u != null) {
 			u.setRealname(realname);
 			u.setTitle(title);
@@ -107,8 +110,9 @@ public class UserRestController {
 			u.setIcon(icon);
 			u.setEmail(email);
 			u.setMobile(mobile);
+		} else {
+			 num = userService.update(u);
 		}
-		int num = userMapper.updateByPrimaryKey(u);
 		return Response.returnData(num);
 		
 	}

@@ -12,8 +12,8 @@ import edu.tsinghua.dmcs.Constants;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Device;
 import edu.tsinghua.dmcs.entity.User;
-import edu.tsinghua.dmcs.mapper.DeviceMapper;
-import edu.tsinghua.dmcs.mapper.UserMapper;
+import edu.tsinghua.dmcs.service.DeviceService;
+import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -21,10 +21,10 @@ import io.swagger.annotations.ApiOperation;
 public class DeviceRestController {
 
 	@Autowired
-	DeviceMapper deviceMapper;
+	DeviceService deviceService;
 	
 	@Autowired
-	UserMapper userMapper;
+	UserService userService;
 	
     @ApiOperation(value="绑定设备", notes="")
 	@RequestMapping("/addDevice")
@@ -47,7 +47,7 @@ public class DeviceRestController {
 		d.setVendor(vendor);
 		d.setGuranteeFrom(guranteeFrom);
 		d.setOwner(owner);
-		int num = deviceMapper.insert(d);
+		int num = deviceService.addDevice(d);
 		
 		return Response.returnData(num);
 	}
@@ -74,16 +74,15 @@ public class DeviceRestController {
 		d.setVendor(vendor);
 		d.setGuranteeFrom(guranteeFrom);
 		d.setOwner(owner);
-		int num = deviceMapper.updateByPrimaryKey(d);
-		
+		int num = deviceService.updateDevice(d);
 		return Response.returnData(num);
 	}
 	
-    @ApiOperation(value="删除设备", notes="")
+    @ApiOperation(value="删除设备", notes="data中删除成功个数")
 	@RequestMapping("/deleteDevice")
 	public Response deleteDevice(@RequestParam Long id) {
 		
-		int num = deviceMapper.deleteByPrimaryKey(id);
+		int num = deviceService.deleteDevice(id);
 		
 		return Response.returnData(num);
 	}
@@ -91,30 +90,30 @@ public class DeviceRestController {
     @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping("/queryDeviceByGroupId")
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
-		List<Device> devices = deviceMapper.queryDeviceByGroupId(groupId);
+		List<Device> devices = deviceService.queryDeviceByGroupId(groupId);
 		return Response.returnData(devices);
 	}
-	
+		
     @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping("/assignOwnerForDevice")
 	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
+    	
+		User user = userService.getUserById(userId);
+		Device device = deviceService.getDeviceById(deviceId);
 		
-		User user = userMapper.selectByPrimaryKey(userId);
-		Device d = deviceMapper.selectByPrimaryKey(deviceId);
 		if(user == null) {
-			return Response.NEW().setErrcode(Constants.RC_FAIL_USER_NO_EXIST_CODE).setMsg(Constants.RC_FAIL_USER_NO_EXIST_MSG);
-		}
-		if(d == null) {
-			return Response.NEW().setErrcode(Constants.RC_FAIL_DEVICE_NO_EXIST_CODE).setMsg(Constants.RC_FAIL_DEVICE_NO_EXIST_MSG);
+			return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
 		}
 		
-		// 是否已绑定用户，已绑定抛错
-		d.setOwner(userId);
-		int count = deviceMapper.updateByPrimaryKey(d);
-		if(count == 0) {
-			return Response.NEW().setErrcode(Constants.RC_FAIL_DEVICE_UPDATE_CODE).setMsg(Constants.RC_FAIL_DEVICE_UPDATE_MSG);
-		}
-		return Response.SUCCESS();
+    	if(device == null) {
+    		return Response.NEW().returnFail(Constants.RC_FAIL_DEVICE_NO_EXIST_CODE, Constants.RC_FAIL_DEVICE_NO_EXIST_MSG, null);
+    	}
+    	
+    	device.setOwner(userId);
+    	
+    	deviceService.updateDevice(device);
+
+		return Response.SUCCESS().setData(device);
 	}
 	
 }
