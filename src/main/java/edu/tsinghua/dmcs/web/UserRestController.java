@@ -30,7 +30,7 @@ public class UserRestController {
 	public Response checkExistence(@RequestParam String username) {
     	logger.trace("checkExistence");
 		User user = userService.checkExistence(username);
-		return Response.returnData(user != null);
+		return Response.SUCCESS().setData(user);
 	}
 	
 	@DmcsController(loginRequired=false)
@@ -64,7 +64,7 @@ public class UserRestController {
 		u.setMobile(mobile);
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
-		return Response.returnData(num);
+		return Response.SUCCESS().setData(u);
 		
 	}
 	
@@ -77,10 +77,10 @@ public class UserRestController {
     	User u = userService.checkExistence(username);
 		if(u != null) {
 			if(u.getPassword().equals(password))
-				return Response.returnData(true);
+				return Response.SUCCESS().setData(u);
 		}
 		
-		return Response.returnData(false);
+		return Response.SUCCESS().setData(null);
 		
 	}
 	
@@ -115,7 +115,7 @@ public class UserRestController {
 		} else {
 			 num = userService.update(u);
 		}
-		return Response.returnData(num);
+		return Response.SUCCESS().returnData(num);
 		
 	}
 	

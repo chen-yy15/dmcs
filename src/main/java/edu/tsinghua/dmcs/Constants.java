@@ -11,6 +11,8 @@ public interface Constants {
 	
 	public static final int RC_FAIL_DEVICE_UPDATE_CODE = 3;
 	
+	public static final int RC_FAIL_GROUP_NO_EXIST_CODE = 4;
+	
 	
 	
 	// public return message
@@ -19,6 +21,8 @@ public interface Constants {
 	public static final String RC_FAIL_USER_NO_EXIST_MSG = "用户不存在";
 	
 	public static final String RC_FAIL_DEVICE_NO_EXIST_MSG = "设备不存在";
+	
+	public static final String RC_FAIL_GROUP_NO_EXIST_MSG = "群组不存在";
 	
 	public static final String RC_FAIL_DEVICE_UPDATE_MSG = "设备更新失败";
 

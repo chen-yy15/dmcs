@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.tsinghua.dmcs.mapper.GroupUserMappingMapper" >
+  <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.GroupUserMapping" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="groupId" property="groupId" jdbcType="BIGINT" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="isAdmin" property="isAdmin" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, groupId, userId, type, isAdmin
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from group_user_mapping
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from group_user_mapping
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.GroupUserMapping" >
+    insert into group_user_mapping (id, groupId, userId, 
+      type, isAdmin)
+    values (#{id,jdbcType=INTEGER}, #{groupId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{type,jdbcType=INTEGER}, #{isAdmin,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.GroupUserMapping" >
+    insert into group_user_mapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="groupId != null" >
+        groupId,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="isAdmin != null" >
+        isAdmin,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.GroupUserMapping" >
+    update group_user_mapping
+    <set >
+      <if test="groupId != null" >
+        groupId = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="isAdmin != null" >
+        isAdmin = #{isAdmin,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.GroupUserMapping" >
+    update group_user_mapping
+    set groupId = #{groupId,jdbcType=BIGINT},
+      userId = #{userId,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      isAdmin = #{isAdmin,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

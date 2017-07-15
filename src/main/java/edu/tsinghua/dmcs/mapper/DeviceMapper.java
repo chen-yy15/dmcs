@@ -21,4 +21,6 @@ public interface DeviceMapper {
     int updateByPrimaryKey(Device record);
     
     List<Device> queryDeviceByGroupId(Long groupId);
+    
+    List<Device> queryUnbindDevices(Integer page, Integer size);
 }

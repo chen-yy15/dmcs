@@ -22,6 +22,6 @@ public interface DeviceService {
 	
 	public Device getDeviceById(Long id);
 
-
+	public List<Device> queryUnbindDevices(Integer page, Integer size);
 
 }

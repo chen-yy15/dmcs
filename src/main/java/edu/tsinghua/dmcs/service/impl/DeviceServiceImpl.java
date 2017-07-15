@@ -80,6 +80,11 @@ public class DeviceServiceImpl implements DeviceService {
 	public Device getDeviceById(Long id) {
 		return deviceMapper.selectByPrimaryKey(id);
 	}
+
+	public List<Device> queryUnbindDevices(Integer page, Integer size) {
+		List<Device> devices = deviceMapper.queryUnbindDevices(page, size);
+		return devices;
+	}
 	
 
 

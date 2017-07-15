@@ -67,7 +67,7 @@ public class Response {
 		return r;
 	}
 	
-	public static Response returnData(Object object) {
+	public Response returnData(Object object) {
 		Response r = SUCCESS();
 		r.setData(object);
 		return r;

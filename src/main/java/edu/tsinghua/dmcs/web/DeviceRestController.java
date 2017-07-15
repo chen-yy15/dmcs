@@ -12,6 +12,7 @@ import edu.tsinghua.dmcs.Constants;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Device;
 import edu.tsinghua.dmcs.entity.User;
+import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.DeviceService;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +27,7 @@ public class DeviceRestController {
 	@Autowired
 	UserService userService;
 	
-    @ApiOperation(value="绑定设备", notes="")
+    @ApiOperation(value="添加新设备", notes="")
 	@RequestMapping("/addDevice")
 	public Response addDevice(@RequestParam Long id,
 			@RequestParam String devimage,
@@ -49,11 +50,12 @@ public class DeviceRestController {
 		d.setOwner(owner);
 		int num = deviceService.addDevice(d);
 		
-		return Response.returnData(num);
+		return Response.SUCCESS().setData(d);
 	}
 	
     @ApiOperation(value="更新设备信息", notes="")
 	@RequestMapping("/updateDevice")
+    @DmcsController(description="更新设备信息")
 	public Response updateDevice(@RequestParam Long id,
 			@RequestParam String devimage,
 			@RequestParam String devid,
@@ -75,27 +77,30 @@ public class DeviceRestController {
 		d.setGuranteeFrom(guranteeFrom);
 		d.setOwner(owner);
 		int num = deviceService.updateDevice(d);
-		return Response.returnData(num);
+		return Response.SUCCESS().setData(num);
 	}
 	
     @ApiOperation(value="删除设备", notes="data中删除成功个数")
 	@RequestMapping("/deleteDevice")
+    @DmcsController(roleAllowed="administrator", description="删除设备")
 	public Response deleteDevice(@RequestParam Long id) {
 		
 		int num = deviceService.deleteDevice(id);
 		
-		return Response.returnData(num);
+		return Response.SUCCESS().setData(num);
 	}
     
     @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping("/queryDeviceByGroupId")
+    @DmcsController(loginRequired=true)
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
 		List<Device> devices = deviceService.queryDeviceByGroupId(groupId);
-		return Response.returnData(devices);
+		return Response.SUCCESS().setData(devices);
 	}
 		
     @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping("/assignOwnerForDevice")
+    @DmcsController(roleAllowed="administrator", description="绑定设备到用户")
 	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
     	
 		User user = userService.getUserById(userId);
@@ -115,5 +120,17 @@ public class DeviceRestController {
 
 		return Response.SUCCESS().setData(device);
 	}
+    
+    @ApiOperation(value="获得未绑定设备列表", notes="")
+	@RequestMapping("/listUnbindDevices")
+    @DmcsController(roleAllowed="administrator")
+	public Response listUnbindDevices(int page, int size) {
+    	
+    	List<Device> devices = deviceService.queryUnbindDevices(page, size);
+    	
+    	return Response.SUCCESS().setData(devices);
+    	
+    }
+    
 	
 }
