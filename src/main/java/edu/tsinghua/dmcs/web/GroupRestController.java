@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Group;
-import edu.tsinghua.dmcs.mapper.GroupMapper;
 import edu.tsinghua.dmcs.service.GroupService;
 import io.swagger.annotations.ApiOperation;
 

@@ -23,8 +23,7 @@ public class Swagger2 {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("DMCS中使用Swagger2构建RESTful APIs")
-				.description("dmcs valley")
-				.termsOfServiceUrl("http://blog.didispace.com/").contact("程序猿DD").version("1.0").build();
+				.description("dmcs valley").contact("chenning").version("1.0").build();
 	}
 
 }

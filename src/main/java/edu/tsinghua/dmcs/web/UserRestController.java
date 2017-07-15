@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.User;
-import edu.tsinghua.dmcs.mapper.UserMapper;
+import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
-
-
 
 @RestController
 @RequestMapping(value="/user")
@@ -26,6 +24,7 @@ public class UserRestController {
 	@Autowired
 	private UserService userService;
 	
+	@DmcsController(loginRequired=false)
     @ApiOperation(value="查询用户名是否存在", notes="data中true or false代表用户是否已存在")
 	@RequestMapping("checkUserExistence")
 	public Response checkExistence(@RequestParam String username) {
@@ -34,6 +33,7 @@ public class UserRestController {
 		return Response.returnData(user != null);
 	}
 	
+	@DmcsController(loginRequired=false)
     @ApiOperation(value="注册新用户", notes="")
 	@RequestMapping("/register")
 	public Response register(@RequestParam String username,
@@ -68,6 +68,7 @@ public class UserRestController {
 		
 	}
 	
+	@DmcsController(loginRequired=false)
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping("/login")
 	public Response login(@RequestParam String username,
@@ -83,6 +84,7 @@ public class UserRestController {
 		
 	}
 	
+	@DmcsController(description="更新用户信息")
     @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
 	@RequestMapping("/update")
 	public Response update(@RequestParam String username,
@@ -116,4 +118,12 @@ public class UserRestController {
 		return Response.returnData(num);
 		
 	}
+	
+	@DmcsController(description="测试")
+    @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
+	@RequestMapping("/test")
+	public String test() {
+		return "test";
+	}
+	
 }
