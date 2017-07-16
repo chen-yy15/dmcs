@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.tsinghua.dmcs.mapper.UserDeviceParameterPositionMapper" >
+  <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.UserDeviceParameterPosition" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="deviceId" property="deviceId" jdbcType="BIGINT" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="position" property="position" jdbcType="INTEGER" />
+    <result column="component" property="component" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="paramId" property="paramId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, deviceId, userId, position, component, type, paramId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_device_dashboard
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_device_dashboard
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.UserDeviceParameterPosition" >
+    insert into user_device_dashboard (id, deviceId, userId, 
+      position, component, type, 
+      paramId)
+    values (#{id,jdbcType=BIGINT}, #{deviceId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{position,jdbcType=INTEGER}, #{component,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{paramId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.UserDeviceParameterPosition" >
+    insert into user_device_dashboard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="deviceId != null" >
+        deviceId,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="component != null" >
+        component,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="paramId != null" >
+        paramId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="component != null" >
+        #{component,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="paramId != null" >
+        #{paramId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.UserDeviceParameterPosition" >
+    update user_device_dashboard
+    <set >
+      <if test="deviceId != null" >
+        deviceId = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="component != null" >
+        component = #{component,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="paramId != null" >
+        paramId = #{paramId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.UserDeviceParameterPosition" >
+    update user_device_dashboard
+    set deviceId = #{deviceId,jdbcType=BIGINT},
+      userId = #{userId,jdbcType=BIGINT},
+      position = #{position,jdbcType=INTEGER},
+      component = #{component,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      paramId = #{paramId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

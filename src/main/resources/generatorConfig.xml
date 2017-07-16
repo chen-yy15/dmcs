@@ -32,37 +32,37 @@
 			/> </table> <table tableName="device" domainObjectName="Device" enableCountByExample="false" 
 			enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
 			selectByExampleQueryId="false"> <property name="useActualColumnNames" value="true" 
-			/> </table> 
-		<table tableName="trace" domainObjectName="Trace"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
-			<property name="useActualColumnNames" value="true" />
-		</table>
-		<table tableName="role" domainObjectName="Role"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
-			<property name="useActualColumnNames" value="true" />
-		</table>
-		<table tableName="group_device_mapping" domainObjectName="GroupDeviceMapping"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
-			<property name="useActualColumnNames" value="true" />
-		</table>
-		<table tableName="group_user_mapping" domainObjectName="GroupUserMapping"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
-			<property name="useActualColumnNames" value="true" />
-		</table>
+			/> </table> <table tableName="trace" domainObjectName="Trace" enableCountByExample="false" 
+			enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+			selectByExampleQueryId="false"> <property name="useActualColumnNames" value="true" 
+			/> </table> <table tableName="role" domainObjectName="Role" enableCountByExample="false" 
+			enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+			selectByExampleQueryId="false"> <property name="useActualColumnNames" value="true" 
+			/> </table> <table tableName="group_device_mapping" domainObjectName="GroupDeviceMapping" 
+			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+			enableSelectByExample="false" selectByExampleQueryId="false"> <property name="useActualColumnNames" 
+			value="true" /> </table> <table tableName="group_user_mapping" domainObjectName="GroupUserMapping" 
+			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+			enableSelectByExample="false" selectByExampleQueryId="false"> <property name="useActualColumnNames" 
+			value="true" /> </table> -->
 		<table tableName="user_role_mapping" domainObjectName="UserRoleMapping"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table>
-		-->
+		<table tableName="user_device_dashboard" domainObjectName="UserDeviceParameterPosition"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="device_parameter" domainObjectName="DeviceParameter"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+
 	</context>
 </generatorConfiguration>
