@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,14 +31,14 @@ public class GroupRestController {
 	
 	
     @ApiOperation(value="查询指定群组是否存在", notes="返回true表示该群组名已存在")
-	@RequestMapping("checkGrpExistence")
+	@RequestMapping(value = "checkGrpExistence", method = RequestMethod.GET)
 	public Response checkExistence(@RequestParam String groupName) {
 		Group group = groupService.checkExistence(groupName);
 		return Response.SUCCESS().returnData(group != null);
 	}
     
     @ApiOperation(value="添加群组", notes="")
-	@RequestMapping("/addGroup")
+	@RequestMapping(value = "/addGroup", method = RequestMethod.GET)
 	public Response addGroup(
 			@RequestParam Long id,
 			@RequestParam String name,
@@ -59,7 +60,7 @@ public class GroupRestController {
 	
 
     @ApiOperation(value="更新群组信息", notes="")
-	@RequestMapping("/updateGroup")
+	@RequestMapping(value = "/updateGroup", method = RequestMethod.GET)
 	public Response update(
 			@RequestParam Long id,
 			@RequestParam String name,
@@ -81,7 +82,7 @@ public class GroupRestController {
 	}
     
     @ApiOperation(value="为当前用户的指定群增长新成员", notes="")
-	@RequestMapping("/addGroupMember")
+	@RequestMapping(value = "/addGroupMember", method = RequestMethod.GET)
 	public Response addGroupMember(Long groupId, Long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {
@@ -100,7 +101,7 @@ public class GroupRestController {
     }
     
     @ApiOperation(value="从指定群组中移除指定用户", notes="")
-	@RequestMapping("/removeGroupMember")
+	@RequestMapping(value = "/removeGroupMember", method = RequestMethod.GET)
 	public Response removeGroupMember(Long groupId, Long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {
@@ -124,7 +125,7 @@ public class GroupRestController {
     }
     
     @ApiOperation(value="按用户列出所属群组", notes="")
-	@RequestMapping("/listGroupByUser")
+	@RequestMapping(value = "/listGroupByUser", method = RequestMethod.GET)
 	public Response listGroupByUser(Long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {

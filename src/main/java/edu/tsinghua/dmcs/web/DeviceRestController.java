@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class DeviceRestController {
 	UserService userService;
 	
     @ApiOperation(value="添加新设备", notes="")
-	@RequestMapping("/addDevice")
+	@RequestMapping(value = "/addDevice", method = RequestMethod.GET)
 	public Response addDevice(@RequestParam Long id,
 			@RequestParam String devimage,
 			@RequestParam String devid,
@@ -54,7 +55,7 @@ public class DeviceRestController {
 	}
 	
     @ApiOperation(value="更新设备信息", notes="")
-	@RequestMapping("/updateDevice")
+	@RequestMapping(value = "/updateDevice", method = RequestMethod.GET)
     @DmcsController(description="更新设备信息")
 	public Response updateDevice(@RequestParam Long id,
 			@RequestParam String devimage,
@@ -81,7 +82,7 @@ public class DeviceRestController {
 	}
 	
     @ApiOperation(value="删除设备", notes="data中删除成功个数")
-	@RequestMapping("/deleteDevice")
+	@RequestMapping(value = "/deleteDevice", method = RequestMethod.GET)
     @DmcsController(roleAllowed="administrator", description="删除设备")
 	public Response deleteDevice(@RequestParam Long id) {
 		
@@ -91,7 +92,7 @@ public class DeviceRestController {
 	}
     
     @ApiOperation(value="通过群组Id查询设备", notes="")
-	@RequestMapping("/queryDeviceByGroupId")
+	@RequestMapping(value = "/queryDeviceByGroupId", method = RequestMethod.GET)
     @DmcsController(loginRequired=true)
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
 		List<Device> devices = deviceService.queryDeviceByGroupId(groupId);
@@ -99,7 +100,7 @@ public class DeviceRestController {
 	}
 		
     @ApiOperation(value="绑定设备到个人", notes="")
-	@RequestMapping("/assignOwnerForDevice")
+	@RequestMapping(value = "/assignOwnerForDevice", method = RequestMethod.GET)
     @DmcsController(roleAllowed="administrator", description="绑定设备到用户")
 	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
     	
@@ -122,7 +123,7 @@ public class DeviceRestController {
 	}
     
     @ApiOperation(value="获得未绑定设备列表", notes="")
-	@RequestMapping("/listUnbindDevices")
+	@RequestMapping(value = "/listUnbindDevices", method = RequestMethod.GET)
     @DmcsController(roleAllowed="administrator")
 	public Response listUnbindDevices(int page, int size) {
     	

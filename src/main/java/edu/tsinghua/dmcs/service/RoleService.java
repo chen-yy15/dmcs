@@ -6,7 +6,7 @@ import edu.tsinghua.dmcs.entity.Role;
 
 public interface RoleService {
 
-	public Role [] getRoleListByUserId(Long userId);
+	public List<Role> getRoleListByUserId(Long userId);
 	
 	public Integer setRoleForUser(Long roleId, Long userId);
 	

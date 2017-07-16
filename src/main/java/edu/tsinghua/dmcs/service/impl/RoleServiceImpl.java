@@ -15,7 +15,7 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	RoleMapper roleMapper;
 	
-	public Role[] getRoleListByUserId(Long userId) {
+	public List<Role> getRoleListByUserId(Long userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

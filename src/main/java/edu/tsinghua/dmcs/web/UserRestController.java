@@ -1,17 +1,21 @@
 package edu.tsinghua.dmcs.web;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.tsinghua.dmcs.Response;
+import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
+import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
@@ -24,9 +28,12 @@ public class UserRestController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private RoleService roleService;
+	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="查询用户名是否存在", notes="data中true or false代表用户是否已存在")
-	@RequestMapping("checkUserExistence")
+	@RequestMapping(value = "checkUserExistence", method = RequestMethod.GET)
 	public Response checkExistence(@RequestParam String username) {
     	logger.trace("checkExistence");
 		User user = userService.checkExistence(username);
@@ -35,7 +42,7 @@ public class UserRestController {
 	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="注册新用户", notes="")
-	@RequestMapping("/register")
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public Response register(@RequestParam String username,
 			@RequestParam String realname,
 			@RequestParam String title,
@@ -70,7 +77,7 @@ public class UserRestController {
 	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="用户登陆", notes="true登陆成功")
-	@RequestMapping("/login")
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Response login(@RequestParam String username,
 			@RequestParam String password) {
 		
@@ -86,7 +93,7 @@ public class UserRestController {
 	
 	@DmcsController(description="更新用户信息")
     @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
-	@RequestMapping("/update")
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public Response update(@RequestParam String username,
 			@RequestParam String realname,
 			@RequestParam String title,
@@ -119,11 +126,12 @@ public class UserRestController {
 		
 	}
 	
-	@DmcsController(description="测试")
-    @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
-	@RequestMapping("/test")
-	public String test() {
-		return "test";
+	@DmcsController(loginRequired=true)
+    @ApiOperation(value="获得指定用户角色", notes="获得当前用户角色")
+	@RequestMapping(value = "/listRolesByUserId", method = RequestMethod.GET)
+	public Response listRolesByUserId(Long userId) {
+		List<Role> rlist = roleService.getRoleListByUserId(userId);
+		return Response.SUCCESS().setData(rlist);
 	}
 	
 }
