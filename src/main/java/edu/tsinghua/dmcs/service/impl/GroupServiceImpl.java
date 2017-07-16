@@ -123,14 +123,12 @@ public class GroupServiceImpl implements GroupService {
 		return null;
 	}
 
-	public GroupUserMapping removeMemberForGroup(Long groupId, Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer removeMemberForGroup(Long groupId, Long userId) {
+		return groupUserMappingMapper.removeMemberForGroup(groupId, userId);
 	}
 
 	public List<Group> listGroupByUserId(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return groupUserMappingMapper.listGroupByUserId(userId);
 	}
 	
 	

@@ -57,6 +57,12 @@
 			selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table>
+		<table tableName="user_role_mapping" domainObjectName="UserRoleMapping"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
 		-->
 	</context>
 </generatorConfiguration>

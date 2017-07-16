@@ -116,9 +116,9 @@ public class GroupRestController {
     		return Response.NEW().returnFail(Constants.RC_FAIL_GROUP_USER_NO_EXIST_CODE, Constants.RC_FAIL_GROUP_USER_NO_EXIST_MSG, null);
     	}
     	
-    	gum = groupService.removeMemberForGroup(groupId, userId);
+    	Integer num = groupService.removeMemberForGroup(groupId, userId);
     	
-    	return Response.SUCCESS().setData(gum);
+    	return Response.SUCCESS().setData(num);
     	
     	
     }

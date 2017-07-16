@@ -33,7 +33,7 @@ public interface GroupService {
 	
 	public GroupUserMapping getGroupUserMapping(Long groupId, Long userId);
 	
-	public GroupUserMapping removeMemberForGroup(Long groupId, Long userId);
+	public Integer removeMemberForGroup(Long groupId, Long userId);
 	
 	public List<Group> listGroupByUserId(Long userId); 
 

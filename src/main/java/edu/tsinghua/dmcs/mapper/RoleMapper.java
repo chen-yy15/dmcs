@@ -1,5 +1,7 @@
 package edu.tsinghua.dmcs.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import edu.tsinghua.dmcs.entity.Role;
@@ -17,4 +19,6 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+    
+    List<Role> listAllRoles();
 }
