@@ -1,6 +1,7 @@
 package edu.tsinghua.dmcs.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -110,6 +111,26 @@ public class GroupServiceImpl implements GroupService {
 		groupDeviceMappingMapper.insert(gdm);
 		
 		return gdm;
+	}
+
+	public GroupDeviceMapping getGroupDeviceMapping(Long groupId, Long deviceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public GroupUserMapping getGroupUserMapping(Long groupId, Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public GroupUserMapping removeMemberForGroup(Long groupId, Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Group> listGroupByUserId(Long userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

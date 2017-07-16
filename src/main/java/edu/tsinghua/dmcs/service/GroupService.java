@@ -1,8 +1,7 @@
 package edu.tsinghua.dmcs.service;
 
 import java.util.Date;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
 
 import edu.tsinghua.dmcs.entity.Group;
 import edu.tsinghua.dmcs.entity.GroupDeviceMapping;
@@ -29,5 +28,13 @@ public interface GroupService {
 	public GroupUserMapping addMemberForGroup(Long groupId, Long userId, boolean isOwner);
 	
 	public GroupDeviceMapping addDeviceForGroup(Long groupId, Long deviceId);
+	
+	public GroupDeviceMapping getGroupDeviceMapping(Long groupId, Long deviceId);
+	
+	public GroupUserMapping getGroupUserMapping(Long groupId, Long userId);
+	
+	public GroupUserMapping removeMemberForGroup(Long groupId, Long userId);
+	
+	public List<Group> listGroupByUserId(Long userId); 
 
 }
