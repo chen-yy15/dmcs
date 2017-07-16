@@ -1,7 +1,10 @@
 package edu.tsinghua.dmcs.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import edu.tsinghua.dmcs.entity.Trace;
 
+@Mapper
 public interface TraceMapper {
     int deleteByPrimaryKey(Long id);
 

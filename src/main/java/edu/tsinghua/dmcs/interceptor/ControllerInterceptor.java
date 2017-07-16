@@ -29,8 +29,8 @@ public class ControllerInterceptor {
 	
     private static final Logger logger = LoggerFactory.getLogger(ControllerInterceptor.class);  
     
-    @Autowired
-    RoleService roleService;
+    //@Autowired
+    //RoleService roleService;
 
     @Pointcut("execution(* edu.tsinghua.dmcs.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")  
     public void controllerMethodPointcut(){
@@ -99,11 +99,11 @@ public class ControllerInterceptor {
     
     private boolean checkUserContainsRoles(Long userId, String [] roles) {
     	List<String> roleList = Arrays.asList(roles);
-    	Role [] r = roleService.getRoleListByUserId(userId);
-    	for(Role role : r) {
-    		if(roleList.contains(role.getName()))
-    			return true;
-    	}
+    	// Role [] r = roleService.getRoleListByUserId(userId);
+//    	for(Role role : r) {
+//    		if(roleList.contains(role.getName()))
+//    			return true;
+//    	}
     	return false;
     }
     
