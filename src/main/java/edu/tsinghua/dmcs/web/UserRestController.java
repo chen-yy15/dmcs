@@ -1,5 +1,6 @@
 package edu.tsinghua.dmcs.web;
 
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.List;
 
@@ -68,7 +69,17 @@ public class UserRestController {
 		u.setRealname(realname);
 		u.setTitle(title);
 		u.setIdcard(idcard);
-		u.setPassword(password);// TODO
+		String securedPasswd = null;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("md5");
+			byte [] bs = digest.digest((this.securitySault + password).getBytes());
+			securedPasswd = new String(bs);
+
+		} catch (Exception e) {
+			logger.error("fail to get md5 algorithm");
+		}
+		// if securedPasswd is null throw exception
+		u.setPassword(securedPasswd);
 		u.setAlias(alias);
 		Date birth = new Date(birthday);
 		u.setBirthday(birth); // TODO
@@ -118,9 +129,17 @@ public class UserRestController {
 			u.setRealname(realname);
 			u.setTitle(title);
 			u.setIdcard(idcard);
-			if(StringUtils.isEmpty(password))
-				throw new DmcsException(Constants.RC_FAIL_PASSWORD_INVALID_CODE, Constants.RC_FAIL_PASSWORD_INVALID_MSG);
-			u.setPassword(password);// TODO
+			String securedPasswd = null;
+			try {
+				MessageDigest digest = MessageDigest.getInstance("md5");
+				byte [] bs = digest.digest((this.securitySault + password).getBytes());
+				securedPasswd = new String(bs);
+
+			} catch (Exception e) {
+				logger.error("fail to get md5 algorithm");
+			}
+			// if securedPasswd is null throw exception
+			u.setPassword(securedPasswd);
 			u.setAlias(alias);
 			Date birth = new Date(birthday);
 			u.setBirthday(birth); // TODO
