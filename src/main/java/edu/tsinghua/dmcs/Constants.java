@@ -14,6 +14,8 @@ public interface Constants {
 	public static final int RC_FAIL_GROUP_NO_EXIST_CODE = 4;
 	
 	public static final int RC_FAIL_GROUP_USER_NO_EXIST_CODE = 5;
+
+	public static final int RC_FAIL_PASSWORD_INVALID_CODE= 6;
 	
 	
 	
@@ -30,6 +32,8 @@ public interface Constants {
 	public static final String RC_FAIL_DEVICE_UPDATE_MSG = "设备更新失败";
 	
 	public static final String RC_FAIL_GROUP_USER_NO_EXIST_MSG = "非该群组用户";
+
+	public static final String RC_FAIL_PASSWORD_INVALID_MSG = "不允许该密码格式";
 
 
 	

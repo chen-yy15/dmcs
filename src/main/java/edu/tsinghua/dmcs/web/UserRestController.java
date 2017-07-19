@@ -3,9 +3,12 @@ package edu.tsinghua.dmcs.web;
 import java.util.Date;
 import java.util.List;
 
+import edu.tsinghua.dmcs.DmcsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,7 @@ import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import edu.tsinghua.dmcs.Constants;
 
 @RestController
 @RequestMapping(value="/user")
@@ -30,6 +34,9 @@ public class UserRestController {
 	
 	@Autowired
 	private RoleService roleService;
+
+	@Value("${security.sault.login}")
+	private String securitySault;
 	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="查询用户名是否存在", notes="data中true or false代表用户是否已存在")
@@ -111,6 +118,8 @@ public class UserRestController {
 			u.setRealname(realname);
 			u.setTitle(title);
 			u.setIdcard(idcard);
+			if(StringUtils.isEmpty(password))
+				throw new DmcsException(Constants.RC_FAIL_PASSWORD_INVALID_CODE, Constants.RC_FAIL_PASSWORD_INVALID_MSG);
 			u.setPassword(password);// TODO
 			u.setAlias(alias);
 			Date birth = new Date(birthday);
@@ -132,6 +141,15 @@ public class UserRestController {
 	public Response listRolesByUserId(Long userId) {
 		List<Role> rlist = roleService.getRoleListByUserId(userId);
 		return Response.SUCCESS().setData(rlist);
+	}
+
+	@DmcsController
+	@ApiOperation(value="test", notes="test")
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public Response test(Long userId) {
+		List<Role> rlist = roleService.getRoleListByUserId(userId);
+		logger.info("this is a test" + this.securitySault);
+		return Response.SUCCESS().returnData("test");
 	}
 	
 }
