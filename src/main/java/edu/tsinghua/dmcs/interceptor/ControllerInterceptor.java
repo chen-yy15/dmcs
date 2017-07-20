@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import edu.tsinghua.dmcs.util.TockenCache;
 import org.apache.maven.shared.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,8 +30,11 @@ public class ControllerInterceptor {
 	
     private static final Logger logger = LoggerFactory.getLogger(ControllerInterceptor.class);  
     
-    //@Autowired
-    //RoleService roleService;
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+	TockenCache tockenCache;
 
     @Pointcut("execution(* edu.tsinghua.dmcs.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")  
     public void controllerMethodPointcut(){
@@ -93,8 +97,19 @@ public class ControllerInterceptor {
     
     private boolean checkLogin(HttpServletRequest request) {
     	Cookie [] cookies = request.getCookies();
+    	for(Cookie cookie : cookies) {
+			String cookieName = cookie.getName();
+			if("dmcstoken".equals(cookieName)) {
+				String cookieValue = cookie.getValue();
+				if(tockenCache.isTokenExist(cookieValue)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
     	
-    	return true;
+    	return false;
     }  
     
     private boolean checkUserContainsRoles(Long userId, String [] roles) {

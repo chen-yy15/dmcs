@@ -1,15 +1,16 @@
 package edu.tsinghua.dmcs.web;
 
 import java.security.MessageDigest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import edu.tsinghua.dmcs.DmcsException;
+import edu.tsinghua.dmcs.util.TockenCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +23,10 @@ import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import edu.tsinghua.dmcs.Constants;
+import sun.misc.BASE64Encoder;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value="/user")
@@ -35,6 +39,9 @@ public class UserRestController {
 	
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private TockenCache tockenCache;
 
 	@Value("${security.sault.login}")
 	private String securitySault;
@@ -61,7 +68,7 @@ public class UserRestController {
 			@RequestParam String image,
 			@RequestParam String icon,
 			@RequestParam String email,
-			@RequestParam String mobile) {
+			@RequestParam String mobile) throws ParseException {
 		
 		User u = new User();
 		u.setUid("1"); // TODO
@@ -81,14 +88,16 @@ public class UserRestController {
 		// if securedPasswd is null throw exception
 		u.setPassword(securedPasswd);
 		u.setAlias(alias);
-		Date birth = new Date(birthday);
-		u.setBirthday(birth); // TODO
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = sdf.parse(birthday);
+		u.setBirthday(d); // TODO
 		u.setImage(image);
 		u.setIcon(icon);
 		u.setEmail(email);
 		u.setMobile(mobile);
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
+		u.setPassword(null);
 		return Response.SUCCESS().setData(u);
 		
 	}
@@ -97,12 +106,30 @@ public class UserRestController {
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Response login(@RequestParam String username,
-			@RequestParam String password) {
+			@RequestParam String password, HttpServletResponse response) {
 		
     	User u = userService.checkExistence(username);
 		if(u != null) {
-			if(u.getPassword().equals(password))
+			String securedPasswd = null;
+			try {
+				MessageDigest digest = MessageDigest.getInstance("md5");
+				byte [] bs = digest.digest((this.securitySault + password).getBytes());
+				securedPasswd = new String(bs);
+				String token = this.getToken(u.getUsername()) ;
+				Cookie cookie = new Cookie("dmcstoken", token);
+				cookie.setMaxAge(3600);
+				cookie.setPath("/");
+				response.addCookie(cookie);
+				tockenCache.setTokenForUser(token, u.getUsername());
+
+
+			} catch (Exception e) {
+				logger.error("fail to get md5 algorithm");
+			}
+			if(u.getPassword().equals(securedPasswd)) {
+				u.setPassword(null);
 				return Response.SUCCESS().setData(u);
+			}
 		}
 		
 		return Response.SUCCESS().setData(null);
@@ -169,6 +196,21 @@ public class UserRestController {
 		List<Role> rlist = roleService.getRoleListByUserId(userId);
 		logger.info("this is a test" + this.securitySault);
 		return Response.SUCCESS().returnData("test");
+	}
+
+	private String getToken(String userName) {
+		String token = userName + this.securitySault + System.currentTimeMillis();
+		String securedtoken = null;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("md5");
+			byte [] bs = digest.digest(token.getBytes());
+			securedtoken = new String(bs);
+			securedtoken = securedtoken + "|" + (System.currentTimeMillis() + 1000 * 3600);
+			securedtoken = new BASE64Encoder().encode(securedtoken.getBytes());
+		} catch (Exception e) {
+			logger.error("fail to get md5 algorithm");
+		}
+		return securedtoken;
 	}
 	
 }
