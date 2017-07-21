@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.util.TockenCache;
 import org.apache.maven.shared.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -58,25 +59,22 @@ public class ControllerInterceptor {
          }
          
          DmcsController controller = controllers[0];
-         Long userId = null;
+         String userName = null;
          if(controller.loginRequired()) {
         	logger.info("login require = " + controller.loginRequired());
- 	        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();    
-
-        	 if(!checkLogin(request)) {
-        		 // throw login required exception
-        	 }
-        	 userId = 0L;
-         } 
+ 	        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+ 	        userName = checkLogin(request);
+ 	        if(userName == null) {
+				 return Response.NEW().loginRequired();
+			 }
+         }
          
          String roleRequireds = controller.roleAllowed();
          String [] roles = StringUtils.split(roleRequireds, ",");
          if(roles != null && roles.length > 0) {
-        	 if(userId == null) {
-        		 // throw can't get useId exception
-        	 }
-        	 if(!checkUserContainsRoles(userId, roles)) {
-        		 // throw role required exception
+
+        	 if(!checkUserContainsRoles(userName, roles)) {
+				 return Response.NEW().authorizationRequired();
         	 }
          }
          
@@ -88,37 +86,40 @@ public class ControllerInterceptor {
     	try {
 			return pjp.proceed();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("fail to process in interceptor ", e);
 		}
     	return null;
     	
     }
     
-    private boolean checkLogin(HttpServletRequest request) {
+    private String checkLogin(HttpServletRequest request) {
     	Cookie [] cookies = request.getCookies();
+    	if(cookies == null || cookies.length == 0)
+    		return null;
     	for(Cookie cookie : cookies) {
 			String cookieName = cookie.getName();
 			if("dmcstoken".equals(cookieName)) {
 				String cookieValue = cookie.getValue();
 				if(tockenCache.isTokenExist(cookieValue)) {
-					return true;
+					return tockenCache.getUserNameByToken(cookieValue);
 				} else {
-					return false;
+					return null;
 				}
 			}
 		}
     	
-    	return false;
+    	return null;
     }  
     
-    private boolean checkUserContainsRoles(Long userId, String [] roles) {
+    private boolean checkUserContainsRoles(String userName, String [] roles) {
     	List<String> roleList = Arrays.asList(roles);
-    	// Role [] r = roleService.getRoleListByUserId(userId);
-//    	for(Role role : r) {
-//    		if(roleList.contains(role.getName()))
-//    			return true;
-//    	}
+    	List<Role> rs = roleService.getRoleListByUserName(userName);
+    	if(rs == null || rs.size() == 0)
+    		return false;
+    	for(Role role : rs) {
+    		if(roleList.contains(role.getName()))
+    			return true;
+    	}
     	return false;
     }
     

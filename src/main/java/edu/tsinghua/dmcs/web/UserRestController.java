@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -134,6 +135,42 @@ public class UserRestController {
 		
 		return Response.SUCCESS().setData(null);
 		
+	}
+
+	@DmcsController(loginRequired=true)
+	@ApiOperation(value="用户登出", notes="true登出成功")
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public Response logout(@RequestParam String username, HttpServletRequest request,
+						   HttpServletResponse response) {
+
+		User u = userService.checkExistence(username);
+		if(u != null) {
+			String securedPasswd = null;
+			try {
+				Cookie [] cookies = request.getCookies();
+				for(Cookie cookie : cookies) {
+					String cookieName = cookie.getName();
+					if("dmcstoken".equals(cookieName)) {
+						String cookieValue = cookie.getValue();
+						if(tockenCache.isTokenExist(cookieValue)) {
+							tockenCache.removeToken(cookieValue);
+							cookie.setValue(null);
+							cookie.setMaxAge(0);
+							cookie.setPath("/");
+							response.addCookie(cookie);
+							break;
+
+						}
+					}
+				}
+
+			} catch (Exception e) {
+				logger.error("fail to get md5 algorithm");
+			}
+		}
+
+		return Response.SUCCESS().setData(null);
+
 	}
 	
 	@DmcsController(description="更新用户信息")

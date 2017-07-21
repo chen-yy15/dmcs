@@ -16,6 +16,10 @@ public interface Constants {
 	public static final int RC_FAIL_GROUP_USER_NO_EXIST_CODE = 5;
 
 	public static final int RC_FAIL_PASSWORD_INVALID_CODE= 6;
+
+	public static final int RC_LOGIN_REQUIRED_CODE = 7;
+
+	public static final int RC_AUTH_REQUIRED_CODE = 7;
 	
 	
 	
@@ -35,6 +39,10 @@ public interface Constants {
 
 	public static final String RC_FAIL_PASSWORD_INVALID_MSG = "不允许该密码格式";
 
+	public static final String RC_LOGIN_REQUIRED_MSG = "未登陆";
 
-	
+	public static final String RC_AUTH_REQUIRED_MSG = "无权限操作";
+
+
+
 }

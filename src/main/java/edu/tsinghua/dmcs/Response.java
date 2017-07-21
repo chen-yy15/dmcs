@@ -82,6 +82,14 @@ public class Response {
 		}
 		return r;
 	}
+
+	public Response loginRequired() {
+		return returnFail(Constants.RC_LOGIN_REQUIRED_CODE, Constants.RC_LOGIN_REQUIRED_MSG, null);
+	}
+
+	public Response authorizationRequired() {
+		return returnFail(Constants.RC_LOGIN_REQUIRED_CODE, Constants.RC_LOGIN_REQUIRED_MSG, null);
+	}
 	
 	
 }

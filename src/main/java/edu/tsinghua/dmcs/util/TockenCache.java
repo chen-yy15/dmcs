@@ -28,4 +28,10 @@ public class TockenCache {
         }
         return null;
     }
+
+    public void removeToken(String token) {
+        if(token != null) {
+            tokens.remove(token);
+        }
+    }
 }
