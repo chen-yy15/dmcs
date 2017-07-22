@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import edu.tsinghua.dmcs.entity.Group;
 import edu.tsinghua.dmcs.entity.GroupUserMapping;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface GroupUserMappingMapper {
@@ -23,8 +24,8 @@ public interface GroupUserMappingMapper {
     
     List<Group> listGroupByUserId(Long userId);
     
-	public Integer removeMemberForGroup(Long groupId, Long userId);
+	public Integer removeMemberForGroup(@Param("groupId") Long groupId, @Param("userId") Long userId);
 	
-	public GroupUserMapping getGroupUserMapping(Long groupId, Long userId);
+	public GroupUserMapping getGroupUserMapping(@Param("groupId") Long groupId, @Param("userId") Long userId);
 
 }

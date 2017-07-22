@@ -23,7 +23,7 @@
 		email, mobile, regtime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Integer">
+		parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
 		from user
@@ -36,7 +36,7 @@
 		from user
 		where username = #{userName,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from user
 		where id = #{id,jdbcType=INTEGER}
 	</delete>

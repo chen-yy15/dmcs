@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.GroupUserMapping" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="groupId" property="groupId" jdbcType="BIGINT" />
-    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="isAdmin" property="isAdmin" jdbcType="TINYINT" />
   </resultMap>
@@ -17,6 +17,20 @@
     from group_user_mapping
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="listGroupByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from group_user_mapping
+    where userId = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="getGroupUserMapping" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from group_user_mapping
+    where userId = #{userId,jdbcType=BIGINT} and
+    groupId = #{groupId,jdbcType=BIGINT}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from group_user_mapping
     where id = #{id,jdbcType=INTEGER}

@@ -205,8 +205,14 @@ public class UserRestController {
 			// if securedPasswd is null throw exception
 			u.setPassword(securedPasswd);
 			u.setAlias(alias);
-			Date birth = new Date(birthday);
-			u.setBirthday(birth); // TODO
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date d = null;
+			try {
+				d = sdf.parse(birthday);
+			} catch (ParseException e) {
+				logger.error("fail to parse date", e);
+			}
+			u.setBirthday(d);
 			u.setImage(image);
 			u.setIcon(icon);
 			u.setEmail(email);
@@ -221,18 +227,9 @@ public class UserRestController {
 	@DmcsController(loginRequired=true)
     @ApiOperation(value="获得指定用户角色", notes="获得当前用户角色")
 	@RequestMapping(value = "/listRolesByUserId", method = RequestMethod.GET)
-	public Response listRolesByUserId(Long userId) {
-		List<Role> rlist = roleService.getRoleListByUserId(userId);
+	public Response listRolesByUserId(String userName) {
+		List<Role> rlist = roleService.getRoleListByUserName(userName);
 		return Response.SUCCESS().setData(rlist);
-	}
-
-	@DmcsController
-	@ApiOperation(value="test", notes="test")
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public Response test(Long userId) {
-		List<Role> rlist = roleService.getRoleListByUserId(userId);
-		logger.info("this is a test" + this.securitySault);
-		return Response.SUCCESS().returnData("test");
 	}
 
 	private String getToken(String userName) {

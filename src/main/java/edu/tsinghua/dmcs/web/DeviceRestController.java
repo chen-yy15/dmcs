@@ -1,5 +1,7 @@
 package edu.tsinghua.dmcs.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,17 +29,18 @@ public class DeviceRestController {
 	
 	@Autowired
 	UserService userService;
-	
+
+	@DmcsController(description = "添加新设备")
     @ApiOperation(value="添加新设备", notes="")
 	@RequestMapping(value = "/addDevice", method = RequestMethod.GET)
-	public Response addDevice(@RequestParam Long id,
+	public Response addDevice(
 			@RequestParam String devimage,
 			@RequestParam String devid,
 			@RequestParam String name,
 			@RequestParam String type,
 			@RequestParam String parameters,
 			@RequestParam String vendor,
-			@RequestParam Date guranteeFrom,
+			@RequestParam String guranteeFrom,
 			@RequestParam Long owner) {
 		
 		Device d = new Device();
@@ -47,7 +50,14 @@ public class DeviceRestController {
 		d.setType(type);
 		d.setParameters(parameters);
 		d.setVendor(vendor);
-		d.setGuranteeFrom(guranteeFrom);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = sdf.parse(guranteeFrom);
+		} catch (ParseException e) {
+
+		}
+		d.setGuranteeFrom(date);
 		d.setOwner(owner);
 		int num = deviceService.addDevice(d);
 		
@@ -64,7 +74,7 @@ public class DeviceRestController {
 			@RequestParam String type,
 			@RequestParam String parameters,
 			@RequestParam String vendor,
-			@RequestParam Date guranteeFrom,
+			@RequestParam String guranteeFrom,
 			@RequestParam Long owner) {
 		
 		Device d = new Device();
@@ -75,7 +85,14 @@ public class DeviceRestController {
 		d.setType(type);
 		d.setParameters(parameters);
 		d.setVendor(vendor);
-		d.setGuranteeFrom(guranteeFrom);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = sdf.parse(guranteeFrom);
+		} catch (ParseException e) {
+
+		}
+		d.setGuranteeFrom(date);
 		d.setOwner(owner);
 		int num = deviceService.updateDevice(d);
 		return Response.SUCCESS().setData(num);
@@ -122,10 +139,10 @@ public class DeviceRestController {
 		return Response.SUCCESS().setData(device);
 	}
     
-    @ApiOperation(value="获得未绑定设备列表", notes="")
+    @ApiOperation(value="获得未绑定设备列表", notes="需要administrator权限")
 	@RequestMapping(value = "/listUnbindDevices", method = RequestMethod.GET)
     @DmcsController(roleAllowed="administrator")
-	public Response listUnbindDevices(int page, int size) {
+	public Response listUnbindDevices(@RequestParam Integer page, @RequestParam Integer size) {
     	
     	List<Device> devices = deviceService.queryUnbindDevices(page, size);
     	

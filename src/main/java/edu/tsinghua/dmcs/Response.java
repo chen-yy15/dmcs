@@ -88,7 +88,7 @@ public class Response {
 	}
 
 	public Response authorizationRequired() {
-		return returnFail(Constants.RC_LOGIN_REQUIRED_CODE, Constants.RC_LOGIN_REQUIRED_MSG, null);
+		return returnFail(Constants.RC_AUTH_REQUIRED_CODE, Constants.RC_AUTH_REQUIRED_MSG, null);
 	}
 	
 	

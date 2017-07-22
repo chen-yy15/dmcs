@@ -1,8 +1,12 @@
 package edu.tsinghua.dmcs.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import edu.tsinghua.dmcs.interceptor.DmcsController;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,43 +26,51 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value="/group")
 public class GroupRestController {
 
-	
+	org.slf4j.Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
 	@Autowired
 	private GroupService groupService;
 	
 	@Autowired
 	private UserService userService;
 	
-	
+	@DmcsController
     @ApiOperation(value="查询指定群组是否存在", notes="返回true表示该群组名已存在")
 	@RequestMapping(value = "checkGrpExistence", method = RequestMethod.GET)
 	public Response checkExistence(@RequestParam String groupName) {
 		Group group = groupService.checkExistence(groupName);
 		return Response.SUCCESS().returnData(group != null);
 	}
-    
+
+	@DmcsController(description="添加组")
     @ApiOperation(value="添加群组", notes="")
 	@RequestMapping(value = "/addGroup", method = RequestMethod.GET)
 	public Response addGroup(
-			@RequestParam Long id,
 			@RequestParam String name,
 			@RequestParam String description,
 			@RequestParam Long owner,
 			@RequestParam Integer type,
-			@RequestParam Date createtime) {
+			@RequestParam String createtime) {
 		
 		Group g = new Group();
 		g.setName(name);
 		g.setDescription(description);
 		g.setOwner(owner);
 		g.setType(type);
-		g.setCreatetime(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = null;
+		try {
+			d = sdf.parse(createtime);
+		} catch (ParseException e) {
+			logger.error("fail to add group ", e);
+		}
+		g.setCreatetime(d);
 		g = groupService.addGroup(g);
 		return Response.SUCCESS().returnData(g);
 		
 	}
-	
 
+	@DmcsController(description = "更新组信息")
     @ApiOperation(value="更新群组信息", notes="")
 	@RequestMapping(value = "/updateGroup", method = RequestMethod.GET)
 	public Response update(
@@ -67,7 +79,7 @@ public class GroupRestController {
 			@RequestParam String description,
 			@RequestParam Long owner,
 			@RequestParam Integer type,
-			@RequestParam Date createtime) {
+			@RequestParam String createtime) {
 		
 		Group g = new Group();
 		g.setId(id);
@@ -75,15 +87,24 @@ public class GroupRestController {
 		g.setDescription(description);
 		g.setOwner(owner);
 		g.setType(type);
-		g.setCreatetime(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = null;
+		try {
+			d = sdf.parse(createtime);
+		} catch (ParseException e) {
+			logger.error("fail to add group ", e);
+		}
+		g.setCreatetime(d);
 		groupService.update(g);
 		return Response.SUCCESS().returnData(g);
 		
 	}
-    
+
+	@DmcsController(description = "添加组成员")
     @ApiOperation(value="为当前用户的指定群增长新成员", notes="")
 	@RequestMapping(value = "/addGroupMember", method = RequestMethod.GET)
-	public Response addGroupMember(Long groupId, Long userId) {
+	public Response addGroupMember(@RequestParam long groupId,
+								   @RequestParam long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
@@ -99,10 +120,12 @@ public class GroupRestController {
     	
     	
     }
-    
+
+    @DmcsController(description = "删除组成员")
     @ApiOperation(value="从指定群组中移除指定用户", notes="")
 	@RequestMapping(value = "/removeGroupMember", method = RequestMethod.GET)
-	public Response removeGroupMember(Long groupId, Long userId) {
+	public Response removeGroupMember(@RequestParam long groupId,
+									  @RequestParam long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
@@ -123,10 +146,11 @@ public class GroupRestController {
     	
     	
     }
-    
+
+	@DmcsController
     @ApiOperation(value="按用户列出所属群组", notes="")
 	@RequestMapping(value = "/listGroupByUser", method = RequestMethod.GET)
-	public Response listGroupByUser(Long userId) {
+	public Response listGroupByUser(@RequestParam long userId) {
     	User u = userService.getUserById(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);

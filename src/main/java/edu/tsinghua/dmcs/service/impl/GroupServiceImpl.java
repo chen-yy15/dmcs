@@ -35,7 +35,6 @@ public class GroupServiceImpl implements GroupService {
     
 	@Transactional
 	public Group addGroup(
-			@RequestParam Long id,
 			@RequestParam String name,
 			@RequestParam String description,
 			@RequestParam Long owner,
@@ -120,14 +119,16 @@ public class GroupServiceImpl implements GroupService {
 
 	public GroupUserMapping getGroupUserMapping(Long groupId, Long userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return groupUserMappingMapper.getGroupUserMapping(groupId, userId);
 	}
 
 	public Integer removeMemberForGroup(Long groupId, Long userId) {
-		return groupUserMappingMapper.removeMemberForGroup(groupId, userId);
+		GroupUserMapping gum = groupUserMappingMapper.getGroupUserMapping(groupId, userId);
+		return groupUserMappingMapper.deleteByPrimaryKey(gum.getId());
 	}
 
 	public List<Group> listGroupByUserId(Long userId) {
+
 		return groupUserMappingMapper.listGroupByUserId(userId);
 	}
 	

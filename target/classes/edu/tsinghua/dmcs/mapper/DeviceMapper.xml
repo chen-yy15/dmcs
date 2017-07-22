@@ -21,6 +21,20 @@
     from device
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="queryUnbindDevices" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from device
+    where owner = 0 limit #{page, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
+  </select>
+  <select id="queryDeviceByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    d.id id, d.devimage devimage, d.devid devid,
+    d.name name, d.type type, d.parameters parameters,
+    d.vendor vendor, d.guranteeFrom guranteeFrom, d.owner owner
+    from device d, group_device_mapping gdm
+    where d.id = gdm.deviceId and gdm.groupId = #{groupId, jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from device
     where id = #{id,jdbcType=BIGINT}

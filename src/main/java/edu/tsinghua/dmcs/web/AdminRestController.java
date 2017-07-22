@@ -2,11 +2,13 @@ package edu.tsinghua.dmcs.web;
 
 import java.util.List;
 
+import edu.tsinghua.dmcs.mapper.UserRoleMappingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.tsinghua.dmcs.Response;
@@ -27,9 +29,9 @@ public class AdminRestController {
 	@DmcsController(loginRequired=true, roleAllowed = "administrator", description = "指定角色给用户")
     @ApiOperation(value="assignRole", notes="指定用户设置角色")
 	@RequestMapping(value = "/assignRole", method = RequestMethod.GET)
-	public Response assignRole(Long userId, Long RoleId) {
-		List<Role> rlist = roleService.getRoleListByUserId(userId);
-		return Response.SUCCESS().setData(rlist);
+	public Response assignRole(@RequestParam Long userId, @RequestParam  Long roleId) {
+		int num = roleService.setRoleForUser(roleId, userId);
+		return Response.SUCCESS().setData(num);
 	}
 	
 	

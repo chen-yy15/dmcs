@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import edu.tsinghua.dmcs.entity.Device;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface DeviceMapper {
@@ -22,5 +23,5 @@ public interface DeviceMapper {
     
     List<Device> queryDeviceByGroupId(Long groupId);
     
-    List<Device> queryUnbindDevices(Integer page, Integer size);
+    List<Device> queryUnbindDevices(@Param("page") Integer page, @Param("size") Integer size);
 }
