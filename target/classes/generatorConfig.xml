@@ -23,7 +23,8 @@
 			targetProject="/Users/chenning/Documents/workspace/dmcs/src/main/java">
 		</javaClientGenerator>
 
-		<!-- <table tableName="group" domainObjectName="Group" enableCountByExample="false" 
+		<!--
+		<table tableName="group" domainObjectName="Group" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
 			selectByExampleQueryId="false"> <property name="useActualColumnNames" value="true" 
 			/> </table> <table tableName="role" domainObjectName="Role" enableCountByExample="false" 
@@ -44,7 +45,8 @@
 			value="true" /> </table> <table tableName="group_user_mapping" domainObjectName="GroupUserMapping" 
 			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
 			enableSelectByExample="false" selectByExampleQueryId="false"> <property name="useActualColumnNames" 
-			value="true" /> </table> -->
+			value="true" /> </table>
+
 		<table tableName="user_role_mapping" domainObjectName="UserRoleMapping"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
@@ -63,6 +65,12 @@
 			selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table>
-
+		-->
+		<table tableName="user_device_dashboard" domainObjectName="UserDeviceDashboard"
+			   enableCountByExample="false" enableUpdateByExample="false"
+			   enableDeleteByExample="false" enableSelectByExample="false"
+			   selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
 	</context>
 </generatorConfiguration>

@@ -3,6 +3,7 @@ edu/tsinghua/dmcs/entity/Device.class
 edu/tsinghua/dmcs/mapper/UserMapper.class
 edu/tsinghua/dmcs/entity/Trace.class
 edu/tsinghua/dmcs/mapper/TraceMapper.class
+edu/tsinghua/dmcs/util/TockenCache.class
 edu/tsinghua/dmcs/service/impl/GroupServiceImpl.class
 edu/tsinghua/dmcs/mapper/DeviceMapper.class
 edu/tsinghua/dmcs/mapper/RoleMapper.class
@@ -29,6 +30,7 @@ edu/tsinghua/dmcs/entity/DeviceParameter.class
 edu/tsinghua/dmcs/interceptor/ControllerInterceptor.class
 edu/tsinghua/dmcs/mapper/UserRoleMappingMapper.class
 edu/tsinghua/dmcs/entity/UserDeviceParameterPosition.class
+edu/tsinghua/dmcs/DmcsException.class
 edu/tsinghua/dmcs/service/GroupService.class
 edu/tsinghua/dmcs/entity/User.class
 edu/tsinghua/dmcs/mapper/UserDeviceParameterPositionMapper.class

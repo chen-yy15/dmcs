@@ -18,6 +18,8 @@
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/UserDeviceParameterPosition.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/DeviceParameterMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/User.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/util/TockenCache.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/DmcsException.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Response.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/GroupRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/TraceMapper.java
