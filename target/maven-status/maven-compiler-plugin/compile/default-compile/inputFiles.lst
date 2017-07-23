@@ -15,6 +15,7 @@
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/UserDeviceParameterPositionMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/UserRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/GroupMapper.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/UserDeviceDashboard.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/UserDeviceParameterPosition.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/DeviceParameterMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/User.java
@@ -24,6 +25,8 @@
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/GroupRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/TraceMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Application.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/UserDeviceDashboardMapper.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/service/UserDeviceDashboardService.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/DeviceParameter.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/service/TraceService.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/service/impl/RoleServiceImpl.java
@@ -35,6 +38,7 @@
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/GroupDeviceMappingMapper.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/Constants.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/entity/Group.java
+/Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/service/impl/UserDeviceDashboardServiceImpl.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/DashboardRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/web/DeviceRestController.java
 /Users/chenning/Documents/workspace/dmcs/src/main/java/edu/tsinghua/dmcs/mapper/RoleMapper.java

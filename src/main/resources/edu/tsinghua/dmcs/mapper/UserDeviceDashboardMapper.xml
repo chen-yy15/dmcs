@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.tsinghua.dmcs.mapper.UserDeviceDashboardMapper" >
+  <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.UserDeviceDashboard" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="deviceId" property="deviceId" jdbcType="BIGINT" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="x_position" property="x_position" jdbcType="INTEGER" />
+    <result column="widget" property="widget" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="paramId" property="paramId" jdbcType="BIGINT" />
+    <result column="y_position" property="y_position" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="heighth" property="heighth" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, deviceId, userId, x_position, widget, type, paramId, y_position, width, heighth
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_device_dashboard
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="listDeviceLayoutByUser" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from user_device_dashboard
+    where deviceId = #{deviceId,jdbcType=BIGINT} and
+    userId = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_device_dashboard
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.UserDeviceDashboard" >
+    insert into user_device_dashboard (id, deviceId, userId, 
+      x_position, widget, type, 
+      paramId, y_position, width, 
+      heighth)
+    values (#{id,jdbcType=BIGINT}, #{deviceId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{x_position,jdbcType=INTEGER}, #{widget,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{paramId,jdbcType=BIGINT}, #{y_position,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{heighth,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.UserDeviceDashboard" >
+    insert into user_device_dashboard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="deviceId != null" >
+        deviceId,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="x_position != null" >
+        x_position,
+      </if>
+      <if test="widget != null" >
+        widget,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="paramId != null" >
+        paramId,
+      </if>
+      <if test="y_position != null" >
+        y_position,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="heighth != null" >
+        heighth,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="x_position != null" >
+        #{x_position,jdbcType=INTEGER},
+      </if>
+      <if test="widget != null" >
+        #{widget,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="paramId != null" >
+        #{paramId,jdbcType=BIGINT},
+      </if>
+      <if test="y_position != null" >
+        #{y_position,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="heighth != null" >
+        #{heighth,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.UserDeviceDashboard" >
+    update user_device_dashboard
+    <set >
+      <if test="deviceId != null" >
+        deviceId = #{deviceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="x_position != null" >
+        x_position = #{x_position,jdbcType=INTEGER},
+      </if>
+      <if test="widget != null" >
+        widget = #{widget,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="paramId != null" >
+        paramId = #{paramId,jdbcType=BIGINT},
+      </if>
+      <if test="y_position != null" >
+        y_position = #{y_position,jdbcType=INTEGER},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="heighth != null" >
+        heighth = #{heighth,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.UserDeviceDashboard" >
+    update user_device_dashboard
+    set deviceId = #{deviceId,jdbcType=BIGINT},
+      userId = #{userId,jdbcType=BIGINT},
+      x_position = #{x_position,jdbcType=INTEGER},
+      widget = #{widget,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      paramId = #{paramId,jdbcType=BIGINT},
+      y_position = #{y_position,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      heighth = #{heighth,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
