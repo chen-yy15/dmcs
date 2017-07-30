@@ -20,8 +20,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value="/dmcs/api/admin")
 public class AdminRestController {
-	
-	Logger logger = LoggerFactory.getLogger(AdminRestController.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(AdminRestController.class);
 	
 	@Autowired
 	private RoleService roleService;

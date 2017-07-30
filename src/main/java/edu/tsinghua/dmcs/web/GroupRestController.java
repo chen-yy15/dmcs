@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.tsinghua.dmcs.interceptor.DmcsController;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value="/dmcs/api/group")
 public class GroupRestController {
 
-	org.slf4j.Logger logger = LoggerFactory.getLogger(UserRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GroupRestController.class);
 
 	@Autowired
 	private GroupService groupService;

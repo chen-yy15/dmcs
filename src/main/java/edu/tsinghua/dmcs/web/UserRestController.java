@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(value="/dmcs/api/user")
 public class UserRestController {
-	
-	Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 	
 	@Autowired
 	private UserService userService;
