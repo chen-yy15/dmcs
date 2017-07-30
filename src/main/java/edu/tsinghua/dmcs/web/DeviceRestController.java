@@ -21,7 +21,7 @@ import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(value="/device")
+@RequestMapping(value="/dmcs/api/device")
 public class DeviceRestController {
 
 	@Autowired

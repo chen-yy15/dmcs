@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/dashboard")
+@RequestMapping(value="/dmcs/api/dashboard")
 public class DashboardRestController {
 
 	@Autowired

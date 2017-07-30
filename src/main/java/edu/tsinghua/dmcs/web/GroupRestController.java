@@ -23,7 +23,7 @@ import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(value="/group")
+@RequestMapping(value="/dmcs/api/group")
 public class GroupRestController {
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(UserRestController.class);

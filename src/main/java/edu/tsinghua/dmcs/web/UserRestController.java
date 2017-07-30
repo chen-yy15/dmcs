@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value="/user")
+@RequestMapping(value="/dmcs/api/user")
 public class UserRestController {
 	
 	Logger logger = LoggerFactory.getLogger(UserRestController.class);

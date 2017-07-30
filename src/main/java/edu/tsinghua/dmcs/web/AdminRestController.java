@@ -18,7 +18,7 @@ import edu.tsinghua.dmcs.service.RoleService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(value="/admin")
+@RequestMapping(value="/dmcs/api/admin")
 public class AdminRestController {
 	
 	Logger logger = LoggerFactory.getLogger(AdminRestController.class);
