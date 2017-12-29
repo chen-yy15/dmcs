@@ -6,15 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.util.TockenCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Role;
@@ -30,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value="/dmcs/api/user")
+@RequestMapping(value="/dmcs/api/v1/user")
 public class UserRestController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
@@ -59,24 +57,17 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="注册新用户", notes="")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public Response register(@RequestParam String username,
-			@RequestParam String realname,
-			@RequestParam String title,
-			@RequestParam String idcard,
-			@RequestParam String password,
-			@RequestParam String alias,
-			@RequestParam String birthday,
-			@RequestParam String image,
-			@RequestParam String icon,
-			@RequestParam String email,
-			@RequestParam String mobile) throws ParseException {
-		
+	public Response register(@RequestBody String body) throws ParseException {
+		System.out.println(body);
+		JSONObject o = JSONObject.parseObject(body);
 		User u = new User();
 		u.setUid("1"); // TODO
-		u.setUsername(username);
-		u.setRealname(realname);
-		u.setTitle(title);
-		u.setIdcard(idcard);
+		u.setEmail(o.getString("mail"));
+		String password = o.getString("password");
+		u.setUsername(o.getString("mail"));
+		// u.setRealname(realname);
+		// u.setTitle(title);
+		// u.setIdcard(idcard);
 		String securedPasswd = null;
 		try {
 			MessageDigest digest = MessageDigest.getInstance("md5");
@@ -88,14 +79,14 @@ public class UserRestController {
 		}
 		// if securedPasswd is null throw exception
 		u.setPassword(securedPasswd);
-		u.setAlias(alias);
+		// u.setAlias(alias);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = sdf.parse(birthday);
-		u.setBirthday(d); // TODO
-		u.setImage(image);
-		u.setIcon(icon);
-		u.setEmail(email);
-		u.setMobile(mobile);
+		// Date d = sdf.parse(birthday);
+		// u.setBirthday(d); // TODO
+		// u.setImage(image);
+		// u.setIcon(icon);
+		//u.setEmail(mail);
+		u.setMobile(o.getString("mobile"));
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
 		u.setPassword(null);
