@@ -63,6 +63,7 @@ public class UserRestController {
 		User u = new User();
 		u.setUid("1"); // TODO
 		u.setEmail(o.getString("mail"));
+
 		String password = o.getString("password");
 		u.setUsername(o.getString("mail"));
 		// u.setRealname(realname);
@@ -90,17 +91,19 @@ public class UserRestController {
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
 		u.setPassword(null);
-		return Response.SUCCESS().setData(u);
+		return Response.SUCCESSOK();
 		
 	}
 	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public Response login(@RequestParam String username,
-			@RequestParam String password, HttpServletResponse response) {
-		
-    	User u = userService.checkExistence(username);
+	public Response login(@RequestBody String body,
+			HttpServletResponse response) {
+		JSONObject o = JSONObject.parseObject(body);
+		String username = o.getString("userName");
+		String password = o.getString("password");
+		User u = userService.checkExistence(username);
 		if(u != null) {
 			String securedPasswd = null;
 			try {
@@ -120,7 +123,7 @@ public class UserRestController {
 			}
 			if(u.getPassword().equals(securedPasswd)) {
 				u.setPassword(null);
-				return Response.SUCCESS().setData(u);
+				return Response.SUCCESSOK().setData(u);
 			}
 		}
 		

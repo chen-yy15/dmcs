@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 public class Response {
 
 	private int errcode;
-	
+
+	private String status;
+
 	private String msg;
 	
 	private Object data;
@@ -16,21 +18,14 @@ public class Response {
 	}
 
 
-
-
 	public Response setErrcode(int errcode) {
 		this.errcode = errcode;
 		return this;
 	}
 
-
-
-
 	public String getMsg() {
 		return msg;
 	}
-
-
 
 
 	public Response setMsg(String msg) {
@@ -66,6 +61,12 @@ public class Response {
 		r.setMsg(Constants.RC_SUCCESS_MSG);
 		return r;
 	}
+
+	public static Response SUCCESSOK() {
+		Response r = new Response();
+		r.setStatus("ok");
+		return r;
+	}
 	
 	public Response returnData(Object object) {
 		Response r = SUCCESS();
@@ -90,6 +91,13 @@ public class Response {
 	public Response authorizationRequired() {
 		return returnFail(Constants.RC_AUTH_REQUIRED_CODE, Constants.RC_AUTH_REQUIRED_MSG, null);
 	}
-	
-	
+
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }
