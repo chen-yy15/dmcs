@@ -65,7 +65,7 @@ public class Response {
 	public static Response SUCCESSOK() {
 		Response r = new Response();
 		r.setStatus("ok");
-		return r;
+		return r ;
 	}
 	
 	public Response returnData(Object object) {
