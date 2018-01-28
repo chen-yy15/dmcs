@@ -5,13 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import edu.tsinghua.dmcs.Constants;
 import edu.tsinghua.dmcs.Response;
@@ -34,42 +32,45 @@ public class DeviceRestController {
 	@Autowired
 	UserService userService;
 
-	@DmcsController(description = "添加新设备")
+	//@DmcsController(description = "添加新设备")
+	@DmcsController(loginRequired=false)
     @ApiOperation(value="添加新设备", notes="")
-	@RequestMapping(value = "/addDevice", method = RequestMethod.GET)
-	public Response addDevice(
-			@RequestParam String devimage,
-			@RequestParam String devid,
-			@RequestParam String name,
-			@RequestParam String type,
-			@RequestParam String parameters,
-			@RequestParam String vendor,
-			@RequestParam String guranteeFrom,
-			@RequestParam Long owner) {
-		
+		@RequestMapping(value = "/addDevice", method = RequestMethod.POST)
+	public Response addDevice(@RequestBody String body)
+			//@RequestParam String devimage,
+			//@RequestParam String devid,
+			//@RequestParam String name,
+			//@RequestParam String type,
+			//@RequestParam String parameters,
+			//@RequestParam String vendor,
+			//@RequestParam String guranteeFrom,
+			//@RequestParam Long owner
+	{
+		System.out.println(body);
+		JSONObject o = JSONObject.parseObject(body);
 		Device d = new Device();
-		d.setDevimage(devimage);
-		d.setDevid(devid);
-		d.setName(name);
-		d.setType(type);
-		d.setParameters(parameters);
-		d.setVendor(vendor);
+		d.setDevimage(o.getString("devimage"));
+		d.setDevid(o.getString("devid"));
+		d.setName(o.getString("name"));
+		d.setType(o.getString("type"));
+		d.setParameters(o.getString("parameters"));
+		d.setVendor(o.getString("vendor"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = null;
 		try {
-			date = sdf.parse(guranteeFrom);
+			date = sdf.parse(o.getString("guranteeFrom"));
 		} catch (ParseException e) {
 
 		}
 		d.setGuranteeFrom(date);
-		d.setOwner(owner);
+		d.setOwner(o.getLong("owner"));
 		int num = deviceService.addDevice(d);
-		
+
 		return Response.SUCCESS().setData(d);
 	}
 	
     @ApiOperation(value="更新设备信息", notes="")
-	@RequestMapping(value = "/updateDevice", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateDevice", method = RequestMethod.POST)
     @DmcsController(description="更新设备信息")
 	public Response updateDevice(@RequestParam Long id,
 			@RequestParam String devimage,
