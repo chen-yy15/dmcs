@@ -6,7 +6,7 @@
 		<package name="edu.tsinghua.dmcs.entity" />
 	</typeAliases>
 	<mappers>
-		<package name="edu.tsinghua.dmcs.mapper" />
 		<mapper resource="edu/tsinghua/dmcs/mapper/*.xml" />
+		<package name="edu.tsinghua.dmcs.mapper" />
 	</mappers>
 </configuration>

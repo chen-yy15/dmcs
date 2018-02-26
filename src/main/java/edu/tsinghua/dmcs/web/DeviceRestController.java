@@ -115,7 +115,7 @@ public class DeviceRestController {
     
     @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping(value = "/queryDeviceByGroupId", method = RequestMethod.GET)
-    @DmcsController(loginRequired=true)
+    @DmcsController(loginRequired=false)
 	public Response queryDeviceByGroupId(@RequestParam Long groupId) {
 		List<Device> devices = deviceService.queryDeviceByGroupId(groupId);
 		return Response.SUCCESS().setData(devices);
