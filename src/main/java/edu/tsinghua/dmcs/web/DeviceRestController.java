@@ -112,7 +112,16 @@ public class DeviceRestController {
 		
 		return Response.SUCCESS().setData(num);
 	}
-    
+/**                       ***                   */
+	@ApiOperation(value="显示设备信息",notes="")
+	@RequestMapping(value="/queryDeviceInfo",method = RequestMethod.GET)
+	@DmcsController(loginRequired=false)
+	public Response queryDevice(){
+		List<Device> devices=deviceService.queryDeviceInfo();
+		return Response.SUCCESS().setData(devices);
+	}
+	//显示设备/*  ****************/
+
     @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping(value = "/queryDeviceByGroupId", method = RequestMethod.GET)
     @DmcsController(loginRequired=false)

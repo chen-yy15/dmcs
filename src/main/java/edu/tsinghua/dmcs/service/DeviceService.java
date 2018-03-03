@@ -17,6 +17,8 @@ public interface DeviceService {
 	public int deleteDevice(Long id);
     
 	public List<Device> queryDeviceByGroupId(Long groupId);
+
+	public List<Device> queryDeviceInfo();
 	
 	public Device assignOwnerForDevice(Long userId, Long deviceId);
 	

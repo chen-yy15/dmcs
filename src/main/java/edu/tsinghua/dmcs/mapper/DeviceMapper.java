@@ -20,6 +20,8 @@ public interface DeviceMapper {
     int updateByPrimaryKeySelective(Device record);
 
     int updateByPrimaryKey(Device record);
+
+    public List<Device> queryDeviceInfo();
     
     List<Device> queryDeviceByGroupId(Long groupId);
     

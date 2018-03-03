@@ -47,6 +47,7 @@ public class DeviceServiceImpl implements DeviceService {
 		
 		return num;
 	}
+
     
     @ApiOperation(value="通过群组Id查询设备", notes="")
 	@RequestMapping("/queryDeviceByGroupId")
@@ -54,7 +55,16 @@ public class DeviceServiceImpl implements DeviceService {
 		List<Device> devices = deviceMapper.queryDeviceByGroupId(groupId);
 		return devices;
 	}
-	
+
+	//显示设备/*  ****************/
+	@ApiOperation(value="显示设备信息",notes="")
+	@RequestMapping("/queryDeviceInfo")
+	public List<Device> queryDeviceInfo (){
+		List<Device> devices=deviceMapper.queryDeviceInfo();
+		return devices;
+	}
+	//显示设备/*  ****************/
+
     @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping("/assignOwnerForDevice")
 	public Device assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
