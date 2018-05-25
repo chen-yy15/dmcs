@@ -4,7 +4,7 @@ import edu.tsinghua.dmcs.entity.User;
 
 public interface UserService {
 	
-	public User checkExistence(String username);
+	public User checkExistence(String username_mobile_email);
 	public int selectUser_num();
 	public Integer addUser(User user);
 	

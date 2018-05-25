@@ -1,1 +1,5 @@
 /target/
+/.idea/libraries/
+将删除 .idea/inspectionProfiles/
+将删除 .idea/misc.xml
+将删除 .idea/workspace.xml

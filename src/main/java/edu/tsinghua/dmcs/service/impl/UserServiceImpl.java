@@ -16,10 +16,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 	
-	public User checkExistence(@RequestParam String username) {
-		User user = userMapper.selectByUserName(username);
+	public User checkExistence(@RequestParam String username_mobile_email) {
+		User user = userMapper.selectByUserName(username_mobile_email);
 		return user;
 	}
+	//这里需要考虑到返回数组的情况
 	public int selectUser_num() {
 		Integer number = userMapper.selectUser_num();
 		if(number == null)

@@ -18,6 +18,8 @@
 --
 -- Table structure for table `device`
 --
+--
+
 
 DROP TABLE IF EXISTS `device`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -167,7 +169,7 @@ CREATE TABLE `user` (
   `userQq` varchar(45) DEFAULT NULL COMMENT 'Qq',
   `regtime` datetime DEFAULT NULL COMMENT '注册时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
+  UNIQUE KEY `username_UNIQUE` (`username`),
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,7 +193,7 @@ CREATE TABLE `user_address` (
    `mobilephone` varchar(45) NOT NULL COMMENT '用户手机',
    `fixedphone`  varchar(45) DEFAULT NULL COMMENT '固定电话',
    `Email` varchar(45) DEFAULT NULL COMMENT '用户邮箱',
-   PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `user_device_dashboard`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

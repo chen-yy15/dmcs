@@ -69,7 +69,7 @@ public class Response {
 	}
 	public static Response FAILWRONG() {
 		Response r=new Response();
-		r.setStatus("wrong");
+		r.setStatus("error");
 		return r ;
 	}
 	

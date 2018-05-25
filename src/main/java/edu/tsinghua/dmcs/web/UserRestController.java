@@ -98,8 +98,6 @@ public class UserRestController {
 		}
 		// if securedPasswd is null throw exception
 		u.setPassword(securedPasswd);
-		// u.setAlias(alias);
-		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		u.setCurrentAuthority("user");
 		u.setUserTelephone(mobile);
 		u.setUserEmail(mail);
@@ -114,7 +112,7 @@ public class UserRestController {
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
 		u.setPassword(null);
-		return Response.SUCCESSOK();
+		return Response.SUCCESSOK().setData(u);
 		
 	}
 	
@@ -124,11 +122,9 @@ public class UserRestController {
 	public Response login(@RequestBody String body,
 			HttpServletResponse response) {
 		JSONObject o = JSONObject.parseObject(body);
-		String username = o.getString("username");
-		String sex=o.getString( "sex");
-		String email=o.getString("email");
+		String username_mobile_email = o.getString("username");
 		String password = o.getString("password");
-		User u = userService.checkExistence(username);
+		User u = userService.checkExistence(username_mobile_email);
 		if(u != null) {
 			String securedPasswd = null;
 			try {
@@ -152,7 +148,7 @@ public class UserRestController {
 			}
 		}
 		
-		return Response.SUCCESS().setData(null);
+		return Response.FAILWRONG();
 		
 	}
 
