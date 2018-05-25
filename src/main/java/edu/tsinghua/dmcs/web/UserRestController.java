@@ -53,22 +53,40 @@ public class UserRestController {
 		User user = userService.checkExistence(username);
 		return Response.SUCCESS().setData(user);
 	}
-	
+	//这样定义的是一个共有类的方法，可以正常的使用的
+	public int selectUser_num() {
+		logger.trace("selectUser_num");
+		int user_num=userService.selectUser_num();
+		return user_num;
+	}
+
+	public static String getUserDate() {
+		Date currentTime = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
+
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="注册新用户", notes="")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public Response register(@RequestBody String body) throws ParseException {
 		System.out.println(body);
 		JSONObject o = JSONObject.parseObject(body);
-		User u = new User();
-		u.setUid("1"); // TODO
-		u.setEmail(o.getString("mail"));
-
+		String username = o.getString("username");
+		User exist_u = userService.checkExistence(username);
+			if(exist_u!=null){
+			  return Response.FAILWRONG();
+			}
+		String sex = o.getString("sex");
+		String mail = o.getString("mail");
 		String password = o.getString("password");
-		u.setUsername(o.getString("mail"));
-		// u.setRealname(realname);
-		// u.setTitle(title);
-		// u.setIdcard(idcard);
+		String mobile = o.getString("mobile");
+		User u = new User();
+		int user_num = selectUser_num();
+		u.setUserid(getUserDate()+String.format("%04d",user_num)); // TODO
+		u.setUsername(username);
+        u.setUsersex(sex);
 		String securedPasswd = null;
 		try {
 			MessageDigest digest = MessageDigest.getInstance("md5");
@@ -81,13 +99,18 @@ public class UserRestController {
 		// if securedPasswd is null throw exception
 		u.setPassword(securedPasswd);
 		// u.setAlias(alias);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		// Date d = sdf.parse(birthday);
-		// u.setBirthday(d); // TODO
-		// u.setImage(image);
-		// u.setIcon(icon);
-		//u.setEmail(mail);
-		u.setMobile(o.getString("mobile"));
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		u.setCurrentAuthority("user");
+		u.setUserTelephone(mobile);
+		u.setUserEmail(mail);
+		u.setRealname(null);
+		u.setAlias(null);
+		u.setAvatar(null);
+		u.setUserEmail_1(null);
+		u.setUserTelephone_1(null);
+		u.setUserworkPlace(null);
+		u.setUserWeixin(null);
+		u.setUserQq(null);
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
 		u.setPassword(null);
@@ -101,7 +124,9 @@ public class UserRestController {
 	public Response login(@RequestBody String body,
 			HttpServletResponse response) {
 		JSONObject o = JSONObject.parseObject(body);
-		String username = o.getString("userName");
+		String username = o.getString("username");
+		String sex=o.getString( "sex");
+		String email=o.getString("email");
 		String password = o.getString("password");
 		User u = userService.checkExistence(username);
 		if(u != null) {
@@ -170,23 +195,24 @@ public class UserRestController {
 	@DmcsController(description="更新用户信息")
     @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
-	public Response update(@RequestParam String username,
-			@RequestParam String realname,
-			@RequestParam String title,
-			@RequestParam String idcard,
+	public Response update(
+			@RequestParam String username,
+			@RequestParam String currentAuthority,
 			@RequestParam String password,
+			@RequestParam String realname,
 			@RequestParam String alias,
-			@RequestParam String birthday,
-			@RequestParam String image,
-			@RequestParam String icon,
-			@RequestParam String email,
-			@RequestParam String mobile) {
+			@RequestParam String avatar,
+			@RequestParam String userEmail,
+			@RequestParam String userEmail_1,
+			@RequestParam String userTelephone,
+			@RequestParam String userTelephone_1,
+			@RequestParam String userworkPlace,
+			@RequestParam String userWeixin,
+			@RequestParam String userQq) {
     	int num = 0;
 		User u = userService.checkExistence(username);
 		if(u != null) {
 			u.setRealname(realname);
-			u.setTitle(title);
-			u.setIdcard(idcard);
 			String securedPasswd = null;
 			try {
 				MessageDigest digest = MessageDigest.getInstance("md5");
@@ -199,18 +225,18 @@ public class UserRestController {
 			// if securedPasswd is null throw exception
 			u.setPassword(securedPasswd);
 			u.setAlias(alias);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date d = null;
-			try {
-				d = sdf.parse(birthday);
-			} catch (ParseException e) {
-				logger.error("fail to parse date", e);
-			}
-			u.setBirthday(d);
-			u.setImage(image);
-			u.setIcon(icon);
-			u.setEmail(email);
-			u.setMobile(mobile);
+			u.setUsername(username);
+			u.setCurrentAuthority(currentAuthority);
+			u.setPassword(password);// TODO
+			u.setAlias(alias);
+			u.setAvatar(avatar);
+			u.setUserEmail(userEmail);
+			u.setUserEmail_1(userEmail_1);
+			u.setUserTelephone(userTelephone);
+			u.setUserTelephone_1(userTelephone_1);
+			u.setUserworkPlace(userworkPlace);
+			u.setUserWeixin(userWeixin);
+			u.setUserQq(userQq);
 		} else {
 			 num = userService.update(u);
 		}

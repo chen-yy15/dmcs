@@ -3,24 +3,27 @@
 <mapper namespace="edu.tsinghua.dmcs.mapper.UserMapper">
 	<resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.User">
 		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="userid" property="userid" jdbcType="VARCHAR" />
 		<result column="username" property="username" jdbcType="VARCHAR" />
-		<result column="realname" property="realname" jdbcType="VARCHAR" />
-		<result column="title" property="title" jdbcType="VARCHAR" />
-		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="currentAuthority" property="currentAuthority" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="usersex" property="password" jdbcType="VARCHAR" />
+		<result column="realname" property="realname" jdbcType="VARCHAR" />
 		<result column="alias" property="alias" jdbcType="VARCHAR" />
-		<result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
-		<result column="image" property="image" jdbcType="VARCHAR" />
-		<result column="icon" property="icon" jdbcType="VARCHAR" />
-		<result column="email" property="email" jdbcType="VARCHAR" />
-		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="avatar" property="avatar" jdbcType="VARCHAR" />
+		<result column="userEmail" property="userEmail" jdbcType="VARCHAR" />
+		<result column="userEmail_1" property="userEmail_1" jdbcType="VARCHAR" />
+		<result column="userTelephone" property="userTelephone" jdbcType="VARCHAR" />
+		<result column="userTelephone_1" property="userTelephone_1" jdbcType="VARCHAR" />
+		<result column="userworkPlace" property="userworkPlace" jdbcType="VARCHAR" />
+		<result column="userWeixin" property="userWeixin" jdbcType="VARCHAR" />
+		<result column="userQq" property="userQq" jdbcType="VARCHAR" />
 		<result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, username, realname, title, idcard, password, alias, birthday,
-		image, icon,
-		email, mobile, regtime
+		id, userid, username, currentAuthority, password, usersex, realname, alias, avatar, userEmail, userEmail_1, userTelephone, userTelephone_1,
+		userworkPlace, userWeixin,
+		userQq, regtime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
@@ -34,25 +37,32 @@
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where username = #{userName,jdbcType=VARCHAR}
+		where username = #{username,jdbcType=VARCHAR}
+	</select>
+	<select id="selectUser_num" resultType="Integer" parameterType="java.lang.Integer">
+		SELECT
+		COUNT(*)
+		from user
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from user
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
+
 	<insert id="insert" parameterType="edu.tsinghua.dmcs.entity.User">
-		insert into user (id, uid, username,
-		realname, title, idcard,
-		password, alias, birthday,
-		image, icon, email,
-		mobile, regtime)
-		values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=VARCHAR},
-		#{username,jdbcType=VARCHAR},
-		#{realname,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR},
-		#{password,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR},
-		#{birthday,jdbcType=TIMESTAMP},
-		#{image,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-		#{mobile,jdbcType=VARCHAR}, #{regtime,jdbcType=TIMESTAMP})
+		insert into user (id, userid, username, currentAuthority,
+		 password, usersex, realname, alias, avatar, userEmail,
+		 userEmail_1, userTelephone, userTelephone_1,
+		 userworkPlace, userWeixin,
+		 userQq, regtime )
+		values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR},
+		#{username,jdbcType=VARCHAR},#{currentAuthority,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},#{usersex, jdbcType=VARCHAR},
+		#{realname,jdbcType=VARCHAR},#{ alias, jdbcType=VARCHAR},#{avatar, jdbcType=VARCHAR},
+		#{userEmail,jdbcType=VARCHAR},#{userEmail_1,jdbcType=VARCHAR},
+		#{userTelephone,jdbcType=VARCHAR},#{userTelephone_1,jdbcType=VARCHAR},
+		#{userworkPlace,jdbcType=VARCHAR}, #{userWeixin,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR},
+		#{regtime,jdbcType=TIMESTAMP})
 	</insert>
 	<insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.User">
 		insert into user
@@ -60,41 +70,50 @@
 			<if test="id != null">
 				id,
 			</if>
-			<if test="uid != null">
-				uid,
+			<if test="userid != null">
+				userid,
 			</if>
 			<if test="username != null">
 				username,
 			</if>
+			<if test="currentAuthority != null">
+				currentAuthority,
+			</if>
+			<if test="passwpord != null">
+				password,
+			</if>
+			<if test="usersex != null">
+				usersex,
+			</if>
 			<if test="realname != null">
 				realname,
-			</if>
-			<if test="title != null">
-				title,
-			</if>
-			<if test="idcard != null">
-				idcard,
-			</if>
-			<if test="password != null">
-				password,
 			</if>
 			<if test="alias != null">
 				alias,
 			</if>
-			<if test="birthday != null">
-				birthday,
+			<if test="avatar != null">
+				avatar,
 			</if>
-			<if test="image != null">
-				image,
+			<if test="userEmail != null">
+				userEmail,
 			</if>
-			<if test="icon != null">
-				icon,
+			<if test="userEmail_1 != null">
+				userEmail_1,
 			</if>
-			<if test="email != null">
-				email,
+			<if test="userTelephone != null">
+				userTelephone,
 			</if>
-			<if test="mobile != null">
-				mobile,
+			<if test="userTelephone_1 != null">
+				userTelephone_1,
+			</if>
+			<if test="userworkPlace != null">
+				userworkPlace,
+			</if>
+			<if test="userWeixin != null">
+				userWeixin,
+			</if>
+			<if test="userQq != null">
+				userQq,
 			</if>
 			<if test="regtime != null">
 				regtime,
@@ -104,41 +123,50 @@
 			<if test="id != null">
 				#{id,jdbcType=INTEGER},
 			</if>
-			<if test="uid != null">
-				#{uid,jdbcType=VARCHAR},
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
 			</if>
 			<if test="username != null">
 				#{username,jdbcType=VARCHAR},
 			</if>
-			<if test="realname != null">
-				#{realname,jdbcType=VARCHAR},
-			</if>
-			<if test="title != null">
-				#{title,jdbcType=VARCHAR},
-			</if>
-			<if test="idcard != null">
-				#{idcard,jdbcType=VARCHAR},
+			<if test="currentAuthority != null">
+				#{currentAuthority,jdbcType=VARCHAR},
 			</if>
 			<if test="password != null">
 				#{password,jdbcType=VARCHAR},
 			</if>
+			<if test="usersex != null">
+				#{usersex,jdbcType=VARCHAR},
+			</if>
+			<if test="realname != null">
+				#{realname,jdbcType=VARCHAR},
+			</if>
 			<if test="alias != null">
 				#{alias,jdbcType=VARCHAR},
 			</if>
-			<if test="birthday != null">
-				#{birthday,jdbcType=TIMESTAMP},
+			<if test="avatar != null">
+				#{avatar,jdbcType=VARCHAR},
 			</if>
-			<if test="image != null">
-				#{image,jdbcType=VARCHAR},
+			<if test="userEmail != null">
+				#{userEmail,jdbcType=VARCHAR},
 			</if>
-			<if test="icon != null">
-				#{icon,jdbcType=VARCHAR},
+			<if test="userEmail_1 != null">
+				#{userEmail_1,jdbcType=VARCHAR},
 			</if>
-			<if test="email != null">
-				#{email,jdbcType=VARCHAR},
+			<if test="userTelephone != null">
+				#{userTelephone,jdbcType=VARCHAR},
 			</if>
-			<if test="mobile != null">
-				#{mobile,jdbcType=VARCHAR},
+			<if test="userTelephone_1 != null">
+				#{userTelephone_1,jdbcType=VARCHAR},
+			</if>
+			<if test="userworkPlace != null">
+				#{userworkPlace,jdbcType=VARCHAR},
+			</if>
+			<if test="userWeixin != null">
+				#{userWeixin,jdbcType=VARCHAR},
+			</if>
+			<if test="userQq != null">
+				#{userQq,jdbcType=VARCHAR},
 			</if>
 			<if test="regtime != null">
 				#{regtime,jdbcType=TIMESTAMP},
@@ -148,63 +176,76 @@
 	<update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.User">
 		update user
 		<set>
-			<if test="uid != null">
-				uid = #{uid,jdbcType=VARCHAR},
+			<if test="userid != null">
+				userid = #{userid,jdbcType=VARCHAR},
 			</if>
 			<if test="username != null">
 				username = #{username,jdbcType=VARCHAR},
 			</if>
-			<if test="realname != null">
-				realname = #{realname,jdbcType=VARCHAR},
-			</if>
-			<if test="title != null">
-				title = #{title,jdbcType=VARCHAR},
-			</if>
-			<if test="idcard != null">
-				idcard = #{idcard,jdbcType=VARCHAR},
+			<if test="currentAuthority != null">
+				currentAuthority = #{currentAuthority,jdbcType=VARCHAR},
 			</if>
 			<if test="password != null">
 				password = #{password,jdbcType=VARCHAR},
 			</if>
+			<if test="usersex != null">
+				password = #{usersex,jdbcType=VARCHAR},
+			</if>
+			<if test="realname != null">
+				realname = #{realname,jdbcType=VARCHAR},
+			</if>
 			<if test="alias != null">
 				alias = #{alias,jdbcType=VARCHAR},
 			</if>
-			<if test="birthday != null">
-				birthday = #{birthday,jdbcType=TIMESTAMP},
+			<if test="avatar != null">
+				avatar = #{avatar,jdbcType=VARCHAR},
 			</if>
-			<if test="image != null">
-				image = #{image,jdbcType=VARCHAR},
+			<if test="userEmail != null">
+				uaerEmail = #{userEmail,jdbcType=VARCHAR},
 			</if>
-			<if test="icon != null">
-				icon = #{icon,jdbcType=VARCHAR},
+			<if test="userEmail_1 != null">
+				userEmail_1 = #{userEmail_1,jdbcType=VARCHAR},
 			</if>
-			<if test="email != null">
-				email = #{email,jdbcType=VARCHAR},
+			<if test="userTelephone != null">
+				userTelephone = #{userTelephone,jdbcType=VARCHAR},
 			</if>
-			<if test="mobile != null">
-				mobile = #{mobile,jdbcType=VARCHAR},
+			<if test="userTelephone_1 != null">
+				userTelephone_1 = #{userTelephone_1,jdbcType=VARCHAR},
+			</if>
+			<if test="userworkPlace != null">
+				userworkPlace = #{userworkPlace,jdbcType=VARCHAR},
+			</if>
+			<if test="userWeixin != null">
+				userWeixin = #{userWeixin,jdbcType=VARCHAR},
+			</if>
+			<if test="userQq != null">
+				userQq = #{userQq,jdbcType=VARCHAR},
 			</if>
 			<if test="regtime != null">
-				regtime = #{regtime,jdbcType=TIMESTAMP},
+				regtim = #{regtime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.User">
 		update user
-		set uid = #{uid,jdbcType=VARCHAR},
-		username = #{username,jdbcType=VARCHAR},
-		realname = #{realname,jdbcType=VARCHAR},
-		title = #{title,jdbcType=VARCHAR},
-		idcard = #{idcard,jdbcType=VARCHAR},
-		password = #{password,jdbcType=VARCHAR},
-		alias = #{alias,jdbcType=VARCHAR},
-		birthday = #{birthday,jdbcType=TIMESTAMP},
-		image = #{image,jdbcType=VARCHAR},
-		icon = #{icon,jdbcType=VARCHAR},
-		email = #{email,jdbcType=VARCHAR},
-		mobile = #{mobile,jdbcType=VARCHAR},
-		regtime = #{regtime,jdbcType=TIMESTAMP}
+		set
+			userid = #{userid,jdbcType=VARCHAR},
+			username = #{username,jdbcType=VARCHAR},
+			currentAuthority = #{currentAuthority,jdbcType=VARCHAR},
+			password = #{password,jdbcType=VARCHAR},
+			usersex = #{usersex,jdbcType=VARCHAR},
+			realname = #{realname,jdbcType=VARCHAR},
+			alias = #{alias,jdbcType=VARCHAR},
+			avatar = #{avatar,jdbcType=VARCHAR},
+			uaerEmail = #{userEmail,jdbcType=VARCHAR},
+			userEmail_1 = #{userEmail_1,jdbcType=VARCHAR},
+			userTelephone = #{userTelephone,jdbcType=VARCHAR},
+			userTelephone_1 = #{userTelephone_1,jdbcType=VARCHAR},
+			userworkPlace = #{userworkPlace,jdbcType=VARCHAR},
+			userWeixin = #{userWeixin,jdbcType=VARCHAR},
+			userQq = #{userQq,jdbcType=VARCHAR},
+			regtim = #{regtime,jdbcType=TIMESTAMP},
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 </mapper>

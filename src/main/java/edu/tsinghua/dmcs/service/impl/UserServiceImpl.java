@@ -20,46 +20,56 @@ public class UserServiceImpl implements UserService {
 		User user = userMapper.selectByUserName(username);
 		return user;
 	}
-	
+	public int selectUser_num() {
+		Integer number = userMapper.selectUser_num();
+		if(number == null)
+			return 0;
+		return number.intValue();
+	}
 	public Integer addUser(User user) {
 		int num = userMapper.insert(user);
 		return num;
 	}
 	
 	public User register(@RequestParam String username,
-			@RequestParam String realname,
-			@RequestParam String title,
-			@RequestParam String idcard,
-			@RequestParam String password,
-			@RequestParam String alias,
-			@RequestParam String birthday,
-			@RequestParam String image,
-			@RequestParam String icon,
-			@RequestParam String email,
-			@RequestParam String mobile) {
+						 @RequestParam String currentAuthority,
+						 @RequestParam String password,
+						 @RequestParam String usersex,
+						 @RequestParam String realname,
+						 @RequestParam String alias,
+						 @RequestParam String avatar,
+						 @RequestParam String userEmail,
+						 @RequestParam String userEmail_1,
+						 @RequestParam String userTelephone,
+						 @RequestParam String userTelephone_1,
+						 @RequestParam String userworkPlace,
+						 @RequestParam String userWeixin,
+						 @RequestParam String userQq) {
 		
 		User u = new User();
-		u.setUid("1"); // TODO
+		u.setUserid("1"); // TODO
 		u.setUsername(username);
-		u.setRealname(realname);
-		u.setTitle(title);
-		u.setIdcard(idcard);
+		u.setCurrentAuthority(currentAuthority);
 		u.setPassword(password);// TODO
+		u.setUsersex(usersex);
+		u.setRealname(realname);
 		u.setAlias(alias);
-		Date birth = new Date(birthday);
-		u.setBirthday(birth); // TODO
-		u.setImage(image);
-		u.setIcon(icon);
-		u.setEmail(email);
-		u.setMobile(mobile);
+		u.setAvatar(avatar);
+        u.setUserEmail(userEmail);
+        u.setUserEmail_1(userEmail_1);
+        u.setUserTelephone(userTelephone);
+        u.setUserTelephone_1(userTelephone_1);
+        u.setUserworkPlace(userworkPlace);
+        u.setUserWeixin(userWeixin);
+        u.setUserQq(userQq);
 		u.setRegtime(new Date());
 		userMapper.insert(u);
-		
 		return u;
 		
 	}
 	
-	public User login(@RequestParam String username,
+	public User login(
+			@RequestParam String username,
 			@RequestParam String password) {
 		
 		User u = userMapper.selectByUserName(username);
@@ -67,38 +77,41 @@ public class UserServiceImpl implements UserService {
 			if(u.getPassword().equals(password))
 				return null;
 		}
-		
 		return u;
-		
 	}
 	
 	public User update(@RequestParam String username,
-			@RequestParam String realname,
-			@RequestParam String title,
-			@RequestParam String idcard,
-			@RequestParam String password,
-			@RequestParam String alias,
-			@RequestParam String birthday,
-			@RequestParam String image,
-			@RequestParam String icon,
-			@RequestParam String email,
-			@RequestParam String mobile) {
+					   @RequestParam String currentAuthority,
+					   @RequestParam String password,
+					   @RequestParam String usersex,
+					   @RequestParam String realname,
+					   @RequestParam String alias,
+					   @RequestParam String avatar,
+					   @RequestParam String userEmail,
+					   @RequestParam String userEmail_1,
+					   @RequestParam String userTelephone,
+					   @RequestParam String userTelephone_1,
+					   @RequestParam String userworkPlace,
+					   @RequestParam String userWeixin,
+					   @RequestParam String userQq) {
 		
 		User u = new User();
 		
 		u = userMapper.selectByUserName(username);
 		if(u != null) {
-			u.setRealname(realname);
-			u.setTitle(title);
-			u.setIdcard(idcard);
+			u.setCurrentAuthority(currentAuthority);
 			u.setPassword(password);// TODO
+			u.setUsersex(usersex);
+			u.setRealname(realname);
 			u.setAlias(alias);
-			Date birth = new Date(birthday);
-			u.setBirthday(birth); // TODO
-			u.setImage(image);
-			u.setIcon(icon);
-			u.setEmail(email);
-			u.setMobile(mobile);
+			u.setAvatar(avatar);
+			u.setUserEmail(userEmail);
+			u.setUserEmail_1(userEmail_1);
+			u.setUserTelephone(userTelephone);
+			u.setUserTelephone_1(userTelephone_1);
+			u.setUserworkPlace(userworkPlace);
+			u.setUserWeixin(userWeixin);
+			u.setUserQq(userQq);
 		}
 		int num = userMapper.updateByPrimaryKey(u);
 		return u;

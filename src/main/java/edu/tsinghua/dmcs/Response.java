@@ -8,10 +8,10 @@ public class Response {
 
 	private String status;
 
-	private String msg;
+	private String msg;//c错误
 	
 	private Object data;
-	
+	//data中返回了对象的信息
 	
 	public int getErrcode() {
 		return errcode;
@@ -65,6 +65,11 @@ public class Response {
 	public static Response SUCCESSOK() {
 		Response r = new Response();
 		r.setStatus("ok");
+		return r ;
+	}
+	public static Response FAILWRONG() {
+		Response r=new Response();
+		r.setStatus("wrong");
 		return r ;
 	}
 	

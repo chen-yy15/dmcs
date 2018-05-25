@@ -150,18 +150,21 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `uid` varchar(45) DEFAULT NULL COMMENT '用户系统号',
+  `userid` varchar(45) DEFAULT NULL COMMENT '用户系统号',
   `username` varchar(45) NOT NULL COMMENT '登陆用户名',
-  `realname` varchar(45) DEFAULT NULL COMMENT '真实姓名',
-  `title` varchar(45) DEFAULT NULL COMMENT '头衔',
-  `idcard` varchar(45) DEFAULT NULL COMMENT '校园卡id',
+  `currentAuthority` varchar(45) NOT NULL COMMENT '用户身份',
   `password` varchar(45) NOT NULL COMMENT '密码',
+  `usersex` varchar(45) NOT NULL COMMENT '性别',
+  `realname` varchar(45) DEFAULT NULL COMMENT '真实姓名',
   `alias` varchar(45) DEFAULT NULL,
-  `birthday` datetime DEFAULT NULL COMMENT '生日',
-  `image` varchar(45) DEFAULT NULL COMMENT '个人照',
-  `icon` varchar(45) DEFAULT NULL COMMENT '个人图标',
-  `email` varchar(45) DEFAULT NULL COMMENT '电邮',
-  `mobile` varchar(45) DEFAULT NULL COMMENT '手机',
+  `avatar` varchar(45) DEFAULT NULL COMMENT '个人照片',
+  `userEmail` varchar(45) NOT NULL COMMENT '电邮',
+  `userEmail_1` varchar(45) DEFAULT NULL COMMENT'备用邮箱',
+  `userTelephone` varchar(45) NOT NULL COMMENT '手机',
+  `userTelephone_1` varchar(45) DEFAULT NULL COMMENT '备用手机',
+  `userworkPlace` varchar(45) DEFAULT NULL COMMENT '地址',
+  `userWeixin` varchar(45) DEFAULT NULL COMMENT '微信',
+  `userQq` varchar(45) DEFAULT NULL COMMENT 'Qq',
   `regtime` datetime DEFAULT NULL COMMENT '注册时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
@@ -171,19 +174,38 @@ CREATE TABLE `user` (
 --
 -- Table structure for table `user_device_dashboard`
 --
+DROP TABLE IF EXISTS `user_address`;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `user_device_dashboard`
+--
+ 
+CREATE TABLE `user_address` (
+   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+   `userid` varchar(45) NOT NULL COMMENT '用户系统号',
+   `title`  varchar(45) NOT NULL COMMENT '地址名',
+   `name`   varchar(45) NOT NULL COMMENT '用户名',
+   `area`   varchar(45) NOT NULL COMMENT '区域',
+   `place`  varchar(45) NOT NULL COMMENT '地址',
+   `mobilephone` varchar(45) NOT NULL COMMENT '用户手机',
+   `fixedphone`  varchar(45) DEFAULT NULL COMMENT '固定电话',
+   `Email` varchar(45) DEFAULT NULL COMMENT '用户邮箱',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `user_device_dashboard`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_device_dashboard` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `deviceId` bigint(20) DEFAULT NULL COMMENT '设备id',
-  `userId` bigint(20) DEFAULT NULL COMMENT '用户id',
-  `x_position` int(11) DEFAULT NULL COMMENT '显示x位置',
-  `widget` int(11) DEFAULT NULL COMMENT '显示组件类型',
-  `type` int(11) DEFAULT NULL COMMENT '参数类型',
-  `paramId` bigint(20) DEFAULT NULL COMMENT '参数id',
-  `y_position` int(11) DEFAULT NULL COMMENT '显示y坐标位置',
+  `deviceId` bigint(20) NOT NULL COMMENT '设备id',
+  `userid` varchar(45) NOT NULL COMMENT '用户id',
+  `type` varchar(45) NOT NULL COMMENT '控件类型',
+  `position_x` int(11) DEFAULT NULL COMMENT '显示x位置',
+  `position_y` int(11) DEFAULT NULL COMMENT '显示y坐标位置',
+  `range` int(11) DEFAULT NULL COMMENT '量程',
+  `measurement` varchar(45) DEFAULT NULL COMMENT '单位',
+  `node` varchar(45) DEFAULT NULL COMMENT '节点',
   `width` int(11) DEFAULT NULL COMMENT 'widget的宽',
   `heighth` int(11) DEFAULT NULL COMMENT 'widget的高',
   PRIMARY KEY (`id`)

@@ -5,29 +5,35 @@ import java.util.Date;
 public class User {
     private Long id;
 
-    private String uid;
+    private String userid;
 
     private String username;
 
-    private String realname;
-
-    private String title;
-
-    private String idcard;
+    private String currentAuthority;
 
     private String password;
 
+    private String usersex;
+
+    private String realname;
+
     private String alias;
 
-    private Date birthday;
+    private String avatar;
 
-    private String image;
+    private String userEmail;
 
-    private String icon;
+    private String userEmail_1;
 
-    private String email;
+    private String userTelephone;
 
-    private String mobile;
+    private String userTelephone_1;
+
+    private String userworkPlace;
+
+    private String userWeixin;
+
+    private String userQq;
 
     private Date regtime;
 
@@ -39,12 +45,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUserid() {
+        return userid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {
@@ -55,85 +61,59 @@ public class User {
         this.username = username;
     }
 
-    public String getRealname() {
-        return realname;
+    public String getCurrentAuthority() { return currentAuthority; }
+
+    public void setCurrentAuthority(String currentAuthority) {this.currentAuthority = currentAuthority;}
+
+    public String getPassword() {return password;}
+
+    public void setPassword(String password) {this.password = password;}
+
+    public String getUsersex() { return usersex;}
+
+    public void setUsersex(String usersex) {this.usersex = usersex; }
+
+    public String getRealname() {return realname;}
+
+    public void setRealname(String realname) {this.realname = realname;}
+
+    public String getAlias() {return alias;}
+
+    public void setAlias(String alias) {this.alias = alias;}
+
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
+    public void setAvatar(String avatar) {this.avatar = avatar;}
 
-    public String getTitle() {
-        return title;
-    }
+    public String getUserEmail() { return userEmail;}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setUserEmail(String userEmail){this.userEmail = userEmail;}
 
-    public String getIdcard() {
-        return idcard;
-    }
+    public String getUserEmail_1() {return userEmail_1;}
 
-    public void setIdcard(String idcard) {
-        this.idcard = idcard;
-    }
+    public void  setUserEmail_1(String userEmail_1) {this.userEmail_1=userEmail_1;}
 
-    public String getPassword() {
-        return password;
-    }
+    public String getUserTelephone() {return userTelephone;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setUserTelephone(String userTelephone) {this.userTelephone = userTelephone;}
 
-    public String getAlias() {
-        return alias;
-    }
+    public String getUserTelephone_1() {return userTelephone_1;}
 
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
+    public void setUserTelephone_1(String userTelephone_1) {this.userTelephone_1 = userTelephone_1;}
 
-    public Date getBirthday() {
-        return birthday;
-    }
+    public String getUserworkPlace() {return userworkPlace;}
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+    public void setUserworkPlace(String userworkPlace) {this.userworkPlace = userworkPlace;}
 
-    public String getImage() {
-        return image;
-    }
+    public String getUserWeixin () {return userWeixin;}
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+    public void setUserWeixin(String weixin) {this.userWeixin = this.userWeixin;}
 
-    public String getIcon() {
-        return icon;
-    }
+    public String getUserQq () {return userQq;}
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+    public void setUserQq(String userQq){this.userQq = userQq;}
 
     public Date getRegtime() {
         return regtime;
