@@ -169,7 +169,7 @@ CREATE TABLE `user` (
   `userQq` varchar(45) DEFAULT NULL COMMENT 'Qq',
   `regtime` datetime DEFAULT NULL COMMENT '注册时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
