@@ -103,7 +103,7 @@ public class UserRestController {
 		u.setUserEmail(mail);
 		u.setRealname(null);
 		u.setAlias(null);
-		u.setAvatar(null);
+		u.setAvatar("http://47.92.126.195:80/image/ZiESqWwCXBRQoaPONSJe.png");
 		u.setUserEmail_1(null);
 		u.setUserTelephone_1(null);
 		u.setUserworkPlace(null);
