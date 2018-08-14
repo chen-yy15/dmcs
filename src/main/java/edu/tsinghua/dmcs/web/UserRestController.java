@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +50,7 @@ public class UserRestController {
 
 	@Autowired
 	private TockenCache tockenCache;
+
 
 	@Value("${security.sault.login}")
 	private String securitySault;
@@ -139,7 +142,8 @@ public class UserRestController {
 				byte [] bs = digest.digest((this.securitySault + password).getBytes());
 				securedPasswd = new String(bs);
 				String token = this.getToken(u.getUsername()) ;//
-				Cookie cookie = new Cookie("dmcstoken", token);
+				String temtoken = URLEncoder.encode(token);
+				Cookie cookie = new Cookie("dmcstoken", temtoken);
 				cookie.setMaxAge(3600);
 				cookie.setPath("/");
 				response.addCookie(cookie);
@@ -167,6 +171,17 @@ public class UserRestController {
 		System.out.println(body);
 		JSONObject o = JSONObject.parseObject(body);
 		String dmcstoken = o.getString("dmcstoken");
+		dmcstoken=URLDecoder.decode(dmcstoken);
+		String username=tockenCache.getUserNameByToken(dmcstoken);
+		System.out.println(username);
+		if(username !=null){
+			User u = userService.checkExistence(username);
+			if( u!=null ) {
+				return Response.SUCCESSOK().setData(u);
+			}
+			return Response.FAILWRONG();
+		}
+			return Response.FAILWRONG();
 		/*String username_mobile_email = o.getString("username");
 		String password = o.getString("password");
 		User u = userService.checkExistence(username_mobile_email);
@@ -192,8 +207,6 @@ public class UserRestController {
 				return Response.SUCCESSOK().setData(u);
 			}
 		}*/
-
-		return Response.FAILWRONG();
 
 	}
 	/*********/
