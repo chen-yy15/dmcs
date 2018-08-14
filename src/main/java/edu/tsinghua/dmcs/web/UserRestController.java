@@ -1,32 +1,39 @@
 package edu.tsinghua.dmcs.web;
 
-import java.security.MessageDigest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
-import edu.tsinghua.dmcs.util.TockenCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
+import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+/////
 
+/////
 @RestController
 @RequestMapping(value="/dmcs/api/v1/user")
 public class UserRestController {
@@ -131,7 +138,7 @@ public class UserRestController {
 				MessageDigest digest = MessageDigest.getInstance("md5");
 				byte [] bs = digest.digest((this.securitySault + password).getBytes());
 				securedPasswd = new String(bs);
-				String token = this.getToken(u.getUsername()) ;
+				String token = this.getToken(u.getUsername()) ;//
 				Cookie cookie = new Cookie("dmcstoken", token);
 				cookie.setMaxAge(3600);
 				cookie.setPath("/");
@@ -151,6 +158,106 @@ public class UserRestController {
 		return Response.FAILWRONG();
 		
 	}
+
+/********/
+	@DmcsController(loginRequired=false)
+	@ApiOperation(value="用户验证", notes="true验证成功")
+	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
+	public Response temcheck(@RequestBody String body) throws ParseException{
+		System.out.println(body);
+		JSONObject o = JSONObject.parseObject(body);
+		String dmcstoken = o.getString("dmcstoken");
+		/*String username_mobile_email = o.getString("username");
+		String password = o.getString("password");
+		User u = userService.checkExistence(username_mobile_email);
+		if(u != null) {
+			String securedPasswd = null;
+			try {
+				MessageDigest digest = MessageDigest.getInstance("md5");
+				byte [] bs = digest.digest((this.securitySault + password).getBytes());
+				securedPasswd = new String(bs);
+				String token = this.getToken(u.getUsername()) ;
+				Cookie cookie = new Cookie("dmcstoken", token);
+				cookie.setMaxAge(3600);
+				cookie.setPath("/");
+				response.addCookie(cookie);
+				tockenCache.setTokenForUser(token, u.getUsername());
+
+
+			} catch (Exception e) {
+				logger.error("fail to get md5 algorithm");
+			}
+			if(u.getPassword().equals(securedPasswd)) {
+				u.setPassword(null);
+				return Response.SUCCESSOK().setData(u);
+			}
+		}*/
+
+		return Response.FAILWRONG();
+
+	}
+	/*********/
+	/*******/
+	@DmcsController(loginRequired=false)
+	@ApiOperation(value="插入图片", notes="插入成功")
+	@RequestMapping(value = "/image", method = RequestMethod.POST)
+	public Response image(HttpServletRequest request,
+						  HttpServletResponse response)  {
+		 File file=new File("/usr/local/nginx/html/dmcs");
+		 if(!file.exists() && !file.isDirectory()){
+		 	System.out.println("/usr/local/html/dmcs"+"目录不存在，需要创建");
+		 	file.mkdir();
+		 }
+		 String message="";
+		 try{
+			 DiskFileItemFactory factory=new DiskFileItemFactory();
+             factory.setSizeThreshold(1024*100);
+
+			 ServletFileUpload upload= new ServletFileUpload(factory);
+             upload.setHeaderEncoding("UTF-8");
+             if(!ServletFileUpload.isMultipartContent(request)){
+             	System.out.println("没有文件上传");
+             	return Response.FAILWRONG();
+			 }
+			 List<FileItem> list= upload.parseRequest(new ServletRequestContext(request));
+             for (FileItem item:list) {
+             	if(item.isFormField()){
+             		String name = item.getFieldName();
+             		String value = item.getString("UTF-8");
+             		System.out.println(name+"="+value);
+				}else{
+             		String filename = item.getName();
+             		System.out.println(filename);
+             		if(filename==null || filename.trim().equals("")){
+             			continue;
+					}
+					filename = filename.substring(filename.lastIndexOf("\\")+1);
+					InputStream in = item.getInputStream();
+
+					FileOutputStream out = new FileOutputStream("/usr/local/nginx/html/dmcs/"+filename);
+					byte buffer[] = new byte[1024];
+					int len=0;
+					while((len=in.read(buffer))>0){
+						out.write(buffer,0,len);
+					}
+					in.close();
+					out.close();
+
+					item.delete();
+					message = "文件上传成功";
+				}
+			 }
+			 return Response.SUCCESSOK();
+		 }catch (Exception e) {
+             message = "文件上传失败";
+             e.printStackTrace();
+             return Response.FAILWRONG();
+         }
+
+	}
+	/*******/
+
+
 
 	@DmcsController(loginRequired=true)
 	@ApiOperation(value="用户登出", notes="true登出成功")
@@ -264,3 +371,5 @@ public class UserRestController {
 	}
 	
 }
+//
+//
