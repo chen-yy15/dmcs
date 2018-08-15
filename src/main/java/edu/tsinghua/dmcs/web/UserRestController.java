@@ -181,41 +181,14 @@ public class UserRestController {
 			}
 			return Response.FAILWRONG();
 		}
-			return Response.FAILWRONG();
-		/*String username_mobile_email = o.getString("username");
-		String password = o.getString("password");
-		User u = userService.checkExistence(username_mobile_email);
-		if(u != null) {
-			String securedPasswd = null;
-			try {
-				MessageDigest digest = MessageDigest.getInstance("md5");
-				byte [] bs = digest.digest((this.securitySault + password).getBytes());
-				securedPasswd = new String(bs);
-				String token = this.getToken(u.getUsername()) ;
-				Cookie cookie = new Cookie("dmcstoken", token);
-				cookie.setMaxAge(3600);
-				cookie.setPath("/");
-				response.addCookie(cookie);
-				tockenCache.setTokenForUser(token, u.getUsername());
-
-
-			} catch (Exception e) {
-				logger.error("fail to get md5 algorithm");
-			}
-			if(u.getPassword().equals(securedPasswd)) {
-				u.setPassword(null);
-				return Response.SUCCESSOK().setData(u);
-			}
-		}*/
-
+		return Response.FAILWRONG();
 	}
 	/*********/
 	/*******/
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
-	public Response image(HttpServletRequest request,
-						  HttpServletResponse response)  {
+	public Response image(HttpServletRequest request)  {
 		 File file=new File("/usr/local/nginx/html/dmcs");
 		 if(!file.exists() && !file.isDirectory()){
 		 	System.out.println("/usr/local/html/dmcs"+"目录不存在，需要创建");
