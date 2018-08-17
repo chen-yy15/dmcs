@@ -9,23 +9,19 @@ import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -33,6 +29,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+//import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 /////
 
 /////
@@ -188,58 +186,50 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
-	public Response image(HttpServletRequest request)  {
-		 File file=new File("/usr/local/nginx/html/dmcs");
-		 if(!file.exists() && !file.isDirectory()){
-		 	System.out.println("/usr/local/html/dmcs"+"目录不存在，需要创建");
-		 	file.mkdir();
-		 }
-		 String message="";
-		 try{
-			 DiskFileItemFactory factory=new DiskFileItemFactory();
-             factory.setSizeThreshold(1024*100);
+	public Response image(@RequestParam(value="file", required = false) MultipartFile file,  HttpServletRequest request) {
+		try {
+			/*if(temstring!=null){
+				System.out.println(temstring);
+			}*/
+			if(file==null){
+				return Response.FAILWRONG();
+			}
+			boolean isempty=file.isEmpty();
+			if (isempty) {
+				System.out.println("文件为空");
+				return Response.FAILWRONG();
+			}
+			// 获取文件名
+			String fileName = file.getOriginalFilename();
+			logger.info("上传的文件名为：" + fileName);
+			// 获取文件的后缀名
+			String suffixName = fileName.substring(fileName.lastIndexOf("."));
+			//logger.info("文件的后缀名为：" + suffixName);
 
-			 ServletFileUpload upload= new ServletFileUpload(factory);
-             upload.setHeaderEncoding("UTF-8");
-             if(!ServletFileUpload.isMultipartContent(request)){
-             	System.out.println("没有文件上传");
-             	return Response.FAILWRONG();
-			 }
-			 List<FileItem> list= upload.parseRequest(new ServletRequestContext(request));
-             for (FileItem item:list) {
-             	if(item.isFormField()){
-             		String name = item.getFieldName();
-             		String value = item.getString("UTF-8");
-             		System.out.println(name+"="+value);
-				}else{
-             		String filename = item.getName();
-             		System.out.println(filename);
-             		if(filename==null || filename.trim().equals("")){
-             			continue;
-					}
-					filename = filename.substring(filename.lastIndexOf("\\")+1);
-					InputStream in = item.getInputStream();
+			// 设置文件存储路径
+			String filePath = "//home/caizj/image/";
+			String path = filePath +fileName;
 
-					FileOutputStream out = new FileOutputStream("/usr/local/nginx/html/dmcs/"+filename);
-					byte buffer[] = new byte[1024];
-					int len=0;
-					while((len=in.read(buffer))>0){
-						out.write(buffer,0,len);
-					}
-					in.close();
-					out.close();
-
-					item.delete();
-					message = "文件上传成功";
-				}
-			 }
-			 return Response.SUCCESSOK();
-		 }catch (Exception e) {
-             message = "文件上传失败";
-             e.printStackTrace();
-             return Response.FAILWRONG();
-         }
-
+			File dest = new File(path);
+			if (!dest.getParentFile().exists()) {
+				dest.getParentFile().mkdirs();// 新建文件夹
+			}
+			if (dest.createNewFile()){
+				System.out.println("File is created!");
+				//Runtime.getRuntime().exec("chmod 777 /home/test3.txt");
+				dest.setExecutable(true);//设置可执行权限
+				dest.setReadable(true);//设置可读权限
+				dest.setWritable(true);//设置可写权限
+			}
+			// 检测是否存在目录
+			file.transferTo(dest);// 文件写入
+			return Response.SUCCESSOK();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.FAILWRONG();
 	}
 	/*******/
 
