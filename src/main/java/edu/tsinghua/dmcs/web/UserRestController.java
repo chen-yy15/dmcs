@@ -169,6 +169,8 @@ public class UserRestController {
 		System.out.println(body);
 		JSONObject o = JSONObject.parseObject(body);
 		String dmcstoken = o.getString("dmcstoken");
+		if(dmcstoken==null)
+			return Response.FAILWRONG();
 		dmcstoken=URLDecoder.decode(dmcstoken);
 		String username=tockenCache.getUserNameByToken(dmcstoken);
 		System.out.println(username);
@@ -186,19 +188,21 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
-	public Response image(@RequestParam(value="file", required = false) MultipartFile file,  HttpServletRequest request) {
-		try {
+	public Response image(@RequestParam(value="file",required  = false) MultipartFile file) {
+		//@RequestParam(value="file", required = false)
 			/*if(temstring!=null){
 				System.out.println(temstring);
 			}*/
-			if(file==null){
-				return Response.FAILWRONG();
-			}
-			boolean isempty=file.isEmpty();
-			if (isempty) {
-				System.out.println("文件为空");
-				return Response.FAILWRONG();
-			}
+		if(file==null){
+			return Response.FAILWRONG();
+		}
+		boolean isempty=file.isEmpty();
+		if (isempty) {
+			System.out.println("文件为空");
+			return Response.FAILWRONG();
+		}
+		else
+			try {
 			// 获取文件名
 			String fileName = file.getOriginalFilename();
 			logger.info("上传的文件名为：" + fileName);
@@ -229,6 +233,35 @@ public class UserRestController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		/*MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+		List<MultipartFile> files = ((MultipartHttpServletRequest) request)
+				.getFiles("file");
+		String name=params.getParameter("name");
+		System.out.println("name:"+name);
+		String id=params.getParameter("id");
+		System.out.println("id:"+id);
+		MultipartFile file = null;
+		BufferedOutputStream stream = null;
+		for (int i = 0; i < files.size(); ++i) {
+			file = files.get(i);
+			if (!file.isEmpty()) {
+				try {
+					byte[] bytes = file.getBytes();
+					stream = new BufferedOutputStream(new FileOutputStream(
+							new File(file.getOriginalFilename())));
+					stream.write(bytes);
+					stream.close();
+				} catch (Exception e) {
+					stream = null;
+					System.out.println( "You failed to upload " + i + " => "
+							+ e.getMessage());
+				}
+			} else {
+				System.out.println( "You failed to upload " + i
+						+ " because the file was empty.");
+			}
+		}*/
 		return Response.FAILWRONG();
 	}
 	/*******/
