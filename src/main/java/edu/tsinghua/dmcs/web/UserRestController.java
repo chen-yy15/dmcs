@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 /////
 
 /////
@@ -193,6 +192,8 @@ public class UserRestController {
 			/*if(temstring!=null){
 				System.out.println(temstring);
 			}*/
+		//这个图片更改与用户有关，所以还是放在这里
+		//这里采用更换函数的方案，可以直接对用户的信息进行自动的更新
 		if(file==null){
 			return Response.FAILWRONG();
 		}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper>
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.TechDocument" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="image_address" property="image_address" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="document_address" property="document_address" jdbcType="VARCHAR" />
+        <result column="identityNumber" property="identityNumber" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, title, image_address, description, document_address, identityNumber
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from tech_document
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryDocuByNumber" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        from tech_document
+        where identityNumber = #{identityNumber, jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from tech_document
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.TechDocument" >
+        insert into tech_document (id, title, image_address, description, document_address, identityNumber
+        )
+        values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{image_address,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR}, #{document_address,jdbcType=VARCHAR}, #{identityNumber,jdbcType=INTEGER},
+        )
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.TechDocument" >
+        update tech_document
+        <set >
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="image_address != null" >
+                image_address = #{image_address,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null" >
+                description = #{description, jdbcType=VARCHAR},
+            </if>
+            <if test="document_address != null" >
+                document_address = #{document_address,jdbcType=VARCHAR},
+            </if>
+            <if test="identityNumber != null" >
+                identityNumber = #{identityNumber, jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.TechDocument" >
+        update tech_document
+        set title = #{title,jdbcType=VARCHAR},
+            image_address = #{image_address,jdbcType=VARCHAR},
+            description = #{description,jdbcType=VARCHAR},
+            document_address = #{document_address,jdbcType=VARCHAR},
+            identityNumber = #{identityNumber,jdbcType=INTEGER},
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

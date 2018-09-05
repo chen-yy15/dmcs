@@ -174,14 +174,12 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `user_device_dashboard`
---
+
 DROP TABLE IF EXISTS `user_address`;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `user_device_dashboard`
+-- Table structure for table `user_address`
 --
  
 CREATE TABLE `user_address` (
@@ -196,6 +194,39 @@ CREATE TABLE `user_address` (
    `Email` varchar(45) DEFAULT NULL COMMENT '用户邮箱',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `techdocument`
+--
+DROP TABLE IF EXISTS  `tech_document`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tech_document` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `title` varchar(45) NOT NULL COMMENT '标题',
+  `image_address` varchar(255) NOT NULL COMMENT '图片地址',
+  `description`  varchar(45) NOT NULL COMMENT '文件描述',
+  `document_address` varchar(255) NOT NULL  COMMENT '文件存储地址',
+  `identityNumber` int NOT NULL COMMENT '识别号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table `image`
+--
+DROP TABLE IF EXISTS  `image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `image`(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `image_address`  varchar(255) NOT NULL COMMENT '图片地址',
+   PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table `user_device_dashboard`
+--
 DROP TABLE IF EXISTS `user_device_dashboard`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
