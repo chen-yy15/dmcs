@@ -20,7 +20,7 @@ public interface TechDocumentMapper {
 
     int updateByPrimaryKey(TechDocument record);//
 
-    List <TechDocument> queryDocuByNumber(int identityNumber);//
+    List <TechDocument> queryDocuByNumber(int identityNumber); //提取全部的文件信息
 
     //List<Device> queryUnbindDevices(@Param("page") Integer page, @Param("size") Integer size);
 }

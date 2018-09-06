@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
+<mapper namespace="edu.tsinghua.dmcs.mapper.TechDocumentMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.TechDocument" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="title" property="title" jdbcType="VARCHAR" />
@@ -30,11 +30,9 @@
         where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.TechDocument" >
-        insert into tech_document (id, title, image_address, description, document_address, identityNumber
-        )
+        insert into tech_document (id, title, image_address, description, document_address, identityNumber)
         values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{image_address,jdbcType=VARCHAR},
-        #{description,jdbcType=VARCHAR}, #{document_address,jdbcType=VARCHAR}, #{identityNumber,jdbcType=INTEGER},
-        )
+        #{description,jdbcType=VARCHAR}, #{document_address,jdbcType=VARCHAR}, #{identityNumber,jdbcType=INTEGER})
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.TechDocument" >
         update tech_document
