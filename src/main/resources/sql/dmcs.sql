@@ -231,10 +231,9 @@ DROP TABLE IF EXISTS `admin_group_zero`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin_group_zero`(
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `userid` varchar(45) NOT NULL COMMENT '用户系统号',
+  `userid` varchar(45) NOT NULL COMMENT '用户系统号/用户系统号',
   `authorityNumber` int NOT NULL COMMENT '用户权限',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`userid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --

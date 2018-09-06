@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.AdminGroupUserMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.AdminGroupUser" >
+        <id column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="userName" property="userName" jdbcType="VARCHAR" />
+        <result column="userEmail" property="userEmail" jdbcType="VARCHAR" />
+        <result column="userworkPlace" property="userworkPlace" jdbcType="VARCHAR" />
+        <result column="userTelephone" property="userTelephone" jdbcType="VARCHAR" />
+        <result column="authorityNumber" property="authorityNumber" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        userid, avatar, userName, userEmail, userworkPlace, userTelephone, authorityNumber
+    </sql>
+    <select id="queryselect" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        d.userid userid, d.authorityNumber authorityNumber,
+        m.avatar avatar, m.userName userName, m.userEmail userEmail
+        m.userworkPlace userworkPlace, m.userTelephone userTelephone
+        from admin_group_zero d, user m
+        where d.userid = m.userid and d.authorityNumber != 1023
+    </select>
 </mapper>

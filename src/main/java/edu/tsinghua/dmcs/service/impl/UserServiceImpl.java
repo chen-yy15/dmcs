@@ -1,14 +1,13 @@
 package edu.tsinghua.dmcs.service.impl;
 
-import java.util.Date;
-
+import edu.tsinghua.dmcs.entity.User;
+import edu.tsinghua.dmcs.mapper.UserMapper;
+import edu.tsinghua.dmcs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.tsinghua.dmcs.entity.User;
-import edu.tsinghua.dmcs.mapper.UserMapper;
-import edu.tsinghua.dmcs.service.UserService;
+import java.util.Date;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -127,5 +126,5 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateByPrimaryKey(user);
 	}
 
-
+    public User getUserByuserid (String userid) { return userMapper.selectByuserid(userid); }
 }
