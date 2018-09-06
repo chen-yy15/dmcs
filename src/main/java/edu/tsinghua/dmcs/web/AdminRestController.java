@@ -3,6 +3,7 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.AdminGroup;
+import edu.tsinghua.dmcs.entity.AdminGroupUser;
 import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
@@ -132,6 +133,10 @@ public class AdminRestController {
 		int checkifhost= adminGroupService.checkifhost(Userid);
 		if( checkifhost == 0 )
 			return Response.FAILWRONG();
+		List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
+		if(adminGroupUsers!=null) {
+			return Response.SUCCESS().setData(adminGroupUsers);
+		}
 		//这里需要返回用户和表的全部信息
 		return Response.FAILWRONG();
 	}
