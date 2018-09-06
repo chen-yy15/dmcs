@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.tsinghua.dmcs.mapper.AdminGroupMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.Device" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="authorityNumber" property="authorityNumber" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, userid, authorityNumber
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from admin_group_zero
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByuserid" parameterType="java.lang.String" >
+        delete from admin_group_zero
+        where userid = #{userid,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.AdminGroup" >
+        insert into admin_group_zero (id, userid, authorityNumber)
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{authorityNumber,jdbcType=INTEGER} )
+    </insert>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from admin_group_zero
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateByuserid" parameterType="edu.tsinghua.dmcs.entity.AdminGroup" >
+        update admin_group_zero
+        <set >
+            <if test="authorityNumber != null" >
+                authorityNumber = #{authorityNumber,jdbcType=INTEGER},
+            </if>
+        </set>
+        where userid = #{userid,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByuserid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from admin_group_zero
+        where userid = #{authorityNumber, jdbcType=VARCHAR}
+    </select>
+</mapper>

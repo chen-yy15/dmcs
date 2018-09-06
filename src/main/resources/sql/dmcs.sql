@@ -152,7 +152,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `userid` varchar(45) DEFAULT NULL COMMENT '用户系统号',
+  `userid` varchar(45) NOT NULL COMMENT '用户系统号',
   `username` varchar(45) NOT NULL COMMENT '登陆用户名',
   `currentAuthority` varchar(45) NOT NULL COMMENT '用户身份',
   `password` varchar(45) NOT NULL COMMENT '密码',
@@ -222,6 +222,19 @@ CREATE TABLE `image`(
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `image_address`  varchar(255) NOT NULL COMMENT '图片地址',
    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table admin_group_zero
+--
+DROP TABLE IF EXISTS `admin_group_zero`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_group_zero`(
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `userid` varchar(45) NOT NULL COMMENT '用户系统号',
+  `authorityNumber` int NOT NULL COMMENT '用户权限',
+  PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --

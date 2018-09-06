@@ -188,10 +188,6 @@ public class UserRestController {
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
 	public Response image(@RequestParam(value="file",required  = false) MultipartFile file) {
-		//@RequestParam(value="file", required = false)
-			/*if(temstring!=null){
-				System.out.println(temstring);
-			}*/
 		//这个图片更改与用户有关，所以还是放在这里
 		//这里采用更换函数的方案，可以直接对用户的信息进行自动的更新
 		if(file==null){
@@ -234,35 +230,6 @@ public class UserRestController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		/*MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
-		List<MultipartFile> files = ((MultipartHttpServletRequest) request)
-				.getFiles("file");
-		String name=params.getParameter("name");
-		System.out.println("name:"+name);
-		String id=params.getParameter("id");
-		System.out.println("id:"+id);
-		MultipartFile file = null;
-		BufferedOutputStream stream = null;
-		for (int i = 0; i < files.size(); ++i) {
-			file = files.get(i);
-			if (!file.isEmpty()) {
-				try {
-					byte[] bytes = file.getBytes();
-					stream = new BufferedOutputStream(new FileOutputStream(
-							new File(file.getOriginalFilename())));
-					stream.write(bytes);
-					stream.close();
-				} catch (Exception e) {
-					stream = null;
-					System.out.println( "You failed to upload " + i + " => "
-							+ e.getMessage());
-				}
-			} else {
-				System.out.println( "You failed to upload " + i
-						+ " because the file was empty.");
-			}
-		}*/
 		return Response.FAILWRONG();
 	}
 	/*******/
