@@ -1,8 +1,9 @@
 package edu.tsinghua.dmcs.mapper;
 
+import edu.tsinghua.dmcs.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
-import edu.tsinghua.dmcs.entity.User;
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -23,4 +24,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<User> nogetuser(String userid);
 }

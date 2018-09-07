@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -127,4 +128,8 @@ public class UserServiceImpl implements UserService {
 	}
 
     public User getUserByuserid (String userid) { return userMapper.selectByuserid(userid); }
+
+	public List<User> nogetUserByuserid(String userid){
+		return userMapper.nogetuser(userid);
+	}
 }

@@ -5,6 +5,7 @@ import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
+import edu.tsinghua.dmcs.service.AdminGroupService;
 import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import edu.tsinghua.dmcs.util.TockenCache;
@@ -47,6 +48,8 @@ public class UserRestController {
 
 	@Autowired
 	private TockenCache tockenCache;
+	@Autowired
+	private AdminGroupService adminGroupService;
 
 
 	@Value("${security.sault.login}")
@@ -330,6 +333,24 @@ public class UserRestController {
 	public Response listRolesByUserId(String userName) {
 		List<Role> rlist = roleService.getRoleListByUserName(userName);
 		return Response.SUCCESS().setData(rlist);
+	}
+	@DmcsController(loginRequired=false)
+	@ApiOperation(value="获得用户信息", notes="获得用户信息")
+	@RequestMapping(value="/getuser",method = RequestMethod.POST)
+	public Response getUser(@RequestBody String body) throws ParseException {
+		JSONObject o = JSONObject.parseObject(body);
+		String Userid = o.getString("Userid");
+		if(Userid == null)
+			return Response.FAILWRONG().setMsg("信息丢失");
+		int checkifhost = adminGroupService.checkifhost(Userid);
+		if(checkifhost == 0 ){//不是管理员
+			return Response.FAILWRONG().setMsg("不是管理员");
+		}
+		else{//是管理员
+			List<User> users = userService.nogetUserByuserid(Userid);
+			return Response.SUCCESSOK().setData(users);
+		}
+		//return Response.FAILWRONG().setMsg("获取用户信息失败");
 	}
 
 	private String getToken(String userName) {

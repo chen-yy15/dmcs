@@ -1,5 +1,6 @@
 package edu.tsinghua.dmcs.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.AdminGroup;
@@ -55,14 +56,20 @@ public class AdminRestController {
 	@RequestMapping(value = "/addAdminuser", method = RequestMethod.POST)
 	public Response addAdminuser(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
+		if(o == null ){
+			return Response.FAILWRONG().setMsg("发送失败");
+		}
 		String userid = o.getString("userid");
 		String Userid = o.getString("Userid");
+		if( userid==null || Userid==null){
+			return Response.FAILWRONG().setMsg("发送失败");
+		}
 		int checkifhost = adminGroupService.checkifhost(Userid);
 		if(checkifhost == 0) {
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setMsg("身份不正确");
 		}//判断是否是0号管理员
 		if(adminGroupService.checkexistUser(userid)!=null){
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setMsg("用户已存在");
 		}//判断用户是否已经存在
 		AdminGroup adminGroup = new AdminGroup();
 		adminGroup.setUserid(userid);
@@ -76,31 +83,41 @@ public class AdminRestController {
 					return Response.SUCCESSOK();
 			}
 		}
-		return Response.FAILWRONG();
+		return Response.FAILWRONG().setMsg("用户添加失败");
 	}
 
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="deleteAdminuser", notes="删除管理员")
 	@RequestMapping(value = "/deleteAdminuser", method = RequestMethod.POST)
 	public Response deleteAdminuser(@RequestBody String body) throws ParseException {
+		//JSONArray o = JSON.parseArray(body);
 		JSONObject o = JSONObject.parseObject(body);
-		String userid = o.getString("userid");
+		JSONArray userids = o.getJSONArray("userids");
 		String Userid = o.getString("Userid");
+		if( Userid==null || userids==null){
+			return Response.FAILWRONG().setMsg("信息缺失");
+		}
 		int checkifhost = adminGroupService.checkifhost(Userid);
 		if(checkifhost == 0 ) {
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setMsg("身份不正确");
 		}//判断是否是管理员
-		int num = adminGroupService.deleteByuserid(userid);
-		if(num !=0){
-			//还需要对该人的身份信息进行更新
+		for(int i=0; i<userids.size();i++){
+			JSONObject object = (JSONObject) userids.get(i);
+			String userid = object.getString("userid");
 			User user = userService.getUserByuserid(userid);
 			if(user!=null){
 				user.setCurrentAuthority("user");
-				if(userService.update(user)!=0)
-					return Response.SUCCESSOK();
+				if(userService.update(user)==0)
+					return Response.FAILWRONG().setMsg("删除管理员失败");
+				if( adminGroupService.deleteByuserid(userid) == 0 ){
+					return Response.FAILWRONG().setMsg("删除管理员失败");
+				}
 			}
+			else
+				return Response.FAILWRONG().setMsg("用户不存在");
 		}
-		return Response.FAILWRONG();
+		List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
+		return Response.SUCCESSOK().setData(adminGroupUsers);
 	}
 
 	@DmcsController(loginRequired=false)
@@ -111,9 +128,12 @@ public class AdminRestController {
 		String userid = o.getString("userid");
 		String Userid = o.getString("Userid");
 		String authority = o.getString("authority");
+		if(userid==null||Userid==null||authority==null){
+			return Response.FAILWRONG().setMsg("信息缺失");
+		}
 		int checkifhost = adminGroupService.checkifhost(Userid);
 		if(checkifhost==0){
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setMsg("身份不正确");
 		}
 		AdminGroup adminGroup = adminGroupService.selectUser(userid);
 		if(adminGroup!=null){
@@ -122,7 +142,7 @@ public class AdminRestController {
 				return Response.SUCCESSOK();
 			}//这里需要注意针对于0号权限的更改问题的处理;
 		}
-		return Response.FAILWRONG();
+		return Response.FAILWRONG().setMsg("删除操作失败");
 	}
     @DmcsController(loginRequired = false)
 	@ApiOperation(value="getAdminuser", notes = "获取管理员信息")
@@ -130,15 +150,17 @@ public class AdminRestController {
 	public Response getAdminuser(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
 		String Userid = o.getString("Userid");
+		if(Userid==null){
+			return Response.FAILWRONG().setMsg("信息缺失");
+		}
 		int checkifhost= adminGroupService.checkifhost(Userid);
 		if( checkifhost == 0 )
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setMsg("身份不正确");
 		List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
-		if(adminGroupUsers!=null) {
-			return Response.SUCCESS().setData(adminGroupUsers);
-		}
+
+		return Response.SUCCESSOK().setData(adminGroupUsers);
 		//这里需要返回用户和表的全部信息
-		return Response.FAILWRONG();
+		//return Response.FAILWRONG().setMsg("信息获取失败");
 	}
 
 
