@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public int update(User user) {
-		return userMapper.updateByPrimaryKey(user);
+		return userMapper.updateByPrimaryKeySelective(user);
 	}
 
     public User getUserByuserid (String userid) { return userMapper.selectByuserid(userid); }

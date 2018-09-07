@@ -4,7 +4,6 @@ package edu.tsinghua.dmcs.entity;
  * Created by caizj on 18-9-6.
  */
 public class AdminGroupUser {
-    private int id;
     private String userid;
     private String avatar;
     private String userName;
@@ -13,8 +12,6 @@ public class AdminGroupUser {
     private String userTelephone;
     private int authorityNumber;
 
-    public int getId() {return id;}
-    public void setId(int id) {this.id=id;}
     public String getUsername() {return userName;}
     public void setUsername(String userName) {this.userName=userName;}
     public String getUserid() {return userid;}

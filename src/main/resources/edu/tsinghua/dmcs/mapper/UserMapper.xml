@@ -39,6 +39,12 @@
 		from user
 		where username = #{username_mobile_email,jdbcType=VARCHAR} OR userTelephone = #{username_mobile_email, jdbcType=VARCHAR} OR userEmail = #{username_mobile_email, jdbcType=VARCHAR}
 	</select>
+	<select id="selectByuserid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where userid = #{userid, jdbcType=VARCHAR }
+	</select>
 	<select id="selectUser_num" resultType="Integer" parameterType="java.lang.Integer">
 		SELECT
 		COUNT(*)
@@ -189,7 +195,7 @@
 				password = #{password,jdbcType=VARCHAR},
 			</if>
 			<if test="usersex != null">
-				password = #{usersex,jdbcType=VARCHAR},
+				usersex = #{usersex,jdbcType=VARCHAR},
 			</if>
 			<if test="realname != null">
 				realname = #{realname,jdbcType=VARCHAR},
@@ -201,7 +207,7 @@
 				avatar = #{avatar,jdbcType=VARCHAR},
 			</if>
 			<if test="userEmail != null">
-				uaerEmail = #{userEmail,jdbcType=VARCHAR},
+				userEmail = #{userEmail,jdbcType=VARCHAR},
 			</if>
 			<if test="userEmail_1 != null">
 				userEmail_1 = #{userEmail_1,jdbcType=VARCHAR},
@@ -222,7 +228,7 @@
 				userQq = #{userQq,jdbcType=VARCHAR},
 			</if>
 			<if test="regtime != null">
-				regtim = #{regtime,jdbcType=TIMESTAMP},
+				regtime = #{regtime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
@@ -245,7 +251,7 @@
 			userworkPlace = #{userworkPlace,jdbcType=VARCHAR},
 			userWeixin = #{userWeixin,jdbcType=VARCHAR},
 			userQq = #{userQq,jdbcType=VARCHAR},
-			regtim = #{regtime,jdbcType=TIMESTAMP},
+			regtime = #{regtime,jdbcType=TIMESTAMP},
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 </mapper>

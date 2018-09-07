@@ -95,7 +95,7 @@ public class AdminRestController {
 			//还需要对该人的身份信息进行更新
 			User user = userService.getUserByuserid(userid);
 			if(user!=null){
-				user.setCurrentAuthority("admin");
+				user.setCurrentAuthority("user");
 				if(userService.update(user)!=0)
 					return Response.SUCCESSOK();
 			}
