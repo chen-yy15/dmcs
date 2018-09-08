@@ -41,6 +41,8 @@ public class AdminGroupServiceImpl implements AdminGroupService {
         return adminGroupMapper.deleteByuserid(userid);
     }
     public AdminGroup checkexistUser(String userid) {
+        if(userid ==null)
+            return null;
         return adminGroupMapper.selectByuserid(userid);
     }
 

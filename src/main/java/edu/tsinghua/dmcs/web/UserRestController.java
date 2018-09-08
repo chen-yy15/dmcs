@@ -179,6 +179,7 @@ public class UserRestController {
 		if(username !=null){
 			User u = userService.checkExistence(username);
 			if( u!=null ) {
+				u.setPassword(null);
 				return Response.SUCCESSOK().setData(u);
 			}
 			return Response.FAILWRONG();

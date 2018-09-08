@@ -33,7 +33,7 @@
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<select id="nogetuser" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select id, userid, username, currentAuthority, realname,  avatar, userEmail, userTelephone
+		select id, userid, username, currentAuthority, realname,  avatar, userEmail, userTelephone,userworkPlace
 		from user
 		where userid != #{userid, jdbcType=VARCHAR}
 	</select>

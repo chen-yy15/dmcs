@@ -22,6 +22,10 @@ public class TockenCache {
         return tokens.get(token);
     }
 
+    public String getUserid(String token){
+        return tokens.get(token);
+    }
+
     public String getTokenExpiredTime(String token) {
         if(token != null) {
             return token.split("|")[1];
