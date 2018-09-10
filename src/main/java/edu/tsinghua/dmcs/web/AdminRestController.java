@@ -222,7 +222,7 @@ public class AdminRestController {
 		   }
 		   return Response.FAILWRONG().setMsg("请求既有Userid又有token存在申请错误");
 		}//首次登录采用Userid的方式进行登录。如果两种方式均存在问题，则直接进行跳转操作;
-		if(Userid==null||admin_token!=null){
+			if(Userid==null||admin_token!=null){
 			admin_token= URLDecoder.decode(admin_token);
 			String userid = tockenCache.getUserid(admin_token);
 			if(userid!=null){
@@ -353,19 +353,35 @@ public class AdminRestController {
 	@RequestMapping(value = "deletedocument", method = RequestMethod.POST)
 	public Response deleteDocument(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
-		String authority = o.getString("authority");
+		String authority_string = o.getString("authority");
 		String documentId = o.getString("documentId");
 		String cookie_info = o.getString("cookie");
 		JSONObject object = JSONObject.parseObject(cookie_info);
-		if(authority==null||documentId==null||object==null){
-			return Response.FAILWRONG().setMsg("身份验证失败");
+		String admin_token = object.getString("admin_token");
+		if(authority_string==null||documentId==null||admin_token==null){
+			return Response.FAILWRONG().setMsg("信息丢失");
 		}
+		admin_token = URLDecoder.decode(admin_token);
+		String userid = tockenCache.getUserid(admin_token);
+		if(userid==null)
+			return Response.FAILWRONG().setMsg("身份验证失败");
+		AdminGroup adminGroup = adminGroupService.selectUser(userid);
+		if(adminGroup==null)
+			return Response.FAILWRONG().setMsg("无相关用户");
+		int tem = adminGroup.getAuthorityNumber();
+		int authority = Integer.parseInt(authority_string);
+		if(tem==0)
+			return Response.FAILWRONG().setMsg("无相关权限");
+		int b = this.power(2,authority-1).intValue();
+		if((tem&b)!=b)
+			return Response.FAILWRONG().setMsg("权限错误");
 		int num = 0;
-		num = techDocuService.deleteDevice(Long.getLong(documentId));
+		Long ID = Long.parseLong(documentId);
+		num = techDocuService.deleteDevice(ID);
 		if(num==0){
 			return Response.FAILWRONG().setMsg("删除操作失败");
 		}
-		List<TechDocument> techDocuments = techDocuService.queryDocuByNumber(Integer.parseInt(authority));
+		List<TechDocument> techDocuments = techDocuService.queryDocuByNumber(authority);
 		return Response.SUCCESSOK().setData(techDocuments);
 	}
 
