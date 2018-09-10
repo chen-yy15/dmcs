@@ -281,9 +281,14 @@ public class AdminRestController {
 				logger.info("上传图片名为：" + imageName);
 				logger.info("上传的文件名为：" + fileName);
 				// 设置文件存储路径
-				String imagePath = "//home/caizj/file/";
+				String IMAGEPATH = "http://39.104.208.4:80/home/dmcs/iamge/";
+				String imagePath = "//home/dmcs/image/";
+				String IMAGE_PATH = IMAGEPATH + imageName;
 				String image_path = imagePath + imageName;
-				String filePath = "//home/caizj/image/";
+
+				String FILEPATH = "http://39.104.208.4:80/home/dmcs/file/";
+				String filePath = "//home/dmcs/file/";
+				String PATH = FILEPATH + fileName;
 				String path = filePath + fileName;
 				File dest_file = new File(path);
 				if (!dest_file.getParentFile().exists()) {
@@ -313,8 +318,8 @@ public class AdminRestController {
 				TechDocument techdocu = new TechDocument();
 				techdocu.setDescription(description);
 				techdocu.setTitle(title);
-				techdocu.setDocument_addressd(path);
-				techdocu.setImage_address(image_path);
+				techdocu.setDocument_addressd(PATH);
+				techdocu.setImage_address(IMAGE_PATH);
 				techdocu.setIdentityNumber(Integer.parseInt(identityNumber));
 				int num = techDocuService.addTechDocument(techdocu);
 				if (num != 0) {

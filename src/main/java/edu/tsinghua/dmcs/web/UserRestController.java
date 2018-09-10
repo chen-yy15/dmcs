@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
@@ -113,7 +114,7 @@ public class UserRestController {
 		u.setUserEmail(mail);
 		u.setRealname(null);
 		u.setAlias(null);
-		u.setAvatar("http://47.92.126.195:80/image/ZiESqWwCXBRQoaPONSJe.png");
+		u.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");
 		u.setUserEmail_1(null);
 		u.setUserTelephone_1(null);
 		u.setUserworkPlace(null);
@@ -168,9 +169,8 @@ public class UserRestController {
 	@ApiOperation(value="用户验证", notes="true验证成功")
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
 	public Response temcheck(@RequestBody String body) throws ParseException{
-		System.out.println(body);
 		JSONObject o = JSONObject.parseObject(body);
-		String dmcstoken = o.getString("dmcstoken");
+		String dmcstoken = o.getString(" dmcstoken");
 		if(dmcstoken==null)
 			return Response.FAILWRONG();
 		dmcstoken=URLDecoder.decode(dmcstoken);
@@ -191,11 +191,15 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
-	public Response image(@RequestParam(value="file",required  = false) MultipartFile file) {
+	public Response image(HttpServletRequest request) {
 		//这个图片更改与用户有关，所以还是放在这里
 		//这里采用更换函数的方案，可以直接对用户的信息进行自动的更新
-		if(file==null){
-			return Response.FAILWRONG();
+		MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+		MultipartFile file = params.getFile("file");
+		Cookie[] cookies = params.getCookies();
+		String dmcs_token = null;
+		if(file==null||cookies==null){
+			return Response.FAILWRONG().setMsg("信息丢失");
 		}
 		boolean isempty=file.isEmpty();
 		if (isempty) {
@@ -204,15 +208,30 @@ public class UserRestController {
 		}
 		else
 			try {
+			for( Cookie cookie:cookies){
+				if(cookie.getName().equals("dmcstoken")){
+					dmcs_token = cookie.getValue();
+				}
+			}
+			dmcs_token = URLDecoder.decode(dmcs_token);
+			String username = tockenCache.getUserNameByToken(dmcs_token);
+			if(username == null)
+				return Response.FAILWRONG();
+			System.out.println(username);
+			User u = userService.checkExistence(username);
+			if( u == null)
+				return Response.FAILWRONG().setMsg("身份验证错误");
 			// 获取文件名
 			String fileName = file.getOriginalFilename();
 			logger.info("上传的文件名为：" + fileName);
 			// 获取文件的后缀名
-			String suffixName = fileName.substring(fileName.lastIndexOf("."));
+			//String suffixName = fileName.substring(fileName.lastIndexOf("."));
 			//logger.info("文件的后缀名为：" + suffixName);
 
 			// 设置文件存储路径
-			String filePath = "//home/caizj/image/";
+				String FILEPATH = "http://39.104.208.4:80/home/dmcs/image/";//实际存储
+			String filePath = "//home/dmcs/image/";//存储到硬盘上
+				String PATH = FILEPATH + fileName;
 			String path = filePath +fileName;
 
 			File dest = new File(path);
@@ -228,13 +247,19 @@ public class UserRestController {
 			}
 			// 检测是否存在目录
 			file.transferTo(dest);// 文件写入
-			return Response.SUCCESSOK();
+			u.setAvatar(PATH);
+			u.setPassword(null);
+			int num  = userService.update(u);
+			if(num==0)
+				return Response.FAILWRONG().setMsg("信息更新失败");
+			return Response.SUCCESSOK().setData(u);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
+			return Response.FAILWRONG().setMsg("文件夹创建出问题了!!!");
 		} catch (IOException e) {
 			e.printStackTrace();
+			return Response.FAILWRONG().setMsg("文件夹创建出问题了!!!");
 		}
-		return Response.FAILWRONG();
 	}
 	/*******/
 
