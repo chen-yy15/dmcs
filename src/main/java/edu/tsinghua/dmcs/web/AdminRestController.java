@@ -75,6 +75,7 @@ public class AdminRestController {
 	@RequestMapping(value = "/addAdminuser", method = RequestMethod.POST)
 	public Response addAdminuser(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println("addAdminuser: "+body);
 		if(o == null ){
 			return Response.FAILWRONG().setMsg("发送失败");
 		}
@@ -115,6 +116,7 @@ public class AdminRestController {
 	public Response deleteAdminuser(@RequestBody String body) throws ParseException {
 		//JSONArray o = JSON.parseArray(body);
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println("deleteAdminuser: "+body);
 		JSONArray userids = o.getJSONArray("userids");
 		String Userid = o.getString("Userid");
 		if( Userid==null || userids==null){
@@ -148,6 +150,7 @@ public class AdminRestController {
 	@RequestMapping(value="/changeAuthority", method=RequestMethod.POST)
 	public Response changeAuthority (@RequestBody String body)throws ParseException{
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println("changeAuthority: "+body);
 		String Userid = o.getString("Userid");
 		JSONArray Users = o.getJSONArray("Users");
 		if(Userid==null||Users==null){
@@ -180,6 +183,7 @@ public class AdminRestController {
 	@RequestMapping(value = "/getAdminuser", method = RequestMethod.POST)
 	public Response getAdminuser(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println("getAdminuser: "+body);
 		String Userid = o.getString("Userid");
 		if(Userid==null){
 			return Response.FAILWRONG().setMsg("信息缺失");
@@ -199,6 +203,7 @@ public class AdminRestController {
 	public  Response getSelfuser(@RequestBody String body ,
 								 HttpServletResponse response) throws ParseException{
  		JSONObject o = JSONObject.parseObject(body);
+ 		System.out.println("getSelfuser: "+body);
 		String Userid = o.getString("Userid");
 		String admin_token = o.getString("admin_token");
 		if(Userid!=null) {
@@ -346,6 +351,7 @@ public class AdminRestController {
 	public Response getDocument(@RequestBody String body) throws ParseException{
 		JSONObject o = JSONObject.parseObject(body);
 		String authority = o.getString("authority");
+		System.out.println("getDocument: "+body);
 		if(authority!=null){
 			List<TechDocument> techDocuments = techDocuService.queryDocuByNumber(Integer.parseInt(authority));
 			return Response.SUCCESSOK().setData(techDocuments);
@@ -358,6 +364,7 @@ public class AdminRestController {
 	@RequestMapping(value = "deletedocument", method = RequestMethod.POST)
 	public Response deleteDocument(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println("deleteDocument: " + body);
 		String authority_string = o.getString("authority");
 		String documentId = o.getString("documentId");
 		String cookie_info = o.getString("cookie");
