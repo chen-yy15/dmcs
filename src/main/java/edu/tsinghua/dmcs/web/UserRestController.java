@@ -170,7 +170,7 @@ public class UserRestController {
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
 	public Response temcheck(@RequestBody String body) throws ParseException{
 		JSONObject o = JSONObject.parseObject(body);
-		String dmcstoken = o.getString(" dmcstoken");
+		String dmcstoken = o.getString("dmcstoken");
 		if(dmcstoken==null)
 			return Response.FAILWRONG();
 		dmcstoken=URLDecoder.decode(dmcstoken);
