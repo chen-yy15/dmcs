@@ -170,6 +170,7 @@ public class UserRestController {
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
 	public Response temcheck(@RequestBody String body) throws ParseException{
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println(o);
 		String dmcstoken = o.getString("dmcstoken");
 		if(dmcstoken==null)
 			return Response.FAILWRONG();
@@ -229,8 +230,8 @@ public class UserRestController {
 			//logger.info("文件的后缀名为：" + suffixName);
 
 			// 设置文件存储路径
-				String FILEPATH = "http://39.104.208.4:80/home/dmcs/image/";//实际存储
-			String filePath = "//home/dmcs/image/";//存储到硬盘上
+				String FILEPATH = "http://39.104.208.4:80/home/dmcs/image/usr";//实际存储
+			String filePath = "//home/dmcs/image/usr";//存储到硬盘上
 				String PATH = FILEPATH + fileName;
 			String path = filePath +fileName;
 

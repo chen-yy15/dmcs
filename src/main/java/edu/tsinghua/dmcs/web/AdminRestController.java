@@ -281,13 +281,13 @@ public class AdminRestController {
 				logger.info("上传图片名为：" + imageName);
 				logger.info("上传的文件名为：" + fileName);
 				// 设置文件存储路径
-				String IMAGEPATH = "http://39.104.208.4:80/home/dmcs/iamge/";
-				String imagePath = "//home/dmcs/image/";
+				String IMAGEPATH = "http://39.104.208.4:80/home/dmcs/image/document/";
+				String imagePath = "//home/dmcs/image/document/";
 				String IMAGE_PATH = IMAGEPATH + imageName;
 				String image_path = imagePath + imageName;
 
-				String FILEPATH = "http://39.104.208.4:80/home/dmcs/file/";
-				String filePath = "//home/dmcs/file/";
+				String FILEPATH = "http://39.104.208.4:80/home/dmcs/file/document/";
+				String filePath = "//home/dmcs/file/docuemnt/";
 				String PATH = FILEPATH + fileName;
 				String path = filePath + fileName;
 				File dest_file = new File(path);
