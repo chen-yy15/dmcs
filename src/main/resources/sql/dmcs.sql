@@ -174,28 +174,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
-DROP TABLE IF EXISTS `user_address`;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user_address`
---
- 
-CREATE TABLE `user_address` (
-   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-   `userid` varchar(45) NOT NULL COMMENT '用户系统号',
-   `title`  varchar(45) NOT NULL COMMENT '地址名',
-   `name`   varchar(45) NOT NULL COMMENT '用户名',
-   `area`   varchar(45) NOT NULL COMMENT '区域',
-   `place`  varchar(45) NOT NULL COMMENT '地址',
-   `mobilephone` varchar(45) NOT NULL COMMENT '用户手机',
-   `fixedphone`  varchar(45) DEFAULT NULL COMMENT '固定电话',
-   `Email` varchar(45) DEFAULT NULL COMMENT '用户邮箱',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `techdocument`
 --
@@ -272,8 +250,110 @@ CREATE TABLE `user_role_mapping` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+/*******************************************************/
+--
+-- Table structure for table `avatar_history`
+--
+DROP TABLE IF EXISTS `avatar_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+Create Table `avatar_history` (
+  `avatarId` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(45) DEFAULT NULL COMMENT '用户号',
+  `avatar` VARCHAR (255) NOT NULL COMMENT '图片地址',
+  `selectFlag` VARCHAR(25) NOT NULL COMMENT 'false/true',
+  PRIMARY KEY(`avatarId`)
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table `user_information`
+--
+DROP TABLE IF EXISTS `user_information`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_information` (
+  `userId` VARCHAR(45) NOT NULL COMMENT '主键',
+  `currentAuthority` VARCHAR(45) NOT NULL COMMENT '身份',
+  `avatarId` bigint(20) NOT NULL COMMENT '头像',
+  `userName` VARCHAR(45) NOT NULL COMMENT '用户名',
+  `realName` VARCHAR(45) DEFAULT NULL COMMENT '真实姓名',
+  `userSex` VARCHAR(45) DEFAULT NULL COMMENT '性别',
+  `userIdNumber` VARCHAR(45) DEFAULT NULL COMMENT '身份证号',
+  `userEmail` VARCHAR(45) NOT NULL COMMENT '邮箱',
+  `userWorkPlace` VARCHAR(45) DEFAULT NULL COMMENT '工作地点',
+  `userTelephone` VARCHAR(25) NOT NULL COMMENT '电话',
+  `userTelephone_1` VARCHAR(25) DEFAULT NULL COMMENT '备用电话',
+  `userWeixin` VARCHAR(45) DEFAULT NULL COMMENT '微信',
+  `userQq` VARCHAR(25) DEFAULT NULL COMMENT 'QQ',
+  PRIMARY KEY(`userId`),
+  UNIQUE KEY(`userName`),
+  UNIQUE KEY(`userEmail`),
+  UNIQUE KEY(`userTelephone`),
+  FOREIGN KEY(`avatarId`) references avatar_history(`avatarId`) ON DELETE cascade ON UPDATE cascade
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `user_address`
+--
+DROP TABLE IF EXISTS `user_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_address` (/**用户地址信息**/
+  `addressId` VARCHAR(45)  NOT NULL COMMENT '地址编号',
+  `userId` VARCHAR(45)  DEFAULT NULL COMMENT '用户号',
+  `name` VARCHAR (45) DEFAULT NULL COMMENT '收件人名字',
+  `title` VARCHAR (45) DEFAULT NULL COMMENT '称呼',
+  `country` VARCHAR(45) DEFAULT NULL COMMENT '国家',
+  `proviance` VARCHAR(45) DEFAULT NULL COMMENT '省份',
+  `city` VARCHAR(45) DEFAULT NULL COMMENT '城市',
+  `area` VARCHAR(45) DEFAULT NULL COMMENT '地区',
+  `place` VARCHAR(45) DEFAULT NULL COMMENT '地点',
+  `mobilePhone` VARCHAR(25) DEFAULT NULL COMMENT '移动电话',
+  `fixedPhone` VARCHAR(25) DEFAULT NULL COMMENT '固定电话',
+  `email` VARCHAR(45) DEFAULT NULL COMMENT '邮件',
+  PRIMARY KEY (`addressId`),
+  FOREIGN KEY(`userId`) references user_information(`userId`) ON DELETE cascade
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_friend`
+--
+DROP TABLE IF EXISTS `user_friend`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_friend` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userSelf` VARCHAR(45) DEFAULT NULL COMMENT '自身用户编号',
+  `userFriend` VARCHAR(45) DEFAULT NULL COMMENT '朋友编号',
+  PRIMARY KEY(id),
+  FOREIGN KEY(`userSelf`) references user_information(`userId`) ON DELETE cascade ,
+  FOREIGN KEY(`userFriend`) references user_information(`userId`) ON DELETE cascade
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `login_log`
+--
+DROP TABLE IF EXISTS `login_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+Create TABLE `login_log`(
+  `logId` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userId` VARCHAR(45) DEFAULT NULL COMMENT '用户编号',
+  `loginIP` VARCHAR(255) DEFAULT NULL COMMENT '登录IP',
+  `loginTime` Datetime DEFAULT NULL COMMENT '登录时间',
+  `loginOutTime` Datetime DEFAULT NULL COMMENT '登出时间',
+  `loginOutWay` VARCHAR(45) DEFAULT NULL COMMENT '登入方式',
+  PRIMARY KEY(`logId`),
+  FOREIGN KEY(`userId`) references user_information(`userId`) ON DELETE cascade
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/**************************************************************************/
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
