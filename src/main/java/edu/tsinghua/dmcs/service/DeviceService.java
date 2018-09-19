@@ -1,11 +1,8 @@
 package edu.tsinghua.dmcs.service;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.web.bind.annotation.RequestParam;
-
 import edu.tsinghua.dmcs.entity.Device;
+
+import java.util.List;
 
 public interface DeviceService {
 	
@@ -20,7 +17,7 @@ public interface DeviceService {
 
 	public List<Device> queryDeviceInfo();
 	
-	public Device assignOwnerForDevice(Long userId, Long deviceId);
+	//public Device assignOwnerForDevice(Long userId, Long deviceId);
 	
 	public Device getDeviceById(Long id);
 

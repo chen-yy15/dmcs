@@ -14,8 +14,8 @@ public interface UserService {
 	
 	public int update(User user);
 
-	public User getUserByuserid(String userid);
+	public User getUserByuserid(String userId);
 
-	public List<User> nogetUserByuserid(String userid);
+	public List<User> nogetUserByuserid(String userId);
 
 }

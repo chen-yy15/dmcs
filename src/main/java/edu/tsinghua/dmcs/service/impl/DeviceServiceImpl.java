@@ -1,18 +1,17 @@
 package edu.tsinghua.dmcs.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import edu.tsinghua.dmcs.entity.Device;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.mapper.DeviceMapper;
 import edu.tsinghua.dmcs.mapper.UserMapper;
 import edu.tsinghua.dmcs.service.DeviceService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Component
 public class DeviceServiceImpl implements DeviceService {
@@ -67,9 +66,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping("/assignOwnerForDevice")
-	public Device assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
+	public Device assignOwnerForDevice(@RequestParam String userId, @RequestParam Long deviceId) {
 		
-		User user = userMapper.selectByPrimaryKey(userId);
+		User user = userMapper.selectByuserid(userId);
 		Device d = deviceMapper.selectByPrimaryKey(deviceId);
 		if(user == null) {
 			return null;
@@ -79,7 +78,6 @@ public class DeviceServiceImpl implements DeviceService {
 		}
 		
 		// 是否已绑定用户，已绑定抛错
-		d.setOwner(userId);
 		int count = deviceMapper.updateByPrimaryKey(d);
 		if(count == 0) {
 			return null;

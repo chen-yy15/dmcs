@@ -35,9 +35,9 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateByPrimaryKeySelective(user);
 	}
 
-    public User getUserByuserid (String userid) { return userMapper.selectByuserid(userid); }
+    public User getUserByuserid (String userId) { return userMapper.selectByuserid(userId); }
 
-	public List<User> nogetUserByuserid(String userid){
-		return userMapper.nogetuser(userid);
+	public List<User> nogetUserByuserid(String userId){
+		return userMapper.nogetuser(userId);
 	}
 }
