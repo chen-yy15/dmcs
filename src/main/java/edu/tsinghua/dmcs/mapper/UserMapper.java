@@ -18,7 +18,7 @@ public interface UserMapper {
     
     User selectByUserName(String username_mobile_email);
 
-    User selectByuserid(String userid);
+    User selectByuserid(String userId);
 
     User selectByUserEmail(String userEmail);
 
@@ -28,5 +28,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    List<User> nogetuser(String userid);
+    List<User> nogetuser(String userId);
 }
