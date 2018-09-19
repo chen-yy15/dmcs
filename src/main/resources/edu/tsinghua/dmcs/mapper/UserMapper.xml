@@ -183,9 +183,6 @@
 	<update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.User">
 		update user_information
 		<set>
-			<if test="userId != null">
-				userId = #{userId,jdbcType=VARCHAR},
-			</if>
 			<if test="currentAuthority !=null">
 				currentAuthority = #{currentAuthority,jdbcType=VARCHAR},
 			</if>
@@ -238,7 +235,6 @@
 	<update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.User">
 		update user_information
 		set
-			userId = #{userId,jdbcType=VARCHAR},
 			currentAuthority = #{currentAuthority,jdbcType=VARCHAR},
 			avatar = #{avatar,jdbcType=VARCHAR},
 			userName = #{userName,jdbcType=VARCHAR},
