@@ -26,45 +26,45 @@
 	</sql>
 	<select id="nogetuser" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select userId, currentAuthority, avatar, userName, realName, userEmail, emailCheckedFlag,userTelephone,userWorkPlace
-		from user
+		from user_information
 		where userId != #{userId, jdbcType=VARCHAR}
 	</select>
 	<select id="selectByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_information
 		where userName = #{username_mobile_email,jdbcType=VARCHAR} OR userTelephone = #{username_mobile_email, jdbcType=VARCHAR} OR userEmail = #{username_mobile_email, jdbcType=VARCHAR}
 	</select>
 	<select id="selectByuserId" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_information
 		where userId = #{userId, jdbcType=VARCHAR }
 	</select>
 	<select id="selectByUserEmail" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_information
 		where userEmail = #{userEmail, jdbcType=VARCHAR }
 	</select>
 	<select id="selectByUserTele" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_information
 		where userTelephone = #{userTele, jdbcType=VARCHAR }
 	</select>
 	<select id="selectUser_num" resultType="Integer" parameterType="java.lang.Integer">
 		SELECT
 		COUNT(*)
-		from user
+		from user_information
 	</select>
 	<delete id="deleteByUserId" parameterType="java.lang.Long">
-		delete from user
+		delete from user_information
 		where userId = #{userId,jdbcType=VARCHAR}
 	</delete>
 
 	<insert id="insert" parameterType="edu.tsinghua.dmcs.entity.User">
-		insert into user (userId,currentAuthority,avatar,userName,realName,passWord,userSex,userIdNumber,
+		insert into user_information (userId,currentAuthority,avatar,userName,realName,passWord,userSex,userIdNumber,
 		userEmail,emailCheckedFlag,userWorkPlace,userTelephone,userTelephone_1,
 		userWeixin,userQq,regtime)
 		values ( #{userId,jdbcType=VARCHAR},#{currentAuthority,jdbcType=VARCHAR},
@@ -76,7 +76,7 @@
 		#{regtime,jdbcType=TIMESTAMP})
 	</insert>
 	<insert id="insertSelective" parameterType="edu.tsinghua.dmcs.entity.User">
-		insert into user
+		insert into user_information
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userId != null">
 				userId,
@@ -181,7 +181,7 @@
 		</trim>
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="edu.tsinghua.dmcs.entity.User">
-		update user
+		update user_information
 		<set>
 			<if test="userId != null">
 				userId = #{userId,jdbcType=VARCHAR},
@@ -236,7 +236,7 @@
 		where userId = #{userId,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="edu.tsinghua.dmcs.entity.User">
-		update user
+		update user_information
 		set
 			userId = #{userId,jdbcType=VARCHAR},
 			currentAuthority = #{currentAuthority,jdbcType=VARCHAR},
