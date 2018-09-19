@@ -104,7 +104,8 @@ public class UserRestController {
 		String workPlace = o.getString("workplace");
 		User u = new User();
 		int user_num = selectUser_num();
-		u.setUserid(getUserDate()+String.format("%04d",user_num)); // TODO
+		String userId=getUserDate()+String.format("%04d",user_num);
+		u.setUserid(userId); // TODO
 		u.setUsername(userName);
         u.setUsersex(sex);
 		String securedPasswd = null;
@@ -122,6 +123,7 @@ public class UserRestController {
 		u.setCurrentAuthority("user");
 		u.setUserTelephone(mobile);
 		u.setUserEmail(mail);
+		u.setEmailCheckedFlag("false");
 		u.setRealname(null);
 		u.setUserIdNumber(null);
 		u.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");

@@ -1,16 +1,6 @@
 package edu.tsinghua.dmcs.web;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import edu.tsinghua.dmcs.Constants;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Device;
@@ -19,6 +9,15 @@ import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.DeviceService;
 import edu.tsinghua.dmcs.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/dmcs/api/device")
@@ -133,9 +132,9 @@ public class DeviceRestController {
     @ApiOperation(value="绑定设备到个人", notes="")
 	@RequestMapping(value = "/assignOwnerForDevice", method = RequestMethod.GET)
     @DmcsController(roleAllowed="administrator", description="绑定设备到用户")
-	public Response assignOwnerForDevice(@RequestParam Long userId, @RequestParam Long deviceId) {
+	public Response assignOwnerForDevice(@RequestParam String userId, @RequestParam Long deviceId) {
     	
-		User user = userService.getUserById(userId);
+		User user = userService.getUserByuserid(userId);
 		Device device = deviceService.getDeviceById(deviceId);
 		
 		if(user == null) {
@@ -145,8 +144,7 @@ public class DeviceRestController {
     	if(device == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_DEVICE_NO_EXIST_CODE, Constants.RC_FAIL_DEVICE_NO_EXIST_MSG, null);
     	}
-    	
-    	device.setOwner(userId);
+
     	
     	deviceService.updateDevice(device);
 

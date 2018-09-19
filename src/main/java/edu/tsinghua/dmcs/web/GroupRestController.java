@@ -1,11 +1,13 @@
 package edu.tsinghua.dmcs.web;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+import edu.tsinghua.dmcs.Constants;
+import edu.tsinghua.dmcs.Response;
+import edu.tsinghua.dmcs.entity.Group;
+import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
+import edu.tsinghua.dmcs.service.GroupService;
+import edu.tsinghua.dmcs.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.tsinghua.dmcs.Constants;
-import edu.tsinghua.dmcs.Response;
-import edu.tsinghua.dmcs.entity.Group;
-import edu.tsinghua.dmcs.entity.GroupUserMapping;
-import edu.tsinghua.dmcs.entity.User;
-import edu.tsinghua.dmcs.service.GroupService;
-import edu.tsinghua.dmcs.service.UserService;
-import io.swagger.annotations.ApiOperation;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value="/dmcs/api/group")
@@ -105,8 +102,8 @@ public class GroupRestController {
     @ApiOperation(value="为当前用户的指定群增长新成员", notes="")
 	@RequestMapping(value = "/addGroupMember", method = RequestMethod.GET)
 	public Response addGroupMember(@RequestParam long groupId,
-								   @RequestParam long userId) {
-    	User u = userService.getUserById(userId);
+								   @RequestParam String userId) {
+    	User u = userService.getUserByuserid(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
     	}
@@ -115,9 +112,9 @@ public class GroupRestController {
     		return Response.NEW().returnFail(Constants.RC_FAIL_GROUP_NO_EXIST_CODE, Constants.RC_FAIL_GROUP_NO_EXIST_MSG, null);
     	}
     	
-    	GroupUserMapping gum = groupService.addMemberForGroup(groupId, userId, false);
+    	//GroupUserMapping gum = groupService.addMemberForGroup(groupId, userId, false);
     	
-    	return Response.SUCCESS().setData(gum);
+    	return Response.SUCCESS();
     	
     	
     }
@@ -126,8 +123,8 @@ public class GroupRestController {
     @ApiOperation(value="从指定群组中移除指定用户", notes="")
 	@RequestMapping(value = "/removeGroupMember", method = RequestMethod.GET)
 	public Response removeGroupMember(@RequestParam long groupId,
-									  @RequestParam long userId) {
-    	User u = userService.getUserById(userId);
+									  @RequestParam String userId) {
+    	User u = userService.getUserByuserid(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
     	}
@@ -136,14 +133,9 @@ public class GroupRestController {
     		return Response.NEW().returnFail(Constants.RC_FAIL_GROUP_NO_EXIST_CODE, Constants.RC_FAIL_GROUP_NO_EXIST_MSG, null);
     	}
     	
-    	GroupUserMapping gum = groupService.getGroupUserMapping(groupId, userId);
-    	if(gum == null) {
-    		return Response.NEW().returnFail(Constants.RC_FAIL_GROUP_USER_NO_EXIST_CODE, Constants.RC_FAIL_GROUP_USER_NO_EXIST_MSG, null);
-    	}
+
     	
-    	Integer num = groupService.removeMemberForGroup(groupId, userId);
-    	
-    	return Response.SUCCESS().setData(num);
+    	return Response.SUCCESS();
     	
     	
     }
@@ -151,15 +143,14 @@ public class GroupRestController {
 	@DmcsController
     @ApiOperation(value="按用户列出所属群组", notes="")
 	@RequestMapping(value = "/listGroupByUser", method = RequestMethod.GET)
-	public Response listGroupByUser(@RequestParam long userId) {
-    	User u = userService.getUserById(userId);
+	public Response listGroupByUser(@RequestParam String userId) {
+    	User u = userService.getUserByuserid(userId);
     	if(u == null) {
     		return Response.NEW().returnFail(Constants.RC_FAIL_USER_NO_EXIST_CODE, Constants.RC_FAIL_USER_NO_EXIST_MSG, null);
     	}
+
     	
-    	List<Group> groups = groupService.listGroupByUserId(userId);
-    	
-    	return Response.SUCCESS().returnData(groups);
+    	return Response.SUCCESS();
     	
     }
 
