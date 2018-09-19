@@ -2,10 +2,12 @@ package edu.tsinghua.dmcs.web;
 
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
+import edu.tsinghua.dmcs.entity.Avatar;
 import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.AdminGroupService;
+import edu.tsinghua.dmcs.service.AvatarService;
 import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.service.UserService;
 import edu.tsinghua.dmcs.util.TockenCache;
@@ -51,6 +53,9 @@ public class UserRestController {
 	private TockenCache tockenCache;
 	@Autowired
 	private AdminGroupService adminGroupService;
+
+	@Autowired
+	private AvatarService avatarService;
 
 
 	@Value("${security.sault.login}")
@@ -136,6 +141,14 @@ public class UserRestController {
 		if(num==0)
 			return Response.FAILWRONG().setErrcode(4).setMsg("注册失败");
 		u.setPassword(null);
+		/*****添加头像****/
+
+		Avatar avatar = new Avatar();
+		avatar.setUserId(userId);
+		avatar.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");
+		avatar.setSelectFlag("true");
+		avatarService.AddAvatar(avatar);
+
 		return Response.SUCCESSOK().setData(u);
 		
 	}
