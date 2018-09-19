@@ -84,21 +84,31 @@ public class UserRestController {
 	public Response register(@RequestBody String body) throws ParseException {
 		System.out.println(body);
 		JSONObject o = JSONObject.parseObject(body);
-		String username = o.getString("username");
-		User exist_u = userService.checkExistence(username);
+		String userName = o.getString("username");
+		User exist_u = userService.checkExistence(userName);
 			if(exist_u!=null){
-			  return Response.FAILWRONG();
+			  return Response.FAILWRONG().setErrcode(1).setMsg("用户名已存在");
+			}
+		String mail = o.getString("mail");
+		exist_u = userService.checkExistence(mail);
+			if(exist_u!=null){
+				return Response.FAILWRONG().setErrcode(2).setMsg("邮箱已存在");
+			}
+		String mobile = o.getString("mobile");
+			exist_u = userService.checkExistence(mobile);
+			if(exist_u!=null){
+				return Response.FAILWRONG().setErrcode(3).setMsg("手机已存在");
 			}
 		String sex = o.getString("sex");
-		String mail = o.getString("mail");
 		String password = o.getString("password");
-		String mobile = o.getString("mobile");
+		String workPlace = o.getString("workplace");
 		User u = new User();
 		int user_num = selectUser_num();
 		u.setUserid(getUserDate()+String.format("%04d",user_num)); // TODO
-		u.setUsername(username);
+		u.setUsername(userName);
         u.setUsersex(sex);
 		String securedPasswd = null;
+
 		try {
 			MessageDigest digest = MessageDigest.getInstance("md5");
 			byte [] bs = digest.digest((this.securitySault + password).getBytes());
@@ -106,22 +116,23 @@ public class UserRestController {
 
 		} catch (Exception e) {
 			logger.error("fail to get md5 algorithm");
+			return Response.FAILWRONG().setMsg("编码错误");
 		}
-		// if securedPasswd is null throw exception
 		u.setPassword(securedPasswd);
 		u.setCurrentAuthority("user");
 		u.setUserTelephone(mobile);
 		u.setUserEmail(mail);
 		u.setRealname(null);
-		u.setAlias(null);
+		u.setUserIdNumber(null);
 		u.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");
-		u.setUserEmail_1(null);
 		u.setUserTelephone_1(null);
-		u.setUserworkPlace(null);
+		u.setUserworkPlace(workPlace);
 		u.setUserWeixin(null);
 		u.setUserQq(null);
 		u.setRegtime(new Date());
 		int num = userService.addUser(u);
+		if(num==0)
+			return Response.FAILWRONG().setErrcode(4).setMsg("注册失败");
 		u.setPassword(null);
 		return Response.SUCCESSOK().setData(u);
 		
@@ -142,10 +153,10 @@ public class UserRestController {
 				MessageDigest digest = MessageDigest.getInstance("md5");
 				byte [] bs = digest.digest((this.securitySault + password).getBytes());
 				securedPasswd = new String(bs);
-				String token = this.getToken(u.getUsername()) ;//
+				String token = this.getToken(u.getUsername()) ;
 				String temtoken = URLEncoder.encode(token);
 				Cookie cookie = new Cookie("dmcstoken", temtoken);
-				cookie.setMaxAge(3600);
+				cookie.setMaxAge(3600);//这是cookie的寿命时间，没有问题;
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				tockenCache.setTokenForUser(token, u.getUsername());
@@ -334,14 +345,11 @@ public class UserRestController {
 			}
 			// if securedPasswd is null throw exception
 			u.setPassword(securedPasswd);
-			u.setAlias(alias);
 			u.setUsername(username);
 			u.setCurrentAuthority(currentAuthority);
 			u.setPassword(password);// TODO
-			u.setAlias(alias);
 			u.setAvatar(avatar);
 			u.setUserEmail(userEmail);
-			u.setUserEmail_1(userEmail_1);
 			u.setUserTelephone(userTelephone);
 			u.setUserTelephone_1(userTelephone_1);
 			u.setUserworkPlace(userworkPlace);

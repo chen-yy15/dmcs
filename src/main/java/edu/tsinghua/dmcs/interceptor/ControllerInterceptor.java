@@ -1,13 +1,8 @@
 package edu.tsinghua.dmcs.interceptor;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import edu.tsinghua.dmcs.Response;
+import edu.tsinghua.dmcs.entity.Role;
+import edu.tsinghua.dmcs.service.RoleService;
 import edu.tsinghua.dmcs.util.TockenCache;
 import org.apache.maven.shared.utils.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,8 +17,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import edu.tsinghua.dmcs.entity.Role;
-import edu.tsinghua.dmcs.service.RoleService;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 @Aspect  
 @Component 
@@ -66,7 +64,7 @@ public class ControllerInterceptor {
  	        userName = checkLogin(request);
  	        if(userName == null) {
 				 return Response.NEW().loginRequired();
-			 }
+			}
          }
          
          String roleRequireds = controller.roleAllowed();

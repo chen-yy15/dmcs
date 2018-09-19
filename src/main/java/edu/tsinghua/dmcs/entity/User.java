@@ -3,33 +3,32 @@ package edu.tsinghua.dmcs.entity;
 import java.util.Date;
 
 public class User {
-    private Long id;
 
-    private String userid;
-
-    private String username;
+    private String userId;
 
     private String currentAuthority;
 
+    private String avatar;
+
+    private String userName;
+
+    private String realName;
+
     private String password;
 
-    private String usersex;
+    private String userSex;
 
-    private String realname;
-
-    private String alias;
-
-    private String avatar;
+    private String userIdNumber;
 
     private String userEmail;
 
-    private String userEmail_1;
+    private String emailCheckedFlag;
 
     private String userTelephone;
 
     private String userTelephone_1;
 
-    private String userworkPlace;
+    private String userWorkPlace;
 
     private String userWeixin;
 
@@ -37,28 +36,20 @@ public class User {
 
     private Date regtime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getUserid() {
-        return userid;
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserid(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.userName = userName;
     }
 
     public String getCurrentAuthority() { return currentAuthority; }
@@ -69,17 +60,17 @@ public class User {
 
     public void setPassword(String password) {this.password = password;}
 
-    public String getUsersex() { return usersex;}
+    public String getUsersex() { return userSex;}
 
-    public void setUsersex(String usersex) {this.usersex = usersex; }
+    public void setUsersex(String userSex) {this.userSex = userSex; }
 
-    public String getRealname() {return realname;}
+    public String getUserIdNumber() {return userIdNumber;}
 
-    public void setRealname(String realname) {this.realname = realname;}
+    public void setUserIdNumber(String userIdNumber) {this.userIdNumber=userIdNumber;}
 
-    public String getAlias() {return alias;}
+    public String getRealname() {return realName;}
 
-    public void setAlias(String alias) {this.alias = alias;}
+    public void setRealname(String realName) {this.realName = realName;}
 
     public String getAvatar() {
         return avatar;
@@ -91,9 +82,9 @@ public class User {
 
     public void setUserEmail(String userEmail){this.userEmail = userEmail;}
 
-    public String getUserEmail_1() {return userEmail_1;}
+    public String getEmailCheckedFlag() {return emailCheckedFlag;}
 
-    public void  setUserEmail_1(String userEmail_1) {this.userEmail_1=userEmail_1;}
+    public void setEmailCheckedFlag(String emailCheckedFlag){ this.emailCheckedFlag = emailCheckedFlag;}
 
     public String getUserTelephone() {return userTelephone;}
 
@@ -103,9 +94,9 @@ public class User {
 
     public void setUserTelephone_1(String userTelephone_1) {this.userTelephone_1 = userTelephone_1;}
 
-    public String getUserworkPlace() {return userworkPlace;}
+    public String getUserworkPlace() {return userWorkPlace;}
 
-    public void setUserworkPlace(String userworkPlace) {this.userworkPlace = userworkPlace;}
+    public void setUserworkPlace(String userWorkPlace) {this.userWorkPlace = userWorkPlace;}
 
     public String getUserWeixin () {return userWeixin;}
 

@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
 
@@ -15,11 +14,15 @@ public interface UserMapper {
 
     int selectUser_num();
 
-    User selectByPrimaryKey(Long id);
+    int deleteByUserId(String userId);
     
-    User selectByUserName(String userName);
+    User selectByUserName(String username_mobile_email);
 
     User selectByuserid(String userid);
+
+    User selectByUserEmail(String userEmail);
+
+    User selectByUserTele(String userTele);
 
     int updateByPrimaryKeySelective(User record);
 
