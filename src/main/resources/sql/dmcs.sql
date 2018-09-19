@@ -274,22 +274,24 @@ DROP TABLE IF EXISTS `user_information`;
 CREATE TABLE `user_information` (
   `userId` VARCHAR(45) NOT NULL COMMENT '主键',
   `currentAuthority` VARCHAR(45) NOT NULL COMMENT '身份',
-  `avatarId` bigint(20) NOT NULL COMMENT '头像',
+  `avatar` VARCHAR(255) NOT NULL COMMENT '头像',
   `userName` VARCHAR(45) NOT NULL COMMENT '用户名',
   `realName` VARCHAR(45) DEFAULT NULL COMMENT '真实姓名',
+  `passWord` VARCHAR(45) NOT NULL COMMENT '密码',
   `userSex` VARCHAR(45) DEFAULT NULL COMMENT '性别',
   `userIdNumber` VARCHAR(45) DEFAULT NULL COMMENT '身份证号',
   `userEmail` VARCHAR(45) NOT NULL COMMENT '邮箱',
+  `emailCheckedFlag` VARCHAR(25) NOT NULL COMMENT '是否注册',
   `userWorkPlace` VARCHAR(45) DEFAULT NULL COMMENT '工作地点',
   `userTelephone` VARCHAR(25) NOT NULL COMMENT '电话',
   `userTelephone_1` VARCHAR(25) DEFAULT NULL COMMENT '备用电话',
   `userWeixin` VARCHAR(45) DEFAULT NULL COMMENT '微信',
   `userQq` VARCHAR(25) DEFAULT NULL COMMENT 'QQ',
+  `regtime` Datetime DEFAULT NULL COMMENT '注册时间',
   PRIMARY KEY(`userId`),
   UNIQUE KEY(`userName`),
   UNIQUE KEY(`userEmail`),
-  UNIQUE KEY(`userTelephone`),
-  FOREIGN KEY(`avatarId`) references avatar_history(`avatarId`) ON DELETE cascade ON UPDATE cascade
+  UNIQUE KEY(`userTelephone`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
