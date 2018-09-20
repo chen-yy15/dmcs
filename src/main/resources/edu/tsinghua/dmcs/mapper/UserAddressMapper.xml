@@ -1,5 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.UserAddressMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.UserAddress" >
+        <id column="addressId" property="addressId" jdbcType="BIGINT" />
+        <result column="userId" property="userId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="place" property="place" jdbcType="VARCHAR" />
+        <result column="mobilePhone" property="mobilePhone" jdbcType="VARCHAR" />
+        <result column="fixedPhone" property="fixedPhone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        addressId,userId,name,title,country,city,area,place,mobilePhone,fixedPhone,email
+    </sql>
+    <delete id="deleteById" parameterType="java.lang.Long" >
+        delete from user_address
+        where addressId = #{addressId,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByUserId" parameterType="java.lang.String" >
+        delete from user_address
+        where userId = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="addAddress" parameterType="edu.tsinghua.dmcs.entity.UserAddress" >
+        insert into user_address (addressId,userId,name,title,country,city,area,place,mobilePhone,fixedPhone,email)
+        values ( #{addressId,jdbcType=BIGINT},#{userId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR},
+                 #{city,jdbcType=VARCHAR},#{area,jdbcType=VARCHAR},#{place,jdbcType=VARCHAR},#{mobilePhone,jdbcType=VARCHAR},#{fixedPhone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateById" parameterType="edu.tsinghua.dmcs.entity.UserAddress" >
+        update user_address
+        <set >
+            <if test="userId != null" >
+                userId = #{usreId,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="place != null" >
+                place = #{place,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilePhone != null" >
+                mobilePhone = #{mobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="fixedPhone != null" >
+                fixedPhone = #{fixedPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where addressId = #{addressId,jdbcType=BIGINT}
+    </update>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from user_address
+        where addressId = #{addressId, jdbcType=BIGINT}
+    </select>
+    <select id="querySelectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from user_address
+        where userId = #{userId, jdbcType=VARCHAR}
+    </select>
 </mapper>
