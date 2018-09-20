@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.LoginLogMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.LoginLog">
+        <id column="logid" property="logid" jdbcType="BIGINT" />
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="loginip" property="loginip" jdbcType="VARCHAR" />
+        <result column="logintime" property="logintime" jdbcType="TIMESTAMP" />
+        <result column="loginouttime" property="loginouttime" jdbcType="TIMESTAMP" />
+        <result column="loginoutway" property="loginoutway" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        logid,userid,loginip,logintime,loginouttime,loginoutway
+    </sql>
+    <insert id="addLog" parameterType="edu.tsinghua.dmcs.entity.LoginLog" >
+        insert into login_log (logid,userid,loginip,logintime,loginouttime,loginoutway)
+        values ( #{logid, jdbcType = BIGINT},#{userid, jdbcType=VARCHAR},#{loginip,jdbcType=VARCHAR},#{logintime,jdbcType=TIMESTAMP},#{loginouttime,jdbcType=TIMESTAMP},#{loginoutway,jdbcType=VARCHAR} )
+    </insert>
+    <delete id="deleteLog" parameterType="java.lang.Long" >
+        DELETE FROM login_log
+        WHERE logid = #{logid, jdbcType =BIGINT}
+    </delete>
+    <delete id="deleteByUserid" parameterType="java.lang.String" >
+        DELETE FROM login_log
+        WHERE userid = #{userid, jdbcType = VARCHAR}
+    </delete>
+    <select id="getLog" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+        <include refid="Base_Column_List" />
+        from login_log
+        WHERE logid = #{logid, jdbcType = BIGINT}
+    </select>
+    <select id="queryGetLog" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM login_log
+        WHERE userid = #{userid, jdbcType = VARCHAR}
+    </select>
 </mapper>
