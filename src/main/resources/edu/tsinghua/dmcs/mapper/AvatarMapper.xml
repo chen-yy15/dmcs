@@ -2,51 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.tsinghua.dmcs.mapper.AvatarMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.Avatar" >
-        <id column="avatarId" property="avatarId" jdbcType="BIGINT" />
-        <result column="userId" property="userId" jdbcType="VARCHAR" />
+        <id column="avatarid" property="avatarid" jdbcType="BIGINT" />
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
         <result column="avatar" property="avatar" jdbcType="VARCHAR" />
-        <result column="selectFlag" property="selectFlag" jdbcType="VARCHAR" />
+        <result column="selectflag" property="selectflag" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-        avatarId,userId,avatar,selectFlag
+        avatarid,userid,avatar,selectflag
     </sql>
     <delete id="deleteById" parameterType="java.lang.Long" >
         delete from avatar_history
-        where avatarId = #{avatarId,jdbcType=BIGINT}
+        where avatarid = #{avatarid,jdbcType=BIGINT}
     </delete>
     <delete id="queryDeleteByUserid" parameterType="java.lang.String">
         delete from avatar_history
-        where userId = #{userId, jdbcType=VARCHAR}
+        where userid = #{userid, jdbcType=VARCHAR}
     </delete>
     <insert id="addAvatar" parameterType="edu.tsinghua.dmcs.entity.Avatar" >
-        insert into avatar_history ( avatarId, userId, avatar, selectFlag)
-        values ( #{avatarId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{avatar, jdbcType=VARCHAR}, #{selectFlag,jdbcType=VARCHAR} )
+        insert into avatar_history ( avatarid, userid, avatar, selectflag)
+        values ( #{avatarid,jdbcType=BIGINT}, #{userid,jdbcType=VARCHAR}, #{avatar, jdbcType=VARCHAR}, #{selectflag,jdbcType=VARCHAR} )
     </insert>
     <update id="updateById" parameterType="edu.tsinghua.dmcs.entity.Avatar" >
         update avatar_history
         <set >
-            <if test="userId != null" >
-                userId = #{userId, jdbcType=VARCHAR},
+            <if test="userid != null" >
+                userid = #{userid, jdbcType=VARCHAR},
             </if>
             <if test="avatar != null">
                 avatar = #{avatar, jdbcType=VARCHAR},
             </if>
-            <if test="selectFlag !=null">
-                selectFlag = #{selectFlag, jdbcType=VARCHAR},
+            <if test="selectflag !=null">
+                selectflag = #{selectflag, jdbcType=VARCHAR},
             </if>
         </set>
-        where avatarId = #{avatarId,jdbcType=BIGINT}
+        where avatarid = #{avatarid,jdbcType=BIGINT}
     </update>
     <select id="querySelectByUserid" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
         from avatar_history
-        where userId = #{userId, jdbcType=VARCHAR}
+        where userid = #{userid, jdbcType=VARCHAR}
     </select>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
         select
         <include refid="Base_Column_List" />
         from avatar_history
-        where avatarId = #{avatarId, jdbcType=BIGINT}
+        where avatarid = #{avatarid, jdbcType=BIGINT}
     </select>
 </mapper>

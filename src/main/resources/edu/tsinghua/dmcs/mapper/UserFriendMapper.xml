@@ -3,15 +3,15 @@
 <mapper namespace="edu.tsinghua.dmcs.mapper.UserFriendMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.UserFriend" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="userSelf" property="userSelf" jdbcType="VARCHAR" />
-        <result column="userFriend" property="userFriend" jdbcType="VARCHAR" />
+        <result column="userself" property="userself" jdbcType="VARCHAR" />
+        <result column="userfriend" property="userfriend" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-        id,userSelf,userFriend
+        id,userself,userfriend
     </sql>
     <delete id="deleteByUser" parameterType="java.lang.String" >
         delete from user_friend
-        where userSelf = #{userSelf,jdbcType=BIGINT}
+        where userself = #{userself,jdbcType=BIGINT}
     </delete>
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from user_friend
@@ -19,11 +19,11 @@
     </delete>
     <delete id="deleteBySelfUser" parameterType="edu.tsinghua.dmcs.entity.UserFriend">
         DELETE from user_friend
-        WHERE userSelf = #{userSelf,jdbcType=VARCHAR} AND userFriend = #{userFriend,jdbcType=VARCHAR}
+        WHERE userself = #{userself,jdbcType=VARCHAR} AND userfriend = #{userfriend,jdbcType=VARCHAR}
     </delete>
     <insert id="addFriend" parameterType="edu.tsinghua.dmcs.entity.UserFriend" >
-        insert into user_friend (id, userSelf, userFriend)
-        values ( #{id,jdbcType=BIGINT}, #{userSelf,jdbcType=VARCHAR}, #{userFriend, jdbcType=VARCHAR})
+        insert into user_friend (id, userself, userfriend)
+        values ( #{id,jdbcType=BIGINT}, #{userself,jdbcType=VARCHAR}, #{userfriend, jdbcType=VARCHAR})
     </insert>
     <select id="getFriend" resultMap="BaseResultMap" parameterType="java.lang.Long" >
         select

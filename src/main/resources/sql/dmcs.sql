@@ -142,38 +142,6 @@ CREATE TABLE `trace` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `userid` varchar(45) NOT NULL COMMENT '用户系统号',
-  `username` varchar(45) NOT NULL COMMENT '登陆用户名',
-  `currentAuthority` varchar(45) NOT NULL COMMENT '用户身份',
-  `password` varchar(45) NOT NULL COMMENT '密码',
-  `usersex` varchar(45) NOT NULL COMMENT '性别',
-  `realname` varchar(45) DEFAULT NULL COMMENT '真实姓名',
-  `alias` varchar(45) DEFAULT NULL,
-  `userIdnumber` varchar(45) DEFAULT NULL COMMENT '身份证号',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '个人照片',
-  `userEmail` varchar(45) NOT NULL COMMENT '电邮',
-  `userEmail_1` varchar(45) DEFAULT NULL COMMENT'备用邮箱',
-  `userTelephone` varchar(45) NOT NULL COMMENT '手机',
-  `userTelephone_1` varchar(255) DEFAULT NULL COMMENT '备用手机',
-  `userworkPlace` varchar(255) DEFAULT NULL COMMENT '地址',
-  `userWeixin` varchar(45) DEFAULT NULL COMMENT '微信',
-  `userQq` varchar(45) DEFAULT NULL COMMENT 'Qq',
-  `regtime` datetime DEFAULT NULL COMMENT '注册时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `techdocument`
 --
@@ -258,11 +226,11 @@ DROP TABLE IF EXISTS `avatar_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 Create Table `avatar_history` (
-  `avatarId` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `userId` VARCHAR(45) DEFAULT NULL COMMENT '用户号',
+  `avatarid` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `userid` VARCHAR(45) DEFAULT NULL COMMENT '用户号',
   `avatar` VARCHAR (255) NOT NULL COMMENT '图片地址',
-  `selectFlag` VARCHAR(25) NOT NULL COMMENT 'false/true',
-  PRIMARY KEY(`avatarId`)
+  `selectflag` VARCHAR(25) NOT NULL COMMENT 'false/true',
+  PRIMARY KEY(`avatarid`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
@@ -272,26 +240,26 @@ DROP TABLE IF EXISTS `user_information`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_information` (
-  `userId` VARCHAR(45) NOT NULL COMMENT '主键',
+  `userid` VARCHAR(45) NOT NULL COMMENT '主键',
   `currentAuthority` VARCHAR(45) NOT NULL COMMENT '身份',
   `avatar` VARCHAR(255) NOT NULL COMMENT '头像',
-  `userName` VARCHAR(45) NOT NULL COMMENT '用户名',
-  `realName` VARCHAR(45) DEFAULT NULL COMMENT '真实姓名',
-  `passWord` VARCHAR(45) NOT NULL COMMENT '密码',
-  `userSex` VARCHAR(45) DEFAULT NULL COMMENT '性别',
-  `userIdNumber` VARCHAR(45) DEFAULT NULL COMMENT '身份证号',
-  `userEmail` VARCHAR(45) NOT NULL COMMENT '邮箱',
-  `emailCheckedFlag` VARCHAR(25) NOT NULL COMMENT '是否注册',
-  `userWorkPlace` VARCHAR(45) DEFAULT NULL COMMENT '工作地点',
-  `userTelephone` VARCHAR(25) NOT NULL COMMENT '电话',
-  `userTelephone_1` VARCHAR(25) DEFAULT NULL COMMENT '备用电话',
-  `userWeixin` VARCHAR(45) DEFAULT NULL COMMENT '微信',
-  `userQq` VARCHAR(25) DEFAULT NULL COMMENT 'QQ',
+  `username` VARCHAR(45) NOT NULL COMMENT '用户名',
+  `realname` VARCHAR(45) DEFAULT NULL COMMENT '真实姓名',
+  `password` VARCHAR(45) NOT NULL COMMENT '密码',
+  `usersex` VARCHAR(45) DEFAULT NULL COMMENT '性别',
+  `useridnumber` VARCHAR(45) DEFAULT NULL COMMENT '身份证号',
+  `useremail` VARCHAR(45) NOT NULL COMMENT '邮箱',
+  `emailcheckedflag` VARCHAR(25) NOT NULL COMMENT '是否注册',
+  `userworkplace` VARCHAR(45) DEFAULT NULL COMMENT '工作地点',
+  `usertelephone` VARCHAR(25) NOT NULL COMMENT '电话',
+  `usertelephone_1` VARCHAR(25) DEFAULT NULL COMMENT '备用电话',
+  `userweixin` VARCHAR(45) DEFAULT NULL COMMENT '微信',
+  `userqq` VARCHAR(25) DEFAULT NULL COMMENT 'QQ',
   `regtime` Datetime DEFAULT NULL COMMENT '注册时间',
-  PRIMARY KEY(`userId`),
-  UNIQUE KEY(`userName`),
-  UNIQUE KEY(`userEmail`),
-  UNIQUE KEY(`userTelephone`)
+  PRIMARY KEY(`userid`),
+  UNIQUE KEY(`username`),
+  UNIQUE KEY(`useremail`),
+  UNIQUE KEY(`usertelephone`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -302,8 +270,8 @@ DROP TABLE IF EXISTS `user_address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_address` (/**用户地址信息**/
-  `addressId` BIGINT(20)  NOT NULL AUTO_INCREMENT,
-  `userId` VARCHAR(45)  DEFAULT NULL COMMENT '用户号',
+  `addressid` BIGINT(20)  NOT NULL AUTO_INCREMENT,
+  `userid` VARCHAR(45)  DEFAULT NULL COMMENT '用户号',
   `name` VARCHAR (45) DEFAULT NULL COMMENT '收件人名字',
   `title` VARCHAR (45) DEFAULT NULL COMMENT '称呼',
   `country` VARCHAR(45) DEFAULT NULL COMMENT '国家',
@@ -311,11 +279,11 @@ CREATE TABLE `user_address` (/**用户地址信息**/
   `city` VARCHAR(45) DEFAULT NULL COMMENT '城市',
   `area` VARCHAR(45) DEFAULT NULL COMMENT '地区',
   `place` VARCHAR(45) DEFAULT NULL COMMENT '地点',
-  `mobilePhone` VARCHAR(25) DEFAULT NULL COMMENT '移动电话',
-  `fixedPhone` VARCHAR(25) DEFAULT NULL COMMENT '固定电话',
+  `mobilephone` VARCHAR(25) DEFAULT NULL COMMENT '移动电话',
+  `fixedphone` VARCHAR(25) DEFAULT NULL COMMENT '固定电话',
   `email` VARCHAR(45) DEFAULT NULL COMMENT '邮件',
   PRIMARY KEY (`addressId`),
-  FOREIGN KEY(`userId`) references user_information(`userId`) ON DELETE cascade
+  FOREIGN KEY(`userid`) references user_information(`userid`) ON DELETE cascade
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -327,11 +295,11 @@ DROP TABLE IF EXISTS `user_friend`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_friend` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `userSelf` VARCHAR(45) DEFAULT NULL COMMENT '自身用户编号',
-  `userFriend` VARCHAR(45) DEFAULT NULL COMMENT '朋友编号',
+  `userself` VARCHAR(45) DEFAULT NULL COMMENT '自身用户编号',
+  `userfriend` VARCHAR(45) DEFAULT NULL COMMENT '朋友编号',
   PRIMARY KEY(id),
-  FOREIGN KEY(`userSelf`) references user_information(`userId`) ON DELETE cascade ,
-  FOREIGN KEY(`userFriend`) references user_information(`userId`) ON DELETE cascade
+  FOREIGN KEY(`userself`) references user_information(`userid`) ON DELETE cascade ,
+  FOREIGN KEY(`userfriend`) references user_information(`userid`) ON DELETE cascade
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -342,14 +310,14 @@ DROP TABLE IF EXISTS `login_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 Create TABLE `login_log`(
-  `logId` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `userId` VARCHAR(45) DEFAULT NULL COMMENT '用户编号',
-  `loginIP` VARCHAR(255) DEFAULT NULL COMMENT '登录IP',
-  `loginTime` Datetime DEFAULT NULL COMMENT '登录时间',
-  `loginOutTime` Datetime DEFAULT NULL COMMENT '登出时间',
-  `loginOutWay` VARCHAR(45) DEFAULT NULL COMMENT '登入方式',
+  `logid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userid` VARCHAR(45) DEFAULT NULL COMMENT '用户编号',
+  `loginip` VARCHAR(255) DEFAULT NULL COMMENT '登录IP',
+  `logintime` Datetime DEFAULT NULL COMMENT '登录时间',
+  `loginouttime` Datetime DEFAULT NULL COMMENT '登出时间',
+  `loginoutway` VARCHAR(45) DEFAULT NULL COMMENT '登入方式',
   PRIMARY KEY(`logId`),
-  FOREIGN KEY(`userId`) references user_information(`userId`) ON DELETE cascade
+  FOREIGN KEY(`userid`) references user_information(`userid`) ON DELETE cascade
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
