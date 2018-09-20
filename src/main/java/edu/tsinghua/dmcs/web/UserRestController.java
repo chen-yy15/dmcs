@@ -3,13 +3,11 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Avatar;
+import edu.tsinghua.dmcs.entity.LoginLog;
 import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
-import edu.tsinghua.dmcs.service.AdminGroupService;
-import edu.tsinghua.dmcs.service.AvatarService;
-import edu.tsinghua.dmcs.service.RoleService;
-import edu.tsinghua.dmcs.service.UserService;
+import edu.tsinghua.dmcs.service.*;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -56,6 +54,9 @@ public class UserRestController {
 
 	@Autowired
 	private AvatarService avatarService;
+
+	@Autowired
+	private LoginLogService loginLogService;
 
 
 	@Value("${security.sault.login}")
@@ -157,10 +158,23 @@ public class UserRestController {
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Response login(@RequestBody String body,
-			HttpServletResponse response) {
+						  HttpServletResponse response, HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		String dmcs_token=null;
+		if(cookies!=null){
+			for(Cookie cookie:cookies){
+				if(cookie.getName().equals("dmcstoken")){
+					dmcs_token = cookie.getValue();
+				}
+			}
+			dmcs_token = URLDecoder.decode(dmcs_token);
+			String username = tockenCache.getUserNameByToken(dmcs_token);
+			if(username!=null)
+				return Response.FAILWRONG().setErrcode(1).setMsg("用户已登录");
+		}
 		JSONObject o = JSONObject.parseObject(body);
-		String username_mobile_email = o.getString("userName");
-		String password = o.getString("passWord");
+		String username_mobile_email = o.getString("username");
+		String password = o.getString("password");
 		User u = userService.checkExistence(username_mobile_email);//别人的用户名与自己的邮箱相同如何解决这个问题
 		if(u != null) {
 			String securedPasswd = null;
@@ -171,7 +185,7 @@ public class UserRestController {
 				String token = this.getToken(u.getUsername()) ;
 				String temtoken = URLEncoder.encode(token);
 				Cookie cookie = new Cookie("dmcstoken", temtoken);
-				cookie.setMaxAge(3600);//这是cookie的寿命时间，没有问题;
+				cookie.setMaxAge(60);//这是cookie的寿命时间，没有问题;
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				tockenCache.setTokenForUser(token, u.getUsername());
@@ -181,6 +195,19 @@ public class UserRestController {
 				return Response.FAILWRONG().setErrcode(1).setMsg("解密失败");
 			}
 			if(u.getPassword().equals(securedPasswd)) {
+				String ip = this.getIpAddress(request);
+				LoginLog loginLog = new LoginLog();
+				loginLog.setLoginip(ip);
+
+				Date login = new Date();
+				Date logout = new Date(login.getTime()+60*1000);
+				/*  直接计算消失时间，加入库中*/
+				loginLog.setUserid(u.getUserid());
+				loginLog.setLogintime(login);
+				loginLog.setLoginoutway("false");
+				loginLog.setLoginouttime(logout);
+				int num = loginLogService.AddLog(loginLog);
+				System.out.println(num);
 				u.setPassword(null);
 				return Response.SUCCESSOK().setData(u);
 			}
@@ -194,10 +221,17 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="用户验证", notes="true验证成功")
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
-	public Response temcheck(@RequestBody String body) throws ParseException{
-		JSONObject o = JSONObject.parseObject(body);
-		System.out.println(o);
-		String dmcstoken = o.getString("dmcstoken");
+	public Response temcheck(HttpServletRequest request) throws ParseException{
+		Cookie[] cookies = request.getCookies();
+		if(cookies.length!=0){
+			System.out.println(cookies.length);
+		}
+		String dmcstoken=null;
+		for(Cookie cookie:cookies){
+			if(cookie.getName().equals("dmcstoken")){
+				dmcstoken=cookie.getValue();
+			}
+		}
 		if(dmcstoken==null)
 			return Response.FAILWRONG().setErrcode(1).setMsg("信息验证失败");
 		dmcstoken=URLDecoder.decode(dmcstoken);
@@ -417,7 +451,59 @@ public class UserRestController {
 		}
 		return securedtoken;
 	}
-	
+
+	public final static String getIpAddress(HttpServletRequest request) {
+		// 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
+
+		String ip = request.getHeader("X-Forwarded-For");
+		if (logger.isInfoEnabled()) {
+			logger.info("getIpAddress(HttpServletRequest) - X-Forwarded-For - String ip=" + ip);
+		}
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("Proxy-Client-IP");
+				if (logger.isInfoEnabled()) {
+					logger.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
+				}
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("WL-Proxy-Client-IP");
+				if (logger.isInfoEnabled()) {
+					logger.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
+				}
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("HTTP_CLIENT_IP");
+				if (logger.isInfoEnabled()) {
+					logger.info("getIpAddress(HttpServletRequest) - HTTP_CLIENT_IP - String ip=" + ip);
+				}
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+				if (logger.isInfoEnabled()) {
+					logger.info("getIpAddress(HttpServletRequest) - HTTP_X_FORWARDED_FOR - String ip=" + ip);
+				}
+			}
+			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+				ip = request.getRemoteAddr();
+				if (logger.isInfoEnabled()) {
+					logger.info("getIpAddress(HttpServletRequest) - getRemoteAddr - String ip=" + ip);
+				}
+			}
+		} else if (ip.length() > 15) {
+			String[] ips = ip.split(",");
+			for (int index = 0; index < ips.length; index++) {
+				String strIp = (String) ips[index];
+				if (!("unknown".equalsIgnoreCase(strIp))) {
+					ip = strIp;
+					break;
+				}
+			}
+		}
+		return ip;
+	}
+//
 }
 //
 //
