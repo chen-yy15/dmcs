@@ -4,9 +4,9 @@ package edu.tsinghua.dmcs.entity;
  * Created by caizj on 18-9-20.
  */
 public class UserAddress {
-    private Long addressId;
+    private Long addressid;
 
-    private String userId;
+    private String userid;
 
     private String name;//收件人
 
@@ -20,19 +20,19 @@ public class UserAddress {
 
     private String place;
 
-    private String mobilePhone;
+    private String mobilephone;
 
-    private String fixedPhone;
+    private String fixedphone;
 
     private String email;
 
-    public Long getAddressId() {return addressId;}
+    public Long getAddressId() {return addressid;}
 
-    public void setAddressId(Long addressId) {this.addressId=addressId;}
+    public void setAddressId(Long addressId) {this.addressid=addressId;}
 
-    public String getUserId() {return userId;}
+    public String getUserId() {return userid;}
 
-    public void setUserId(String userId) {this.userId = userId;}
+    public void setUserId(String userid) {this.userid = userid;}
 
     public String getName() {return name;}
 
@@ -58,13 +58,13 @@ public class UserAddress {
 
     public void setPlace(String place) {this.place=place;}
 
-    public String getMobilePhone() {return mobilePhone;}
+    public String getMobilePhone() {return mobilephone;}
 
-    public void setMobilePhone(String mobilePhone) {this.mobilePhone = mobilePhone;}
+    public void setMobilePhone(String mobilePhone) {this.mobilephone = mobilePhone;}
 
-    public String getFixedPhone() {return fixedPhone;}
+    public String getFixedPhone() {return fixedphone;}
 
-    public void setFixedPhone(String fixedPhone) {this.fixedPhone = fixedPhone;}
+    public void setFixedPhone(String fixedPhone) {this.fixedphone = fixedPhone;}
 
     public String getEmail() {return email;}
 

@@ -1,7 +1,5 @@
 package edu.tsinghua.dmcs;
 
-import com.alibaba.fastjson.JSONObject;
-
 public class Response {
 
 	private int errcode;
@@ -39,7 +37,6 @@ public class Response {
 	public Object getData() {
 		return data;
 	}
-
 
 
 

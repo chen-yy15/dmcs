@@ -16,14 +16,14 @@ import java.util.List;
 public interface UserAddressMapper {
     int addAddress(UserAddress userAddress);
 
-    int deleteById(Long addressId);
+    int deleteById(Long addressid);
 
-    int deleteByUserId(String userId);
+    int deleteByUserId(String userid);
 
     int updateById(UserAddress userAddress);
 
-    UserAddress selectById(Long addressId);
+    UserAddress selectById(Long addressid);
 
-    List<UserAddress> querySelectByUserId(String userId);
+    List<UserAddress> querySelectByUserId(String userid);
 
 }

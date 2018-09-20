@@ -4,73 +4,73 @@ import java.util.Date;
 
 public class User {
 
-    private String userId;
+    private String userid;
 
     private String currentAuthority;
 
     private String avatar;
 
-    private String userName;
+    private String username;
 
-    private String realName;
+    private String realname;
 
-    private String passWord;
+    private String password;
 
-    private String userSex;
+    private String usersex;
 
-    private String userIdNumber;
+    private String useridnumber;
 
-    private String userEmail;
+    private String useremail;
 
-    private String emailCheckedFlag;
+    private String emailcheckedflag;
 
-    private String userTelephone;
+    private String usertelephone;
 
-    private String userTelephone_1;
+    private String usertelephone_1;
 
-    private String userWorkPlace;
+    private String userworkplace;
 
-    private String userWeixin;
+    private String userweixin;
 
-    private String userQq;
+    private String userqq;
 
     private Date regtime;
 
     public String getUserid() {
-        return userId;
+        return userid;
     }
 
-    public void setUserid(String userId) {
-        this.userId = userId;
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {
-        return userName;
+        return username;
     }
 
-    public void setUsername(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getCurrentAuthority() { return currentAuthority; }
 
     public void setCurrentAuthority(String currentAuthority) {this.currentAuthority = currentAuthority;}
 
-    public String getPassword() {return passWord;}
+    public String getPassword() {return password;}
 
-    public void setPassword(String passWord) {this.passWord = passWord;}
+    public void setPassword(String password) {this.password = password;}
 
-    public String getUsersex() { return userSex;}
+    public String getUsersex() { return usersex;}
 
-    public void setUsersex(String userSex) {this.userSex = userSex; }
+    public void setUsersex(String userSex) {this.usersex = userSex; }
 
-    public String getUserIdNumber() {return userIdNumber;}
+    public String getUserIdNumber() {return useridnumber;}
 
-    public void setUserIdNumber(String userIdNumber) {this.userIdNumber=userIdNumber;}
+    public void setUserIdNumber(String useridnumber) {this.useridnumber=useridnumber;}
 
-    public String getRealname() {return realName;}
+    public String getRealname() {return realname;}
 
-    public void setRealname(String realName) {this.realName = realName;}
+    public void setRealname(String realname) {this.realname = realname;}
 
     public String getAvatar() {
         return avatar;
@@ -78,33 +78,33 @@ public class User {
 
     public void setAvatar(String avatar) {this.avatar = avatar;}
 
-    public String getUserEmail() { return userEmail;}
+    public String getUserEmail() { return useremail;}
 
-    public void setUserEmail(String userEmail){this.userEmail = userEmail;}
+    public void setUserEmail(String useremail){this.useremail = useremail;}
 
-    public String getEmailCheckedFlag() {return emailCheckedFlag;}
+    public String getEmailCheckedFlag() {return emailcheckedflag;}
 
-    public void setEmailCheckedFlag(String emailCheckedFlag){ this.emailCheckedFlag = emailCheckedFlag;}
+    public void setEmailCheckedFlag(String emailcheckedflag){ this.emailcheckedflag = emailcheckedflag;}
 
-    public String getUserTelephone() {return userTelephone;}
+    public String getUserTelephone() {return usertelephone;}
 
-    public void setUserTelephone(String userTelephone) {this.userTelephone = userTelephone;}
+    public void setUserTelephone(String usertelephone) {this.usertelephone = usertelephone;}
 
-    public String getUserTelephone_1() {return userTelephone_1;}
+    public String getUserTelephone_1() {return usertelephone_1;}
 
-    public void setUserTelephone_1(String userTelephone_1) {this.userTelephone_1 = userTelephone_1;}
+    public void setUserTelephone_1(String usertelephone_1) {this.usertelephone_1 = usertelephone_1;}
 
-    public String getUserworkPlace() {return userWorkPlace;}
+    public String getUserworkPlace() {return userworkplace;}
 
-    public void setUserworkPlace(String userWorkPlace) {this.userWorkPlace = userWorkPlace;}
+    public void setUserworkPlace(String userworkplace) {this.userworkplace = userworkplace;}
 
-    public String getUserWeixin () {return userWeixin;}
+    public String getUserWeixin () {return userweixin;}
 
-    public void setUserWeixin(String weixin) {this.userWeixin = this.userWeixin;}
+    public void setUserWeixin(String weixin) {this.userweixin = weixin;}
 
-    public String getUserQq () {return userQq;}
+    public String getUserQq () {return userqq;}
 
-    public void setUserQq(String userQq){this.userQq = userQq;}
+    public void setUserQq(String userqq){this.userqq = userqq;}
 
     public Date getRegtime() {
         return regtime;

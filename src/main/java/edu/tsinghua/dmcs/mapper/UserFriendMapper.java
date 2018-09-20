@@ -10,11 +10,11 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserFriendMapper {
     int addFriend(UserFriend userFriend);
 
-    int deleteByUser(String userSelf);
+    int deleteByUser(String userself);
 
     int deleteById(Long id);
 
-    int deleteBySelfUser(UserFriend userFriend);
+    int deleteBySelfUser(UserFriend userfriend);
 
     UserFriend getFriend(Long id);
 }

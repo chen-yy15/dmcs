@@ -106,7 +106,7 @@ public class UserRestController {
 			}
 		String sex = o.getString("sex");
 		String password = o.getString("password");
-		String workPlace = o.getString("workplace");
+		String workPlace = o.getString("workPlace");
 		User u = new User();
 		int user_num = selectUser_num();
 		String userId=getUserDate()+String.format("%04d",user_num);
@@ -125,7 +125,7 @@ public class UserRestController {
 			return Response.FAILWRONG().setMsg("编码错误");
 		}
 		u.setPassword(securedPasswd);
-		u.setCurrentAuthority("user");
+		u.setCurrentAuthority("guest");
 		u.setUserTelephone(mobile);
 		u.setUserEmail(mail);
 		u.setEmailCheckedFlag("false");
@@ -159,8 +159,8 @@ public class UserRestController {
 	public Response login(@RequestBody String body,
 			HttpServletResponse response) {
 		JSONObject o = JSONObject.parseObject(body);
-		String username_mobile_email = o.getString("username");
-		String password = o.getString("password");
+		String username_mobile_email = o.getString("userName");
+		String password = o.getString("passWord");
 		User u = userService.checkExistence(username_mobile_email);//别人的用户名与自己的邮箱相同如何解决这个问题
 		if(u != null) {
 			String securedPasswd = null;
@@ -176,9 +176,9 @@ public class UserRestController {
 				response.addCookie(cookie);
 				tockenCache.setTokenForUser(token, u.getUsername());
 
-
 			} catch (Exception e) {
 				logger.error("fail to get md5 algorithm");
+				return Response.FAILWRONG().setErrcode(1).setMsg("解密失败");
 			}
 			if(u.getPassword().equals(securedPasswd)) {
 				u.setPassword(null);
@@ -186,7 +186,7 @@ public class UserRestController {
 			}
 		}
 		
-		return Response.FAILWRONG();
+		return Response.FAILWRONG().setErrcode(0).setMsg("用户不存在");
 		
 	}
 
@@ -199,12 +199,12 @@ public class UserRestController {
 		System.out.println(o);
 		String dmcstoken = o.getString("dmcstoken");
 		if(dmcstoken==null)
-			return Response.FAILWRONG();
+			return Response.FAILWRONG().setErrcode(1).setMsg("信息验证失败");
 		dmcstoken=URLDecoder.decode(dmcstoken);
-		String username=tockenCache.getUserNameByToken(dmcstoken);
-		System.out.println(username);
-		if(username !=null){
-			User u = userService.checkExistence(username);
+		String userName=tockenCache.getUserNameByToken(dmcstoken);
+		System.out.println(userName);
+		if(userName !=null){
+			User u = userService.checkExistence(userName);
 			if( u!=null ) {
 				u.setPassword(null);
 				return Response.SUCCESSOK().setData(u);

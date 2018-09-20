@@ -6,19 +6,19 @@ package edu.tsinghua.dmcs.entity;
 public class UserFriend {
     private Long id;
 
-    private String userSelf;
+    private String userself;
 
-    private String userFriend;
+    private String userfriend;
 
     public Long getId() {return id;}
 
     public void setId(Long id) { this.id=id; }
 
-    public String getUserSelf() { return userSelf; }
+    public String getUserSelf() { return userself; }
 
-    public void setUserSelf(String userSelf) {this.userSelf=userSelf;}
+    public void setUserSelf(String userSelf) {this.userself=userSelf;}
 
-    public String getUserFriend() {return userFriend;}
+    public String getUserFriend() {return userfriend;}
 
-    public void setUserFriend(String userFriend) {this.userFriend=userFriend;}
+    public void setUserFriend(String userFriend) {this.userfriend=userFriend;}
 }

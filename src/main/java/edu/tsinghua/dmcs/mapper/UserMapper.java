@@ -14,11 +14,11 @@ public interface UserMapper {
 
     int selectUser_num();
 
-    int deleteByUserId(String userId);
+    int deleteByUserId(String userid);
     
     User selectByUserName(String username_mobile_email);
 
-    User selectByuserid(String userId);
+    User selectByuserid(String userid);
 
     User selectByUserEmail(String userEmail);
 
@@ -28,5 +28,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    List<User> nogetuser(String userId);
+    List<User> nogetuser(String userid);
 }

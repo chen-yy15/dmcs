@@ -12,13 +12,13 @@ import java.util.List;
 public interface AvatarMapper {
     int addAvatar(Avatar avatar);
 
-    int deleteById(Long avatarId);
+    int deleteById(Long avatarid);
 
     int updateById(Avatar avatar);
 
-    Avatar selectById(Long avatarId);
+    Avatar selectById(Long avatarid);
 
-    List<Avatar> querySelectByUserid(String userId);
+    List<Avatar> querySelectByUserid(String userid);
 
-    int queryDeleteByUserid(String userId);
+    int queryDeleteByUserid(String userid);
 }
