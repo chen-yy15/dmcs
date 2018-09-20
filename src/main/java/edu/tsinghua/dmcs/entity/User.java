@@ -14,7 +14,7 @@ public class User {
 
     private String realName;
 
-    private String password;
+    private String passWord;
 
     private String userSex;
 
@@ -56,9 +56,9 @@ public class User {
 
     public void setCurrentAuthority(String currentAuthority) {this.currentAuthority = currentAuthority;}
 
-    public String getPassword() {return password;}
+    public String getPassword() {return passWord;}
 
-    public void setPassword(String password) {this.password = password;}
+    public void setPassword(String passWord) {this.passWord = passWord;}
 
     public String getUsersex() { return userSex;}
 
