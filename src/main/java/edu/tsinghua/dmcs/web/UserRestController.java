@@ -161,7 +161,7 @@ public class UserRestController {
 		JSONObject o = JSONObject.parseObject(body);
 		String username_mobile_email = o.getString("username");
 		String password = o.getString("password");
-		User u = userService.checkExistence(username_mobile_email);
+		User u = userService.checkExistence(username_mobile_email);//别人的用户名与自己的邮箱相同如何解决这个问题
 		if(u != null) {
 			String securedPasswd = null;
 			try {
