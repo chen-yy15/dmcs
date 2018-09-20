@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.UserFriendMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.UserFriend" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="userSelf" property="userSelf" jdbcType="VARCHAR" />
+        <result column="userFriend" property="userFriend" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id,userSelf,userFriend
+    </sql>
+    <delete id="deleteByUser" parameterType="java.lang.String" >
+        delete from user_friend
+        where userSelf = #{userSelf,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from user_friend
+        where id = #{id, jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteBySelfUser" parameterType="edu.tsinghua.dmcs.entity.UserFriend">
+        DELETE from user_friend
+        WHERE userSelf = #{userSelf,jdbcType=VARCHAR} AND userFriend = #{userFriend,jdbcType=VARCHAR}
+    </delete>
+    <insert id="addFriend" parameterType="edu.tsinghua.dmcs.entity.UserFriend" >
+        insert into user_friend (id, userSelf, userFriend)
+        values ( #{id,jdbcType=BIGINT}, #{userSelf,jdbcType=VARCHAR}, #{userFriend, jdbcType=VARCHAR})
+    </insert>
+    <select id="getFriend" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from user_friend
+        where id = #{id, jdbcType=BIGINT}
+    </select>
 </mapper>
