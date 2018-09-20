@@ -302,7 +302,7 @@ DROP TABLE IF EXISTS `user_address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_address` (/**用户地址信息**/
-  `addressId` VARCHAR(45)  NOT NULL COMMENT '地址编号',
+  `addressId` BIGINT(20)  NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(45)  DEFAULT NULL COMMENT '用户号',
   `name` VARCHAR (45) DEFAULT NULL COMMENT '收件人名字',
   `title` VARCHAR (45) DEFAULT NULL COMMENT '称呼',
