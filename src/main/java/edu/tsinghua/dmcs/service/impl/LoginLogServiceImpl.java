@@ -37,6 +37,21 @@ public class LoginLogServiceImpl implements LoginLogService {
         return num;
     }
 
+    public int UpdateLog(LoginLog loginLog){
+        int num = 0;
+        if(loginLog != null){
+            num = loginLogMapper.updateLog(loginLog);
+        }
+        return num;
+    }
+
+    public LoginLog GetLogMax(LoginLog loginLog){
+        if(loginLog!=null){
+            return loginLogMapper.getLogMax(loginLog);
+        }
+        return null;
+    }
+
     public LoginLog GetLog(Long logid){
         return loginLogMapper.getLog(logid);
     }

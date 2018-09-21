@@ -17,7 +17,11 @@ public interface LoginLogMapper {
 
     int deleteByUserid(String userid);
 
+    int updateLog(LoginLog loginLog);
+
     LoginLog getLog(Long logid);
+
+    LoginLog getLogMax(LoginLog loginLog);
 
     List<LoginLog> queryGetLog(String userid);
 }

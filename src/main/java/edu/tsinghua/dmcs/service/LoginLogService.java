@@ -15,7 +15,11 @@ public interface LoginLogService {
 
     public int DeleteByUserid(String userid);
 
+    public int UpdateLog(LoginLog loginLog);
+
     public LoginLog GetLog(Long logid);
+
+    public LoginLog GetLogMax(LoginLog loginLog);
 
     public List<LoginLog> QueryLog(String userid);
 }

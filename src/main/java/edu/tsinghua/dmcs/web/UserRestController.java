@@ -153,7 +153,9 @@ public class UserRestController {
 		return Response.SUCCESSOK().setData(u);
 		
 	}
-	
+	//这里如何解决一台电脑上登录两个不同的账号的问题呢？
+	//目前只能解决一台电脑上同一时期只能登录单个账号
+	//如何避免一个账号在异地登录呢？
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -185,7 +187,7 @@ public class UserRestController {
 				String token = this.getToken(u.getUsername()) ;
 				String temtoken = URLEncoder.encode(token);
 				Cookie cookie = new Cookie("dmcstoken", temtoken);
-				cookie.setMaxAge(60);//这是cookie的寿命时间，没有问题;
+				cookie.setMaxAge(120);//这是cookie的寿命时间，没有问题;
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				tockenCache.setTokenForUser(token, u.getUsername());
@@ -326,39 +328,42 @@ public class UserRestController {
 
 
 
-	@DmcsController(loginRequired=true)
+	@DmcsController(loginRequired=false)
 	@ApiOperation(value="用户登出", notes="true登出成功")
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public Response logout(@RequestParam String username, HttpServletRequest request,
-						   HttpServletResponse response) {
-
-		User u = userService.checkExistence(username);
-		if(u != null) {
-			String securedPasswd = null;
-			try {
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public Response logout(HttpServletRequest request, HttpServletResponse response) {
+			 {
 				Cookie [] cookies = request.getCookies();
 				for(Cookie cookie : cookies) {
 					String cookieName = cookie.getName();
 					if("dmcstoken".equals(cookieName)) {
 						String cookieValue = cookie.getValue();
-						if(tockenCache.isTokenExist(cookieValue)) {
+						cookieValue = URLDecoder.decode(cookieValue);
+						String username = tockenCache.getUserNameByToken(cookieValue);
+						User u = userService.checkExistence(username);
+						if(u!=null){
 							tockenCache.removeToken(cookieValue);
 							cookie.setValue(null);
 							cookie.setMaxAge(0);
 							cookie.setPath("/");
 							response.addCookie(cookie);
-							break;
 
-						}
+							LoginLog a = new LoginLog();
+							String ip = this.getIpAddress(request);
+							a.setLoginip(ip);
+							a.setUserid(u.getUserid());
+							LoginLog b = loginLogService.GetLogMax(a);
+							if(b==null)
+								break;
+							b.setLoginouttime(new Date());
+							b.setLoginoutway("true");
+							loginLogService.UpdateLog(b);
+						}//cookie已经清零了，需要进行log设置
+
 					}
 				}
-
-			} catch (Exception e) {
-				logger.error("fail to get md5 algorithm");
 			}
-		}
-
-		return Response.SUCCESS().setData(null);
+		    return Response.SUCCESSOK();
 
 	}
 	
