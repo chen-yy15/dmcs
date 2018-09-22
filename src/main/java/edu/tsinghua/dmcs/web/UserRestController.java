@@ -8,6 +8,7 @@ import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.*;
+import edu.tsinghua.dmcs.util.SendEmail;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -50,8 +51,8 @@ public class UserRestController {
 	@Autowired
 	private TockenCache tockenCache;
 
-	//@Autowired
-	//private SendEmail sendEmail;
+	@Autowired
+	private SendEmail emailService;
 
 	@Autowired
 	private AdminGroupService adminGroupService;
@@ -266,7 +267,7 @@ public class UserRestController {
 			return Response.FAILWRONG();
 		}
 		System.out.println(verify);
-		//sendEmail.sendSimEmail("caizj15@qq.com","注册邮件","注册信息");
+		emailService.sendSimEmail("caizj15@qq.com","注册邮件","注册信息");
 		return Response.SUCCESSOK();
 	}
 	/*******/
