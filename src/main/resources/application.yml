@@ -22,6 +22,15 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
+    mail:
+        host: smtp.163.com
+        username: caizj15@163.com
+        password: dmcsvalley
+        properties:
+            mail:
+                smtp:
+                     auth: true
+                     timeout: 25000
     mybatis: 
         config-location: classpath:mybatis-config.xml
         typeAliasesPackage: edu.tsinghua.dmcs.entity
