@@ -49,6 +49,10 @@ public class UserRestController {
 
 	@Autowired
 	private TockenCache tockenCache;
+
+	//@Autowired
+	//private SendEmail sendEmail;
+
 	@Autowired
 	private AdminGroupService adminGroupService;
 
@@ -220,6 +224,8 @@ public class UserRestController {
 	}
 
 /********/
+
+/*******/
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="用户验证", notes="true验证成功")
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
@@ -260,6 +266,7 @@ public class UserRestController {
 			return Response.FAILWRONG();
 		}
 		System.out.println(verify);
+		//sendEmail.sendSimEmail("caizj15@qq.com","注册邮件","注册信息");
 		return Response.SUCCESSOK();
 	}
 	/*******/
