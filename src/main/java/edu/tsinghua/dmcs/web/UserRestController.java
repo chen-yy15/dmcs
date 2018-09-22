@@ -250,6 +250,18 @@ public class UserRestController {
 		return Response.FAILWRONG();
 	}
 	/*********/
+	@DmcsController(loginRequired = false)
+	@ApiOperation(value = "邮件激活",notes = "邮件激活成功")
+	@RequestMapping(value = "/verifyaccount",method = RequestMethod.POST)
+	public Response verifyAccount(@RequestBody String body) throws ParseException{
+		JSONObject o = JSONObject.parseObject(body);
+		String verify = o.getString("verify");
+		if(verify==null){
+			return Response.FAILWRONG();
+		}
+		System.out.println(verify);
+		return Response.SUCCESSOK();
+	}
 	/*******/
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
