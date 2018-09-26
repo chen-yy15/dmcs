@@ -14,6 +14,8 @@ public interface UserService {
 	
 	public int update(User user);
 
+	public int changeEmailFlag(String username);
+
 	public User getUserByuserid(String userId);
 
 	public List<User> nogetUserByuserid(String userId);
