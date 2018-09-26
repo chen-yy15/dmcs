@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /////
 
@@ -66,6 +67,9 @@ public class UserRestController {
 
 	@Value("${security.sault.login}")
 	private String securitySault;
+
+	@Value("${security.sault.number}")
+	private String securityNumber;
 	
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="查询用户名是否存在", notes="data中true or false代表用户是否已存在")
@@ -93,7 +97,7 @@ public class UserRestController {
     @ApiOperation(value="注册新用户", notes="")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public Response register(@RequestBody String body) throws ParseException {
-		System.out.println(body);
+		System.out.println("欢迎注册！！！！");
 		JSONObject o = JSONObject.parseObject(body);
 		String userName = o.getString("username");
 		User exist_u = userService.checkExistence(userName);
@@ -164,8 +168,7 @@ public class UserRestController {
 	@DmcsController(loginRequired=false)
     @ApiOperation(value="用户登陆", notes="true登陆成功")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public Response login(@RequestBody String body,
-						  HttpServletResponse response, HttpServletRequest request) {
+	public Response login(@RequestBody String body, HttpServletResponse response, HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		String dmcs_token=null;
 		if(cookies!=null){
@@ -174,6 +177,7 @@ public class UserRestController {
 					dmcs_token = cookie.getValue();
 				}
 			}
+			System.out.println("dmcs_token: "+dmcs_token);
 			dmcs_token = URLDecoder.decode(dmcs_token);
 			String username = tockenCache.getUserNameByToken(dmcs_token);
 			if(username!=null)
@@ -192,7 +196,7 @@ public class UserRestController {
 				String token = this.getToken(u.getUsername()) ;
 				String temtoken = URLEncoder.encode(token);
 				Cookie cookie = new Cookie("dmcstoken", temtoken);
-				cookie.setMaxAge(120);//这是cookie的寿命时间，没有问题;
+				cookie.setMaxAge(5*3600);//这是cookie的寿命时间，没有问题;
 				cookie.setPath("/");
 				response.addCookie(cookie);
 				tockenCache.setTokenForUser(token, u.getUsername());
@@ -207,7 +211,7 @@ public class UserRestController {
 				loginLog.setLoginip(ip);
 
 				Date login = new Date();
-				Date logout = new Date(login.getTime()+60*1000);
+				Date logout = new Date(login.getTime()+5*60*60*1000);
 				/*  直接计算消失时间，加入库中*/
 				loginLog.setUserid(u.getUserid());
 				loginLog.setLogintime(login);
@@ -258,17 +262,89 @@ public class UserRestController {
 	}
 	/*********/
 	@DmcsController(loginRequired = false)
+	@ApiOperation(value = "账号激活",notes = "激活账号已发送至邮箱")
+	@RequestMapping(value= "/motivate",method = RequestMethod.POST)
+	public Response Motivate(@RequestBody String body, HttpServletRequest request) throws ParseException{
+		Cookie[] cookies = request.getCookies();
+        String dmcstoken = null;
+        for(Cookie cookie:cookies) {
+          if(cookie.getName().equals("dmcstoken")){
+              dmcstoken=cookie.getValue();
+          }
+        };
+        dmcstoken = URLDecoder.decode(dmcstoken);
+        String uname = tockenCache.getUserNameByToken(dmcstoken);
+        User u = userService.checkExistence(uname);
+        if(u==null) {
+            JSONObject o = JSONObject.parseObject(body);
+            System.out.println(o);
+            String username = o.getString("username");
+            String email = o.getString("email");
+            if (username == null || email == null)
+                return Response.FAILWRONG().setErrcode(0).setMsg("信息缺失");
+            User u1 = userService.checkExistence(email);
+            if (u1 == null || u1.getEmailCheckedFlag() == "true")
+                return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
+            try {
+                String number = this.getNumber(); //目前获得了令牌信息
+                tockenCache.setTokenForUser(number, username);
+                String content = "http://39.104.208/#/user/login" + "?" + number;
+                emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
+                return Response.SUCCESSOK();
+            } catch (Exception e) {
+                logger.error("激活邮件发送失败");
+                return Response.FAILWRONG().setMsg("激活邮件发送失败").setErrcode(1);
+            }
+        }
+        if(u!=null){
+            if(u.getEmailCheckedFlag()=="true")
+                return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
+            JSONObject o = JSONObject.parseObject(body);
+            String email = o.getString("email");
+            try {
+                if (email != u.getUserEmail()) {
+                    u.setCurrentAuthority("guest");
+                    u.setPassword(null);
+                    u.setEmailCheckedFlag("false");
+                    userService.update(u);
+                }
+                String number = this.getNumber();
+                tockenCache.setTokenForUser(number,u.getUsername());
+                String content = "http://39.104.208/#/user/login" + "?" + number;
+                emailService.sendSimEmail("caizj15@qq.com","注册邮件",content);
+            } catch (Exception e) {
+                logger.error("数据库更新出现问题或邮件发送失败");
+                return Response.FAILWRONG().setMsg("操作失败").setErrcode(2);
+            }
+
+        }
+        return Response.FAILWRONG();
+	}
+
+	@DmcsController(loginRequired = false)
 	@ApiOperation(value = "邮件激活",notes = "邮件激活成功")
 	@RequestMapping(value = "/verifyaccount",method = RequestMethod.POST)
 	public Response verifyAccount(@RequestBody String body) throws ParseException{
 		JSONObject o = JSONObject.parseObject(body);
+		System.out.println(o);
 		String verify = o.getString("verify");
 		if(verify==null){
 			return Response.FAILWRONG();
 		}
-		System.out.println(verify);
-		emailService.sendSimEmail("caizj15@qq.com","注册邮件","注册信息");
-		return Response.SUCCESSOK();
+		try{
+			String username= tockenCache.getUserNameByToken(verify);
+			User u = userService.checkExistence(username);
+			if(u==null )
+				return Response.FAILWRONG();
+			//这里需要捕捉意外错误吗？改变用户身份和用户标记情况;
+			userService.changeEmailFlag(username);
+			System.out.println(verify);
+			tockenCache.removeToken(verify);
+		}catch (Exception e){
+			logger.error("数据库操作出现问题");
+			return Response.FAILWRONG().setErrcode(1);
+		}
+	    return Response.SUCCESSOK();
 	}
 	/*******/
 	@DmcsController(loginRequired=false)
@@ -475,6 +551,12 @@ public class UserRestController {
 			logger.error("fail to get md5 algorithm");
 		}
 		return securedtoken;
+	}
+
+	private String getNumber(){
+		//String name = username + this.securityNumber + System.currentTimeMillis();
+		UUID uuid  = UUID.randomUUID();
+		return uuid.toString().replace("-","");
 	}
 
 	public final static String getIpAddress(HttpServletRequest request) {
