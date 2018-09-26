@@ -251,4 +251,11 @@
 			regtime = #{regtime,jdbcType=TIMESTAMP},
 		where userid = #{userid,jdbcType=VARCHAR}
 	</update>
+	<update id="changeEmailflag" parameterType="java.lang.String">
+		UPDATE  user_information
+		SET
+		currentAuthority = "user",
+		emailcheckedflag = "true"
+		WHERE username = #{username, jdbcType=VARCHAR}
+	</update>
 </mapper>
