@@ -28,5 +28,7 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    int changeEmailflag(String username);
+
     List<User> nogetuser(String userid);
 }
