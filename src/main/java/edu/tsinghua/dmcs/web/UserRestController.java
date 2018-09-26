@@ -177,11 +177,13 @@ public class UserRestController {
 					dmcs_token = cookie.getValue();
 				}
 			}
-			System.out.println("dmcs_token: "+dmcs_token);
-			dmcs_token = URLDecoder.decode(dmcs_token);
-			String username = tockenCache.getUserNameByToken(dmcs_token);
-			if(username!=null)
-				return Response.FAILWRONG().setErrcode(1).setMsg("用户已登录");
+			if(dmcs_token!=null) {
+                System.out.println("dmcs_token: " + dmcs_token);
+                dmcs_token = URLDecoder.decode(dmcs_token);
+                String username = tockenCache.getUserNameByToken(dmcs_token);
+                if (username != null)
+                    return Response.FAILWRONG().setErrcode(1).setMsg("用户已登录");
+            }
 		}
 		JSONObject o = JSONObject.parseObject(body);
 		String username_mobile_email = o.getString("username");
@@ -193,13 +195,6 @@ public class UserRestController {
 				MessageDigest digest = MessageDigest.getInstance("md5");
 				byte [] bs = digest.digest((this.securitySault + password).getBytes());
 				securedPasswd = new String(bs);
-				String token = this.getToken(u.getUsername()) ;
-				String temtoken = URLEncoder.encode(token);
-				Cookie cookie = new Cookie("dmcstoken", temtoken);
-				cookie.setMaxAge(5*3600);//这是cookie的寿命时间，没有问题;
-				cookie.setPath("/");
-				response.addCookie(cookie);
-				tockenCache.setTokenForUser(token, u.getUsername());
 
 			} catch (Exception e) {
 				logger.error("fail to get md5 algorithm");
@@ -220,6 +215,15 @@ public class UserRestController {
 				int num = loginLogService.AddLog(loginLog);
 				System.out.println(num);
 				u.setPassword(null);
+                String token = this.getToken(u.getUsername()) ;
+                String temtoken = URLEncoder.encode(token);
+
+                Cookie cookie = new Cookie("dmcstoken", temtoken);
+                cookie.setMaxAge(5*3600);//这是cookie的寿命时间，没有问题;
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                tockenCache.setTokenForUser(token, u.getUsername());
+
 				return Response.SUCCESSOK().setData(u);
 			}
 		}
@@ -271,54 +275,54 @@ public class UserRestController {
           if(cookie.getName().equals("dmcstoken")){
               dmcstoken=cookie.getValue();
           }
-        };
-        dmcstoken = URLDecoder.decode(dmcstoken);
-        String uname = tockenCache.getUserNameByToken(dmcstoken);
-        User u = userService.checkExistence(uname);
-        if(u==null) {
-            JSONObject o = JSONObject.parseObject(body);
-            System.out.println(o);
-            String username = o.getString("username");
-            String email = o.getString("email");
-            if (username == null || email == null)
-                return Response.FAILWRONG().setErrcode(0).setMsg("信息缺失");
-            User u1 = userService.checkExistence(email);
-            if (u1 == null || u1.getEmailCheckedFlag() == "true")
-                return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
-            try {
-                String number = this.getNumber(); //目前获得了令牌信息
-                tockenCache.setTokenForUser(number, username);
-                String content = "http://39.104.208/#/user/login" + "?" + number;
-                emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
-                return Response.SUCCESSOK();
-            } catch (Exception e) {
-                logger.error("激活邮件发送失败");
-                return Response.FAILWRONG().setMsg("激活邮件发送失败").setErrcode(1);
-            }
         }
-        if(u!=null){
-            if(u.getEmailCheckedFlag()=="true")
-                return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
-            JSONObject o = JSONObject.parseObject(body);
-            String email = o.getString("email");
-            try {
-                if (email != u.getUserEmail()) {
-                    u.setCurrentAuthority("guest");
-                    u.setPassword(null);
-                    u.setEmailCheckedFlag("false");
-                    userService.update(u);
+        /***针对于修改邮箱的情况**/
+        if(dmcstoken!=null) {
+            dmcstoken = URLDecoder.decode(dmcstoken);
+            String uname = tockenCache.getUserNameByToken(dmcstoken);
+            User u = userService.checkExistence(uname);
+            if(u!=null) {
+                if (u.getEmailCheckedFlag() == "true")
+                    return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
+                JSONObject o = JSONObject.parseObject(body);
+                String email = o.getString("email");
+                try {
+                    if (email != u.getUserEmail()) {
+                        u.setCurrentAuthority("guest");
+                        u.setPassword(null);
+                        u.setEmailCheckedFlag("false");
+                        userService.update(u);
+                    }
+                    String number = this.getNumber();
+                    tockenCache.setTokenForUser(number, u.getUsername());
+                    String content = "http://39.104.208/#/user/login" + "?" + "verify="+number;
+                    emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
+                } catch (Exception e) {
+                    logger.error("数据库更新出现问题或邮件发送失败");
+                    return Response.FAILWRONG().setMsg("操作失败").setErrcode(2);
                 }
-                String number = this.getNumber();
-                tockenCache.setTokenForUser(number,u.getUsername());
-                String content = "http://39.104.208/#/user/login" + "?" + number;
-                emailService.sendSimEmail("caizj15@qq.com","注册邮件",content);
-            } catch (Exception e) {
-                logger.error("数据库更新出现问题或邮件发送失败");
-                return Response.FAILWRONG().setMsg("操作失败").setErrcode(2);
             }
-
         }
-        return Response.FAILWRONG();
+        /*******/
+        JSONObject o = JSONObject.parseObject(body);
+        System.out.println(o);
+        String username = o.getString("username");
+        String email = o.getString("email");
+        if (username == null || email == null)
+            return Response.FAILWRONG().setErrcode(0).setMsg("信息缺失");
+        User u1 = userService.checkExistence(email);
+        if (u1 == null || u1.getEmailCheckedFlag() == "true")
+            return Response.FAILWRONG().setErrcode(0).setMsg("身份验证错误");
+        try {
+            String number = this.getNumber(); //目前获得了令牌信息
+            tockenCache.setTokenForUser(number, username);
+            String content = "http://39.104.208/#/user/login" + "?" + number;
+            emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
+            return Response.SUCCESSOK();
+        } catch (Exception e) {
+            logger.error("激活邮件发送失败");
+            return Response.FAILWRONG().setMsg("激活邮件发送失败").setErrcode(1);
+        }
 	}
 
 	@DmcsController(loginRequired = false)
