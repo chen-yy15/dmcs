@@ -35,6 +35,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateByPrimaryKeySelective(user);
 	}
 
+	public int changeEmailFlag(String username) {
+		return userMapper.changeEmailflag(username);
+	}
+
     public User getUserByuserid (String userId) { return userMapper.selectByuserid(userId); }
 
 	public List<User> nogetUserByuserid(String userId){
