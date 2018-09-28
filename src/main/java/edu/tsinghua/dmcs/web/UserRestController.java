@@ -234,7 +234,7 @@ public class UserRestController {
 
 /********/
 
-/*******/
+/********/
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="用户验证", notes="true验证成功")
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
@@ -287,7 +287,8 @@ public class UserRestController {
                 JSONObject o = JSONObject.parseObject(body);
                 String email = o.getString("email");
                 try {
-                    if (email != u.getUserEmail()) {
+                	String get_email = u.getUserEmail();
+                    if (email != get_email) {
                         u.setCurrentAuthority("guest");
                         u.setPassword(null);
                         u.setEmailCheckedFlag("false");
@@ -297,6 +298,7 @@ public class UserRestController {
                     tockenCache.setTokenForUser(number, u.getUsername());
                     String content = "http://39.104.208/#/user/login" + "?" + "verify="+number;
                     emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
+                    return Response.SUCCESSOK();
                 } catch (Exception e) {
                     logger.error("数据库更新出现问题或邮件发送失败");
                     return Response.FAILWRONG().setMsg("操作失败").setErrcode(2);
