@@ -271,6 +271,7 @@ public class UserRestController {
 	public Response Motivate(@RequestBody String body, HttpServletRequest request) throws ParseException{
 		Cookie[] cookies = request.getCookies();
         String dmcstoken = null;
+        if(cookies.length>0)
         for(Cookie cookie:cookies) {
           if(cookie.getName().equals("dmcstoken")){
               dmcstoken=cookie.getValue();
