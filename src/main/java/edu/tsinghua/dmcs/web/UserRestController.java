@@ -271,12 +271,14 @@ public class UserRestController {
 	public Response Motivate(@RequestBody String body, HttpServletRequest request) throws ParseException{
 		Cookie[] cookies = request.getCookies();
         String dmcstoken = null;
-        if(cookies.length>0)
-        for(Cookie cookie:cookies) {
-          if(cookie.getName().equals("dmcstoken")){
-              dmcstoken=cookie.getValue();
-          }
+        if(cookies!=null){
+			for(Cookie cookie:cookies) {
+			  if(cookie.getName().equals("dmcstoken")){
+				  dmcstoken=cookie.getValue();
+			  }
+			}
         }
+
         /***针对于修改邮箱的情况**/
         if(dmcstoken!=null) {
             dmcstoken = URLDecoder.decode(dmcstoken);
