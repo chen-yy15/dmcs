@@ -32,7 +32,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public int update(User user) {
-		return userMapper.updateByPrimaryKeySelective(user);
+		int num = 0 ;
+		if(user!=null)
+		num =  userMapper.updateByPrimaryKeySelective(user);
+		return num;
 	}
 
 	public int changeEmailFlag(String username) {
