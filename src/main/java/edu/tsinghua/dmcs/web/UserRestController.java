@@ -244,6 +244,7 @@ public class UserRestController {
 			System.out.println(cookies.length);
 		}
 		String dmcstoken=null;
+		if(cookies!=null)
 		for(Cookie cookie:cookies){
 			if(cookie.getName().equals("dmcstoken")){
 				dmcstoken=cookie.getValue();
@@ -355,6 +356,76 @@ public class UserRestController {
 		}
 	    return Response.SUCCESSOK();
 	}
+
+	@DmcsController(loginRequired = false)
+	@ApiOperation(value = "个人信息更新",notes ="更新成功")
+	@RequestMapping(value = "/updateuser",method = RequestMethod.POST)
+	public Response updateUser(@RequestBody String body, HttpServletRequest request){
+		JSONObject o = JSONObject.parseObject(body);
+		System.out.println(o);
+		Cookie[] cookies = request.getCookies();
+		if(cookies ==null)
+			return Response.FAILWRONG().setErrcode(1).setMsg("信息丢失");
+		String dmcstoken = null;
+		for(Cookie cookie:cookies){
+			if(cookie.getName().equals("dmcstoken")){
+				dmcstoken=cookie.getValue();
+			}
+		}
+		if(dmcstoken==null)
+			return Response.FAILWRONG().setErrcode(1).setMsg("信息丢失");
+		dmcstoken = URLDecoder.decode(dmcstoken);
+		String username = tockenCache.getUserNameByToken(dmcstoken);
+		if(username == null)
+			return Response.FAILWRONG().setErrcode(1).setMsg("身份验证错误");
+		User u = userService.checkExistence(username);
+		if(u == null)
+			return Response.FAILWRONG().setErrcode(1).setMsg("身份验证错误");
+
+		String password = o.getString("password");
+		String oldpassword = o.getString("oldpassword");
+		if(password!=null && oldpassword!=null){
+			String securePassowrd =null;
+			String securePassword1 = null;
+			try{
+				MessageDigest digest = MessageDigest.getInstance("md5");
+				byte[] bs = digest.digest((this.securitySault + password).getBytes());
+				byte[] bs1 = digest.digest((this.securitySault + oldpassword).getBytes());
+				securePassowrd = new String(bs);
+				securePassword1 = new String(bs1);
+
+				if(u.getPassword().equals(securePassword1)){
+					u.setPassword(securePassowrd);
+					userService.update(u);
+					return Response.SUCCESSOK().setMsg("密码更新成功");
+				}
+
+				return Response.FAILWRONG().setMsg("密码更新失败");
+			}catch(Exception e){
+				logger.error("fail to get md5 algorithm");
+				return Response.FAILWRONG().setErrcode(1).setMsg("操作错误");
+			}
+		}
+		String realname = o.getString("realname");
+		String userworkplace = o.getString("userworkplace");
+		String useridnumber = o.getString("useridnumber");
+		String usertelephone_1 = o.getString("usertelephone_1");
+		String userweixin = o.getString("userweixin");
+		String userqq = o.getString("userqq");
+
+		u.setRealname(realname);
+		u.setUserworkPlace(userworkplace);
+		u.setUserIdNumber(useridnumber);
+		u.setUserTelephone_1(usertelephone_1);
+		u.setUserWeixin(userweixin);
+		u.setUserQq(userqq);
+		int num = 0;
+		num = userService.update(u);
+		if(num!=0)
+			return Response.SUCCESSOK().setMsg("更新成功");
+		return Response.FAILWRONG();
+	}
+	/*******/
 	/*******/
 	@DmcsController(loginRequired=false)
 	@ApiOperation(value="插入图片", notes="插入成功")
