@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,12 +62,22 @@ public class ControllerInterceptor {
          if(controller.loginRequired()) {
         	logger.info("login require = " + controller.loginRequired());
  	        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
- 	        userName = checkLogin(request);
+ 	        userName = checkLogin(request,"dmcstoken");
  	        if(userName == null) {
 				 return Response.NEW().loginRequired();
 			}
          }
-         
+
+         String userName1 = null;
+         if(controller.authRequired()) {
+         	logger.info("authority require = " + controller.authRequired());
+         	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+         	userName1 = checkLogin(request,"admin_token");
+         	if(userName1 == null) {
+         		return Response.NEW().authorizationRequired();
+			}
+		 }
+
          String roleRequireds = controller.roleAllowed();
          String [] roles = StringUtils.split(roleRequireds, ",");
          if(roles != null && roles.length > 0) {
@@ -90,22 +101,22 @@ public class ControllerInterceptor {
     	
     }
     
-    private String checkLogin(HttpServletRequest request) {
+    private String checkLogin(HttpServletRequest request, String cookiename) {
     	Cookie [] cookies = request.getCookies();
     	if(cookies == null || cookies.length == 0)
     		return null;
-    	for(Cookie cookie : cookies) {
-			String cookieName = cookie.getName();
-			if("dmcstoken".equals(cookieName)) {
-				String cookieValue = cookie.getValue();
-				if(tockenCache.isTokenExist(cookieValue)) {
-					return tockenCache.getUserNameByToken(cookieValue);
-				} else {
-					return null;
+			for(Cookie cookie : cookies) {
+				String cookieName = cookie.getName();
+				if(cookiename.equals(cookieName)) {
+					String cookieValue = cookie.getValue();
+					cookieValue = URLDecoder.decode(cookieValue);
+					if(tockenCache.isTokenExist(cookieValue)) {
+						return tockenCache.getUserNameByToken(cookieValue);
+					} else {
+						return null;
+					}
 				}
 			}
-		}
-    	
     	return null;
     }  
     
