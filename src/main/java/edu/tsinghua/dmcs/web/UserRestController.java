@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.Avatar;
 import edu.tsinghua.dmcs.entity.LoginLog;
-import edu.tsinghua.dmcs.entity.Role;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.*;
@@ -235,7 +234,7 @@ public class UserRestController {
 /********/
 
 /********/
-	@DmcsController(loginRequired=false)
+	@DmcsController(loginRequired=true)
 	@ApiOperation(value="用户验证", notes="true验证成功")
 	@RequestMapping(value = "/temcheck", method = RequestMethod.POST)
 	public Response temcheck(HttpServletRequest request) throws ParseException{
@@ -265,7 +264,7 @@ public class UserRestController {
 		}
 		return Response.FAILWRONG();
 	}
-	/*********/
+	/***这里是发送激活邮件******/
 	@DmcsController(loginRequired = false)
 	@ApiOperation(value = "账号激活",notes = "激活账号已发送至邮箱")
 	@RequestMapping(value= "/motivate",method = RequestMethod.POST)
@@ -330,7 +329,7 @@ public class UserRestController {
             return Response.FAILWRONG().setMsg("激活邮件发送失败").setErrcode(1);
         }
 	}
-
+/**这里是对邮件进行激活**/
 	@DmcsController(loginRequired = false)
 	@ApiOperation(value = "邮件激活",notes = "邮件激活成功")
 	@RequestMapping(value = "/verifyaccount",method = RequestMethod.POST)
@@ -357,7 +356,7 @@ public class UserRestController {
 	    return Response.SUCCESSOK();
 	}
 
-	@DmcsController(loginRequired = false)
+	@DmcsController(loginRequired = true)
 	@ApiOperation(value = "个人信息更新",notes ="更新成功")
 	@RequestMapping(value = "/updateuser",method = RequestMethod.POST)
 	public Response updateUser(@RequestBody String body, HttpServletRequest request){
@@ -427,7 +426,7 @@ public class UserRestController {
 	}
 	/*******/
 	/*******/
-	@DmcsController(loginRequired=false)
+	@DmcsController(loginRequired=true)
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
 	public Response image(HttpServletRequest request) {
@@ -504,7 +503,7 @@ public class UserRestController {
 
 
 
-	@DmcsController(loginRequired=false)
+	@DmcsController(loginRequired=true)
 	@ApiOperation(value="用户登出", notes="true登出成功")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public Response logout(HttpServletRequest request, HttpServletResponse response) {
@@ -542,64 +541,8 @@ public class UserRestController {
 		    return Response.SUCCESSOK();
 
 	}
-	
-	@DmcsController(description="更新用户信息")
-    @ApiOperation(value="更新用户信息", notes="返回更新成功个数")
-	@RequestMapping(value = "/update", method = RequestMethod.GET)
-	public Response update(
-			@RequestParam String username,
-			@RequestParam String currentAuthority,
-			@RequestParam String password,
-			@RequestParam String realname,
-			@RequestParam String alias,
-			@RequestParam String avatar,
-			@RequestParam String userEmail,
-			@RequestParam String userEmail_1,
-			@RequestParam String userTelephone,
-			@RequestParam String userTelephone_1,
-			@RequestParam String userworkPlace,
-			@RequestParam String userWeixin,
-			@RequestParam String userQq) {
-    	int num = 0;
-		User u = userService.checkExistence(username);
-		if(u != null) {
-			u.setRealname(realname);
-			String securedPasswd = null;
-			try {
-				MessageDigest digest = MessageDigest.getInstance("md5");
-				byte [] bs = digest.digest((this.securitySault + password).getBytes());
-				securedPasswd = new String(bs);
 
-			} catch (Exception e) {
-				logger.error("fail to get md5 algorithm");
-			}
-			// if securedPasswd is null throw exception
-			u.setPassword(securedPasswd);
-			u.setUsername(username);
-			u.setCurrentAuthority(currentAuthority);
-			u.setPassword(password);// TODO
-			u.setAvatar(avatar);
-			u.setUserEmail(userEmail);
-			u.setUserTelephone(userTelephone);
-			u.setUserTelephone_1(userTelephone_1);
-			u.setUserworkPlace(userworkPlace);
-			u.setUserWeixin(userWeixin);
-			u.setUserQq(userQq);
-		} else {
-			 num = userService.update(u);
-		}
-		return Response.SUCCESS().returnData(num);
-		
-	}
-	
 	@DmcsController(loginRequired=true)
-    @ApiOperation(value="获得指定用户角色", notes="获得当前用户角色")
-	@RequestMapping(value = "/listRolesByUserId", method = RequestMethod.GET)
-	public Response listRolesByUserId(String userName) {
-		List<Role> rlist = roleService.getRoleListByUserName(userName);
-		return Response.SUCCESS().setData(rlist);
-	}
-	@DmcsController(loginRequired=false)
 	@ApiOperation(value="获得用户信息", notes="获得用户信息")
 	@RequestMapping(value="/getuser",method = RequestMethod.POST)
 	public Response getUser(@RequestBody String body) throws ParseException {
@@ -690,7 +633,5 @@ public class UserRestController {
 		}
 		return ip;
 	}
-//
 }
-//
 //
