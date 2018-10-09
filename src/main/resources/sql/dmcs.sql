@@ -171,18 +171,6 @@ CREATE TABLE `image`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Table structure for table admin_group_zero
---
-DROP TABLE IF EXISTS `admin_group_zero`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `admin_group_zero`(
-  `userid` varchar(45) NOT NULL COMMENT '用户系统号/用户系统号',
-  `authorityNumber` int NOT NULL COMMENT '用户权限',
-  PRIMARY KEY (`userid`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
---
 -- Table structure for table `user_device_dashboard`
 --
 DROP TABLE IF EXISTS `user_device_dashboard`;
@@ -320,7 +308,106 @@ Create TABLE `login_log`(
   FOREIGN KEY(`userid`) references user_information(`userid`) ON DELETE cascade
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+--
+-- Table structure for table file_info
+--
+DROP TABLE IF EXISTS `file_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_info`(
+  `fileid` VARCHAR(45) NOT NULL COMMENT '文件编号',
+  `filename` VARCHAR(45) COMMENT '文件名',
+  `suffixname` VARCHAR(45) COMMENT '后缀名',
+  `filetype` VARCHAR(25) COMMENT '文件类型',
+  `filedescription` VARCHAR(255) COMMENT '文件描述内容',
+  `filesrc` VARCHAR(255) COMMENT '文件目录',
+  `insertTime` DATETIME COMMENT '插入时间',
+  `insertUser` VARCHAR(45) NOT NULL COMMENT '插入用户名',
+  PRIMARY KEY ('fileid'),
+  FOREIGN KEY ('insertUser') REFERENCES user_information('userid') ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table file_window_module
+--
+DROP TABLE IF EXISTS `file_window_module`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_window_module`(
+  `createid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `fileid` VARCHAR(45) COMMENT '操作的文件编号',
+  `moduleid` INT COMMENT '对应模块编号',
+  `windowid` INT COMMENT '对应窗口',
+  `image_fileid` VARCHAR(45) COMMENT '关联的图片',
+  `viewed` VARCHAR(25) COMMENT '可视性判断',
+  PRIMARY KEY(`createid`),
+  FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`)ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table sysOperation_log
+--
+DROP TABLE IF EXISTS `sysOperation_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sysOperation_log`(
+  `logid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userid` VARCHAR(45) COMMENT '用户编号',
+  `fileid` VARCHAR(45) COMMENT '文件编号,其中公告采用特殊编号',
+  `filefullname` VARCHAR(255) COMMENT '文件内容，公告则直接显示公告内容',
+  `operationtime` DATETIME COMMENT '操作时间',
+  `opDesc` VARCHAR(255) COMMENT '操作描述',
+  PRIMARY KEY(`logid`),
+  FOREIGN KEY('userid') REFERENCES user_information(`userid`) ON DELETE CASCADE ,
+  FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table admin_group_zero
+--
+DROP TABLE IF EXISTS `admin_group_zero`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_group_zero`(
+  `userid` varchar(45) NOT NULL COMMENT '用户系统号/用户系统号',
+  `authorityNumber` int NOT NULL COMMENT '用户权限',
+  PRIMARY KEY (`userid`),
+  FOREIGN KEY(`userid`) references user_information(`userid`) ON DELETE cascade
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for table web_information
+--
+DROP TABLE IF EXISTS `web_information`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `web_information`(
+  `infid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `inftxt` VARCHAR(255) COMMENT '公告内容',
+  `viewed` VARCHAR(25) COMMENT '可视性设置false/true',
+  `inserUser` VARCHAR(45) COMMENT '插入用户',
+  `insertTime` DATETIME COMMENT '插入时间',
+  `outTime` DATETIME COMMENT '过期时间',
+  PRIMARY KEY(`infid`),
+  FOREIGN KEY(`inserUser`) REFERENCES user_information(`userid`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for enum_name
+--
+DROP TABLE IF EXISTS `enum_name`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `enum_name`(
+  `nameid` INT NOT NULL COMMENT '编号',
+  `moduleType` VARCHAR(25) NOT NULL COMMENT '模块类型',
+  `namedetail` VARCHAR(45) COMMENT '内容详情',
+  PRIMARY KEY(`nameid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Table structure for
+-- 
 /**************************************************************************/
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
