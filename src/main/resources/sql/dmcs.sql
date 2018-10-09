@@ -323,8 +323,8 @@ CREATE TABLE `file_info`(
   `filesrc` VARCHAR(255) COMMENT '文件目录',
   `insertTime` DATETIME COMMENT '插入时间',
   `insertUser` VARCHAR(45) NOT NULL COMMENT '插入用户名',
-  PRIMARY KEY ('fileid'),
-  FOREIGN KEY ('insertUser') REFERENCES user_information('userid') ON DELETE CASCADE
+  PRIMARY KEY (`fileid`),
+  FOREIGN KEY (`insertUser`) REFERENCES user_information(`userid`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
@@ -358,7 +358,7 @@ CREATE TABLE `sysOperation_log`(
   `operationtime` DATETIME COMMENT '操作时间',
   `opDesc` VARCHAR(255) COMMENT '操作描述',
   PRIMARY KEY(`logid`),
-  FOREIGN KEY('userid') REFERENCES user_information(`userid`) ON DELETE CASCADE ,
+  FOREIGN KEY(`userid`) REFERENCES user_information(`userid`) ON DELETE CASCADE ,
   FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -407,7 +407,7 @@ CREATE TABLE `enum_name`(
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
 -- Table structure for
--- 
+--
 /**************************************************************************/
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
