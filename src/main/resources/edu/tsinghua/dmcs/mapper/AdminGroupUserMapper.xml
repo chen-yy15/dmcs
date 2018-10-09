@@ -17,7 +17,7 @@
         select
         d.userid userid, d.authorityNumber authorityNumber, m.avatar avatar, m.userName userName, m.userEmail userEmail,
         m.userworkPlace userworkPlace, m.userTelephone userTelephone
-        from admin_group_zero d, user m
+        from admin_group_zero d, user_information m
         where d.userid = m.userid and d.authorityNumber != 1023
     </select>
 </mapper>
