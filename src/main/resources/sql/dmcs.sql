@@ -315,7 +315,7 @@ DROP TABLE IF EXISTS `file_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_info`(
-  `fileid` VARCHAR(45) NOT NULL COMMENT '文件编号',
+  `fileid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `filename` VARCHAR(45) COMMENT '文件名',
   `suffixname` VARCHAR(45) COMMENT '后缀名',
   `filetype` VARCHAR(25) COMMENT '文件类型',
@@ -335,10 +335,10 @@ DROP TABLE IF EXISTS `file_window_module`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_window_module`(
   `createid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `fileid` VARCHAR(45) COMMENT '操作的文件编号',
+  `fileid` BIGINT(45) COMMENT '操作的文件编号',
   `moduleid` INT COMMENT '对应模块编号',
   `windowid` INT COMMENT '对应窗口',
-  `image_fileid` VARCHAR(45) COMMENT '关联的图片',
+  `image_fileid` BIGINT(20) COMMENT '关联的图片',
   `viewed` VARCHAR(25) COMMENT '可视性判断',
   PRIMARY KEY(`createid`),
   FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`)ON DELETE CASCADE
@@ -353,7 +353,7 @@ DROP TABLE IF EXISTS `sysOperation_log`;
 CREATE TABLE `sysOperation_log`(
   `logid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `userid` VARCHAR(45) COMMENT '用户编号',
-  `fileid` VARCHAR(45) COMMENT '文件编号,其中公告采用特殊编号',
+  `fileid` BIGINT(20) COMMENT '文件编号,其中公告采用特殊编号',
   `filefullname` VARCHAR(255) COMMENT '文件内容，公告则直接显示公告内容',
   `operationtime` DATETIME COMMENT '操作时间',
   `opDesc` VARCHAR(255) COMMENT '操作描述',

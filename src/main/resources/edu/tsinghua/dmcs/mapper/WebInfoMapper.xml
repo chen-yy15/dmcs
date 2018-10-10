@@ -30,7 +30,7 @@
     <insert id="addWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
         insert into user_information (infid,inftxt,viewed,inserUser,insertTime,outTime)
         values (#{infid,jdbcType=BIGINT},#{inftxt,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},
-        #{inserUser,jdbcTye=VARCHAR},#{insertTime,jdbcType=TIMESTAMP},#{outTime,jdbcType=TIMESTAMP})
+        #{inserUser,jdbcType=VARCHAR},#{insertTime,jdbcType=TIMESTAMP},#{outTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="updateWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
         UPDATE web_information

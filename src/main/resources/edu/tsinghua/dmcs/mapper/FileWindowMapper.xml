@@ -3,10 +3,10 @@
 <mapper namespace="edu.tsinghua.dmcs.mapper.FileWindowMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.FileWindowModule">
         <id column="createid" property="createid" jdbcType="BIGINT" />
-        <result column="fileid" property="fileid" jdbcType="VARCHAR" />
+        <result column="fileid" property="fileid" jdbcType="BIGINT" />
         <result column="moduleid" property="moduleid" jdbcType="INTEGER" />
         <result column="windowid" property="windowid" jdbcType="INTEGER" />
-        <result column="image_fileid" property="image_fileid" jdbcType="VARCHAR" />
+        <result column="image_fileid" property="image_fileid" jdbcType="BIGINT" />
         <result column="viewed" property="viewed" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
@@ -24,14 +24,14 @@
     </delete>
     <insert id="addFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
         INSERT INTO file_window_module(createid,fileid,moduleid,windowid,image_fileid,viewed)
-        VALUES(#{createid,jdbcType=BIGINT},#{fileid,jdbcType=VARCHAR},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},
-        #{image_fileid,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR})
+        VALUES(#{createid,jdbcType=BIGINT},#{fileid,jdbcType=BIGINT},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},
+        #{image_fileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR})
     </insert>
     <update id="updateFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
         UPDATE file_window_module
         <set>
             <if test="fileid !=null">
-                fileid = #{fileid,jdbcType=VARCHAR}
+                fileid = #{fileid,jdbcType=BIGINT}
             </if>
             <if test="moduleid !=null">
                 moduleid = #{moduleid,jdbcType=INTEGER}
@@ -40,7 +40,7 @@
                 windowid = #{windowid,jdbcType=INTEGER}
             </if>
             <if test="image_fileid !=null">
-                image_fileid = #{image_fileid,jdbcType=VARCHAR}
+                image_fileid = #{image_fileid,jdbcType=BIGINT}
             </if>
             <if test="viewed !=null">
                 viewed = #{viewed,jdbcType=VARCHAR}

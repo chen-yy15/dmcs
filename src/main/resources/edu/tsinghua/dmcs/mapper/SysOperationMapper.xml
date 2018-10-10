@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.SysOperationLog">
         <id column="logid" property="logid" jdbcType="BIGINT" />
         <result column="userid" property="userid" jdbcType="VARCHAR" />
-        <result column="fileid" property="fileid" jdbcType="VARCHAR" />
+        <result column="fileid" property="fileid" jdbcType="BIGINT" />
         <result column="filefullname" property="filefullname" jdbcType="VARCHAR" />
         <result column="operationtime" property="operationtime" jdbcType="TIMESTAMP" />
         <result column="opDesc" property="opDesc" jdbcType="VARCHAR" />
@@ -29,7 +29,7 @@
     </delete>
     <insert id="addOperation" parameterType="edu.tsinghua.dmcs.entity.SysOperationLog">
         INSERT INTO sysOperation_log(logid,userid,fileid,filefullname,operationtime,opDesc)
-        VALUES (#{logid,jdbcType=BIGINT},#{userid,jdbcType=VARCHAR},#{fileid,jdbcType=VARCHAR},
+        VALUES (#{logid,jdbcType=BIGINT},#{userid,jdbcType=VARCHAR},#{fileid,jdbcType=BIGINT},
         #{filefullname,jdbcType=VARCHAR},#{operationtime,jdbcType=TIMESTAMP},#{opDesc,jdbcType=VARCHAR})
     </insert>
     <update id="updateOperation" parameterType="edu.tsinghua.dmcs.entity.SysOperationLog">
@@ -39,7 +39,7 @@
                 userid = #{userid,jdbcType=VARCHAR},
             </if>
             <if test="fileid !=null">
-                fileid = #{fileid,jdbcType=VARCHAR},
+                fileid = #{fileid,jdbcType=BIGINT},
             </if>
             <if test="filefullname !=null">
                 filefullname = #{filefullname,jdbcType=VARCHAR},
