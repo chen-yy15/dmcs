@@ -6,13 +6,13 @@ package edu.tsinghua.dmcs.entity;
 public class FileWindowModule {
     private Long createid ;
 
-    private String  fileid ;
+    private Long  fileid ;
 
     private Integer moduleid ;
 
     private Integer windowid ;
 
-    private String image_fileid ;
+    private Long image_fileid ;
 
     private String viewed;
 
@@ -20,9 +20,9 @@ public class FileWindowModule {
 
     public void setCreateid(Long createid) {this.createid = createid;}
 
-    public String getFileid() {return fileid;}
+    public Long getFileid() {return fileid;}
 
-    public void setFileid(String fileid) {this.fileid = fileid;}
+    public void setFileid(Long fileid) {this.fileid = fileid;}
 
     public Integer getModuleid() {return moduleid;}
 
@@ -32,9 +32,9 @@ public class FileWindowModule {
 
     public void setWindowid(Integer windowid) {this.windowid = windowid;}
 
-    public String getImage_fileid() {return image_fileid;}
+    public Long getImage_fileid() {return image_fileid;}
 
-    public void setImage_fileid(String image_fileid) {this.image_fileid = image_fileid;}
+    public void setImage_fileid(Long image_fileid) {this.image_fileid = image_fileid;}
 
     public String getViewed(){return viewed;}
 

@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by caizj on 18-10-9.
  */
 public class FileInfo {
-    private  String fileid ;
+    private  Long fileid ;
 
     private String  filename ;
 
@@ -22,9 +22,9 @@ public class FileInfo {
 
     private String insertUser ;
 
-    public String getFileid() {return fileid;}
+    public Long getFileid() {return fileid;}
 
-    public void  setFileid(String fileid) {this.fileid=fileid;}
+    public void  setFileid(Long fileid) {this.fileid=fileid;}
 
     public String getFilename() {return filename;}
 

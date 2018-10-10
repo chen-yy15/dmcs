@@ -10,7 +10,7 @@ public class SysOperationLog {
 
     private String userid;
 
-    private String fileid;
+    private Long fileid;
 
     private String filefullname;
 
@@ -26,9 +26,9 @@ public class SysOperationLog {
 
     public void setUserid(String userid) {this.userid = userid;}
 
-    public String getFileid(){return fileid;}
+    public Long getFileid(){return fileid;}
 
-    public void setFileid(String fileid) {this.fileid = fileid;}
+    public void setFileid(Long fileid) {this.fileid = fileid;}
 
     public String getFilefullname(){return filefullname;}
 
