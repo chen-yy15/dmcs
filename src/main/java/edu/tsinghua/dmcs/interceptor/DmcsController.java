@@ -15,7 +15,7 @@ public  @interface DmcsController {
     
     public String roleAllowed() default "";
 
-    public boolean authRequired() default true;
+    public boolean authRequired() default false;
     
     public boolean loginRequired() default true;
     
