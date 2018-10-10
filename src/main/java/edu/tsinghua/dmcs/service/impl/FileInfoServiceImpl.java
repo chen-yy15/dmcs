@@ -25,7 +25,7 @@ public class FileInfoServiceImpl implements FileInfoService{
         return num;
     }
 
-    public int DeleteFile(String fileid){
+    public int DeleteFile(Long fileid){
         int num = 0;
         num = fileInfoMapper.deleteFile(fileid);
         return num;
@@ -47,7 +47,7 @@ public class FileInfoServiceImpl implements FileInfoService{
         return num;
     }
 
-    public FileInfo SelectFileInfo(String fileid){
+    public FileInfo SelectFileInfo(Long fileid){
         return fileInfoMapper.selectByFileid(fileid);
     }
 
