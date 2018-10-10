@@ -10,13 +10,13 @@ import java.util.List;
 public interface FileInfoService {
     public int AddFile(FileInfo fileInfo);
 
-    public int DeleteFile(String fileid);
+    public int DeleteFile(Long fileid);
 
     public int UpdateFileInfo(FileInfo fileInfo);
 
     public int UpdateFileViewed(FileInfo fileInfo);
 
-    public FileInfo SelectFileInfo(String fileid);
+    public FileInfo SelectFileInfo(Long fileid);
 
     public List<FileInfo> GetFileInfo();
 }
