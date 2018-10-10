@@ -44,9 +44,6 @@ public class UserRestController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private RoleService roleService;
 
 	@Autowired
 	private TockenCache tockenCache;
