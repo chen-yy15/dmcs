@@ -13,11 +13,11 @@ public interface FileInfoMapper {
 
     int addFile(FileInfo fileInfo);
 
-    int deleteFile(String fileid);
+    int deleteFile(Long fileid);
 
     int updateFile(FileInfo fileInfo);
 
-    FileInfo selectByFileid(String fileid);
+    FileInfo selectByFileid(Long fileid);
 
     List<FileInfo> getFile();
 }
