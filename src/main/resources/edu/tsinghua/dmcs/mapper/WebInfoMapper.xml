@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.WebInfoMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.WebInformation">
+        <id column="infid" property="infid" jdbcType="BIGINT" />
+        <result column="inftxt" property="inftxt" jdbcType="VARCHAR" />
+        <result column="viewed" property="viewed" jdbcType="VARCHAR" />
+        <result column="inserUser" property="inserUser" jdbcType="VARCHAR" />
+        <result column="insertTime" property="insertTime" jdbcType="TIMESTAMP" />
+        <result column="outTime" property="outTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        infid,inftxt,viewed,inserUser,insertTime,outTime
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from web_information
+        WHERE infid = #{infid, jdbcType=BIGINT}
+    </select>
+    <select id="getWebInfo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        from web_information
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM web_information
+         WHERE infid = #{infid, jdbcType=BIGINT}
+    </delete>
+    <insert id="addWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
+        insert into user_information (infid,inftxt,viewed,inserUser,insertTime,outTime)
+        values (#{infid,jdbcType=BIGINT},#{inftxt,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},
+        #{inserUser,jdbcTye=VARCHAR},#{insertTime,jdbcType=TIMESTAMP},#{outTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
+        UPDATE web_information
+        <set>
+            <if test="inftxt !=null">
+                inftxt = #{inftxt,jdbcType=VARCHAR},
+            </if>
+            <if test="viewed !=null">
+                viewed = #{viewed,jdbcType=VARCHAR},
+            </if>
+            <if test="inserUser !=null">
+                inserUser = #{inserUser,jdbcType=VARCHAR},
+            </if>
+            <if test="insertTime !=null">
+                insertTime = #{insertTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outTime != null">
+                outTime = #{outTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE infid = #{infid,jdbcType=BIGINT}
+    </update>
 </mapper>

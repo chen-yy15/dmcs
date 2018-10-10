@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
+<mapper namespace="edu.tsinghua.dmcs.mapper.FileInfoMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.FileInfo">
+        <id column="fileid" property="fileid" jdbcType="VARCHAR" />
+        <result column="filename" property="filename" jdbcType="VARCHAR"/>
+        <result column="suffixname" property="suffixname" jdbcType="VARCHAR"/>
+        <result column="filetype" property="filetype" jdbcType="VARCHAR"/>
+        <result column="filedescription" property="filedescription" jdbcType="VARCHAR"/>
+        <result column="filesrc" property="filesrc" jdbcType="VARCHAR"/>
+        <result column="insertTime" property="insertTime" jdbcType="TIMESTAMP"/>
+        <result column="insertUser" property="insertUser" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        fileid,filename,suffixname,filetype,filedescription,filesrc,insertTime,insertUser
+    </sql>
+    <select id="selectByFileid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM file_info
+        WHERE fileid = #{fileid, jdbcType=VARCHAR}
+    </select>
+    <select id="getFile" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM file_info
+    </select>
+    <delete id="deleteFile" parameterType="java.lang.String">
+        DELETE FROM file_info
+        WHERE fileid = #{fileid, jdbcType=VARCHAR}
+    </delete>
+    <insert id="addFile" parameterType="edu.tsinghua.dmcs.entity.FileInfo">
+        INSERT into file_info(fileid,filename,suffixname,filetype,filedescription,filesrc,insertTime,insertUser)
+        VALUES (#{fileid,jdbcType=VARCHAR},#{filename,jdbcType=VARCHAR},#{suffixname,jdbcType=VARCHAR},
+        #{filetype,jdbcType=VARCHAR},#{filedescription,jdbcType=VARCHAR},#{filesrc,jdbcType=VARCHAR},
+        #{insertTime,jdbcType=TIMESTAMP},#{insertUser,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateFile" parameterType="edu.tsinghua.dmcs.entity.FileInfo">
+        UPDATE file_info
+        <set>
+            <if test="filename !=null">
+                filename = #{filename,jdbcType=VARCHAR}
+            </if>
+            <if test="suffixname !=null">
+                suffixname = #{suffixname,jdbcType=VARCHAR}
+            </if>
+            <if test="filetype !=null">
+                filetype = #{filetype,jdbcType=VARCHAR}
+            </if>
+            <if test="filedescription !=null">
+                filedescription = #{filedescription,jdbcType=VARCHAR}
+            </if>
+            <if test="filesrc !=nul">
+                filesrc = #{filesrc,jdbcType=VARCHAR}
+            </if>
+            <if test="insertTime !=nul">
+                insertTime = #{insertTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="insertUser !=nul">
+                insertUser = #{insertUser,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE fileid = #{fileid, jdbcType=VARCHAR}
+    </update>
 
 </mapper>

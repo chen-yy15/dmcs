@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.SysOperationMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.SysOperationLog">
+        <id column="logid" property="logid" jdbcType="BIGINT" />
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="fileid" property="fileid" jdbcType="VARCHAR" />
+        <result column="filefullname" property="filefullname" jdbcType="VARCHAR" />
+        <result column="operationtime" property="operationtime" jdbcType="TIMESTAMP" />
+        <result column="opDesc" property="opDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        logid,userid,fileid,filefullname,operationtime,opDesc
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sysOperation_log
+        WHERE logid = #{logid,jdbcType=BIGINT}
+    </select>
+    <select id="getOperation" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sysOperation_log
+    </select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM sysOperation_log
+        WHERE logid = #{logid,jdbcType=BIGINT}
+    </delete>
+    <insert id="addOperation" parameterType="edu.tsinghua.dmcs.entity.SysOperationLog">
+        INSERT INTO sysOperation_log(logid,userid,fileid,filefullname,operationtime,opDesc)
+        VALUES (#{logid,jdbcType=BIGINT},#{userid,jdbcType=VARCHAR},#{fileid,jdbcType=VARCHAR},
+        #{filefullname,jdbcType=VARCHAR},#{operationtime,jdbcType=TIMESTAMP},#{opDesc,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateOperation" parameterType="edu.tsinghua.dmcs.entity.SysOperationLog">
+        UPDATE sysOperation_log
+        <set>
+            <if test="userid !=null">
+                userid = #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="fileid !=null">
+                fileid = #{fileid,jdbcType=VARCHAR},
+            </if>
+            <if test="filefullname !=null">
+                filefullname = #{filefullname,jdbcType=VARCHAR},
+            </if>
+            <if test="operationtime !=null">
+                operationtime = #{operationtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="opDesc !=null">
+                opDesc = #{opDesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE logid = #{logid,jdbcType=BIGINT}
+    </update>
 </mapper>
