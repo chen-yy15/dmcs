@@ -53,7 +53,7 @@ public class AdminRestController {
 	private String securitySault;
 
 
-	@DmcsController(loginRequired=false)
+	@DmcsController(authRequired = true)
 	@ApiOperation(value="addAdminuser", notes="添加管理员")
 	@RequestMapping(value = "/addAdminuser", method = RequestMethod.POST)
 	public Response addAdminuser(@RequestBody String body) throws ParseException {
@@ -93,7 +93,7 @@ public class AdminRestController {
 		return Response.FAILWRONG().setMsg("用户添加失败");
 	}
 
-	@DmcsController(loginRequired=false)
+	@DmcsController(authRequired = true)
 	@ApiOperation(value="deleteAdminuser", notes="删除管理员")
 	@RequestMapping(value = "/deleteAdminuser", method = RequestMethod.POST)
 	public Response deleteAdminuser(@RequestBody String body) throws ParseException {
@@ -128,7 +128,7 @@ public class AdminRestController {
 		return Response.SUCCESSOK().setData(adminGroupUsers);
 	}
 
-	@DmcsController(loginRequired=false)
+	@DmcsController(authRequired = true)
 	@ApiOperation(value="changeAuthority", notes="更新权限")
 	@RequestMapping(value="/changeAuthority", method=RequestMethod.POST)
 	public Response changeAuthority (@RequestBody String body)throws ParseException{
@@ -162,7 +162,7 @@ public class AdminRestController {
 		return Response.FAILWRONG().setMsg(fail+"个用户更新失败");
 	}
 
-    @DmcsController()
+    @DmcsController(authRequired = true)
 	@ApiOperation(value="getAdminuser", notes = "获取管理员信息")
 	@RequestMapping(value = "/getAdminuser", method = RequestMethod.POST)
 	public Response getAdminuser(@RequestBody String body) throws ParseException {
@@ -181,7 +181,7 @@ public class AdminRestController {
 		//这里需要返回用户和表的全部信息
 		//return Response.FAILWRONG().setMsg("信息获取失败");
 	}
-	@DmcsController(loginRequired = true)
+	@DmcsController()
 	@ApiOperation(value="getSelfuser", notes = "获取管理员自身信息")
 	@RequestMapping(value = "/getSelfuser", method = RequestMethod.POST)
 	public  Response getSelfuser(@RequestBody String body ,
@@ -225,7 +225,7 @@ public class AdminRestController {
 		return Response.FAILWRONG();
 	}
 
-	@DmcsController()
+	@DmcsController(authRequired = true)
 	@ApiOperation(value="addocument",notes = "添加文件")
 	@RequestMapping(value = "/addocument",method = RequestMethod.POST)
 	public Response addocument(HttpServletRequest request) throws ParseException {
