@@ -80,6 +80,7 @@ public class Response {
 		Response r = new Response();
 		r.setErrcode(rc);
 		r.setMsg(errmsg);
+		r.setStatus("error");
 		if(object != null) {
 			r.setData(object);
 		}
