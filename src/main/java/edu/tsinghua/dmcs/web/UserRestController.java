@@ -508,7 +508,7 @@ public class UserRestController {
 				Cookie [] cookies = request.getCookies();
 				for(Cookie cookie : cookies) {
 					String cookieName = cookie.getName();
-					if("dmcstoken".equals(cookieName)) {
+					if("dmcstoken".equals(cookieName) || "admin_token".equals(cookieName)) {
 						String cookieValue = cookie.getValue();
 						cookieValue = URLDecoder.decode(cookieValue);
 						String username = tockenCache.getUserNameByToken(cookieValue);
