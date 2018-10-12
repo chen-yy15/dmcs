@@ -19,5 +19,7 @@ public interface FileInfoMapper {
 
     FileInfo selectByFileid(Long fileid);
 
+    List<FileInfo> SelectFile(String filetype);
+
     List<FileInfo> getFile();
 }
