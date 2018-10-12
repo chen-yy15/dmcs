@@ -3,6 +3,7 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.FileInfo;
+import edu.tsinghua.dmcs.entity.SysOperationLog;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.FileInfoService;
 import edu.tsinghua.dmcs.service.UserService;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by caizj on 18-10-9.
@@ -146,8 +148,40 @@ public class FileController {
         JSONObject o = JSONObject.parseObject(body);
         System.out.println("删除文件: "+body);
         String fileid = o.getString("fileid");
-        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
-
+        Long Fileid = Long.valueOf(fileid);
+        FileInfo fileInfo = fileInfoService.SelectFileInfo(Fileid);
+        if(fileInfo==null){
+            return Response.FAILWRONG().setMsg("文件不存在");
+        }
+        Cookie[] cookies = request.getCookies();
+        String admin_token=null;
+        if(cookies!=null){
+            for ( Cookie cookie:cookies) {
+                if(cookie.getName().equals("admin_token")){
+                    admin_token = cookie.getValue();
+                    admin_token = URLDecoder.decode(admin_token);
+                    System.out.println(admin_token);
+                }
+            }
+        }
+        if(admin_token==null)
+            return Response.FAILWRONG().setMsg("权限验证错误");
+        String userid = tockenCache.getUserid(admin_token);
+        int num = 0;
+        num = fileInfoService.DeleteFile(Fileid);
+        if(num==0){
+            return Response.FAILWRONG().setMsg("文件删除失败");
+        }
+        File file = new File(fileInfo.getFilesrc());
+        if(file.delete()){
+            logger.info(fileInfo.getFilesrc()+" 文件删除");
+        }
+        SysOperationLog sysOperationLog = new SysOperationLog();
+        sysOperationLog.setFileid(Fileid);
+        sysOperationLog.setOperationtime(new Date());
+        sysOperationLog.setOpDesc("删除文件");
+        sysOperationLog.setUserid(userid);
+        sysOperationLog.setFilefullname(fileInfo.getFilesrc() +"="+fileInfo.getFiledescription());
         return Response.FAILWRONG().setErrcode(0);
     }
 
@@ -166,12 +200,22 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
-    @ApiOperation(value="getFile", notes = "特殊文件获取")
-    @RequestMapping(value = "/getFile", method = RequestMethod.POST)
-    public Response GetFile(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        return Response.FAILWRONG().setErrcode(0);
+    @ApiOperation(value="getFile", notes = "文件获取")
+    @RequestMapping(value = "/getFilelist", method = RequestMethod.GET)
+    public Response GetFile() throws ParseException {
+        List<FileInfo> fileInfos = fileInfoService.SelectFile("file");
+        return Response.SUCCESSOK().setData(fileInfos);
     }
 
+    @DmcsController(authRequired = true)
+    @ApiOperation(value="getFile", notes = "图片文件获取")
+    @RequestMapping(value = "/getImagelist", method = RequestMethod.GET)
+    public Response GetImage() throws ParseException {
+        List<FileInfo> fileInfos = fileInfoService.SelectFile("image");
+        return Response.SUCCESSOK().setData(fileInfos);
+    }
+
+    /**针对于firstpage数据的获取*/
     @DmcsController(loginRequired = false)
     @ApiOperation(value="selectFile",notes = "一般性文件获取")
     @RequestMapping(value = "/selectFile", method = RequestMethod.POST)
