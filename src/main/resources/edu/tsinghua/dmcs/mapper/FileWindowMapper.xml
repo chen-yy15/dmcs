@@ -8,9 +8,10 @@
         <result column="windowid" property="windowid" jdbcType="INTEGER" />
         <result column="image_fileid" property="image_fileid" jdbcType="BIGINT" />
         <result column="viewed" property="viewed" jdbcType="VARCHAR" />
+        <result column="file_image" property="file_image" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
-        createid,fileid,moduleid,windowid,image_fileid,viewed
+        createid,fileid,moduleid,windowid,image_fileid,viewed,file_image
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         SELECT
@@ -18,14 +19,24 @@
         FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
     </select>
+    <select id="selectFile_image" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM file_window_module
+        WHERE file_image = #{file_image, jdbcType=VARCHAR}
+    </select>
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
     </delete>
+    <delete id="deleteFile_image" parameterType="java.lang.String">
+        DELETE FROM file_window_module
+        WHERE file_image = #{file_image, jdbcType=VARCHAR}
+    </delete>
     <insert id="addFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
-        INSERT INTO file_window_module(createid,fileid,moduleid,windowid,image_fileid,viewed)
+        INSERT INTO file_window_module(createid,fileid,moduleid,windowid,image_fileid,viewed,file_image)
         VALUES(#{createid,jdbcType=BIGINT},#{fileid,jdbcType=BIGINT},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},
-        #{image_fileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR})
+        #{image_fileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR},#{file_image,jdbcType=VARCHAR})
     </insert>
     <update id="updateFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
         UPDATE file_window_module
