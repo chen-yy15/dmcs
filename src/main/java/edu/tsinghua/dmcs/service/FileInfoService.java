@@ -18,5 +18,7 @@ public interface FileInfoService {
 
     public FileInfo SelectFileInfo(Long fileid);
 
+    public List<FileInfo> SelectFile(String filetype);
+
     public List<FileInfo> GetFileInfo();
 }
