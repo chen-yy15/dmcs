@@ -23,6 +23,8 @@ public class TockenCache {
     }
 
     public String getUserid(String token){
+        if(token==null)
+            return null;
         return tokens.get(token);
     }
 

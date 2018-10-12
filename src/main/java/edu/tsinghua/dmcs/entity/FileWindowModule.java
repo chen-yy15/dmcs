@@ -16,6 +16,8 @@ public class FileWindowModule {
 
     private String viewed;
 
+    private String file_image;
+
     public Long getCreateid() {return createid;}
 
     public void setCreateid(Long createid) {this.createid = createid;}
@@ -39,5 +41,9 @@ public class FileWindowModule {
     public String getViewed(){return viewed;}
 
     public void setViewed(String viewed) {this.viewed = viewed;}
+
+    public String getFile_image(){return file_image;}
+
+    public void setFile_image(String file_image) {this.file_image = file_image;}
 
 }

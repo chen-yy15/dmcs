@@ -14,4 +14,6 @@ public interface FileWindowService {
     public int UpdateFileWindow(FileWindowModule fileWindowModule);
 
     public FileWindowModule SelectFileWindow(Long createid);
+
+    public FileWindowModule ExistFileWindow(String file_image);
 }
