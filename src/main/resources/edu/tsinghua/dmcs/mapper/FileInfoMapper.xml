@@ -25,6 +25,12 @@
         <include refid="Base_Column_List" />
         FROM file_info
     </select>
+    <select id="SelectFile" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM file_info
+        WHERE filetype = #{filetype, jdbcType=VARCHAR}
+    </select>
     <delete id="deleteFile" parameterType="java.lang.Long">
         DELETE FROM file_info
         WHERE fileid = #{fileid, jdbcType=BIGINT}
