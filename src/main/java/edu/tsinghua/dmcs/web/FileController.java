@@ -3,27 +3,32 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.FileInfo;
+import edu.tsinghua.dmcs.entity.FileWindowModule;
 import edu.tsinghua.dmcs.entity.SysOperationLog;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.FileInfoService;
+import edu.tsinghua.dmcs.service.FileWindowService;
+import edu.tsinghua.dmcs.service.SysOperationService;
 import edu.tsinghua.dmcs.service.UserService;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +48,13 @@ public class FileController {
     private UserService userService;
     @Autowired
     TockenCache tockenCache;
+    @Autowired
+    private SysOperationService sysOperationService;
+    @Autowired
+    private FileWindowService fileWindowService;
+
+    @Value("${security.sault.login}")
+    private String securitySault;
 
 
     @DmcsController(authRequired = true)
@@ -141,6 +153,40 @@ public class FileController {
         return Response.FAILWRONG();
     }
 
+    /**权限验证*/
+    @DmcsController(authRequired = true)
+    @ApiOperation(value = "getFileToken", notes = "获取文件更改能力")
+    @RequestMapping(value = "/getFileToken", method = RequestMethod.GET)
+    public Response GetFileToken(HttpServletRequest request,HttpServletResponse response){
+        Cookie[] cookies = request.getCookies();
+        String admin_token=null;
+        if(cookies==null)
+            return Response.FAILWRONG();
+        if(cookies!=null){
+            for(Cookie cookie:cookies){
+                if(cookie.getName().equals("admin_token")){
+                    admin_token = cookie.getValue();
+                    admin_token = URLDecoder.decode(admin_token);
+                }
+            }
+        }
+        String userid = tockenCache.getUserid(admin_token);
+        String filemanage = this.produceToken(userid);
+        if(filemanage!=null){
+            try{
+                Cookie cookie = new Cookie("managefile",filemanage);
+                cookie.setMaxAge(3600);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                tockenCache.setTokenForUser(filemanage,userid);
+            }catch (Exception e){
+                logger.info("设置cookie出错");
+            }
+            return Response.SUCCESSOK().setMsg("获取令牌成功");
+        }
+        return Response.FAILWRONG();
+    }
+
     @DmcsController(authRequired = true)
     @ApiOperation(value = "deleteFile", notes = "删除文件")
     @RequestMapping(value = "/deleteFile", method = RequestMethod.POST)
@@ -182,20 +228,17 @@ public class FileController {
         sysOperationLog.setOpDesc("删除文件");
         sysOperationLog.setUserid(userid);
         sysOperationLog.setFilefullname(fileInfo.getFilesrc() +"="+fileInfo.getFiledescription());
-        return Response.FAILWRONG().setErrcode(0);
+        num = sysOperationService.AddOperation(sysOperationLog);
+        if(num==0){
+            return Response.FAILWRONG().setMsg("记录更新失败");
+        }
+        return Response.SUCCESSOK();
     }
 
     @DmcsController(authRequired = true)
     @ApiOperation(value="updatefile",notes = "修改文件")
     @RequestMapping(value = "/updateFile", method = RequestMethod.POST)
     public Response UpdateFile(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        return Response.FAILWRONG().setErrcode(0);
-    }
-
-    @DmcsController(authRequired = true)
-    @ApiOperation(value="updateView",notes = "更改可视性")
-    @RequestMapping(value = "/updateView", method = RequestMethod.POST)
-    public Response UpdateView(@RequestBody String body, HttpServletRequest request) throws ParseException {
         return Response.FAILWRONG().setErrcode(0);
     }
 
@@ -224,10 +267,102 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
-    @ApiOperation(value="fileWindow",notes="文件与窗口绑定")
+    @ApiOperation(value="fileWindow",notes="文件与图片绑定")
     @RequestMapping(value = "/fileWindow", method = RequestMethod.POST)
     public Response FileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        return Response.FAILWRONG().setErrcode(0);
+        JSONObject o = JSONObject.parseObject(body);
+        String fileid = o.getString("fileid");
+        String imageid = o.getString("imageid");
+        if(fileid==null||imageid==null){
+            return Response.FAILWRONG().setMsg("文件与图片绑定失败");
+        }
+        FileInfo file= fileInfoService.SelectFileInfo(Long.valueOf(fileid));
+        FileInfo image = fileInfoService.SelectFileInfo(Long.valueOf(imageid));
+        if(file==null||image==null){
+            return Response.FAILWRONG().setMsg("文件不存在");
+        }
+
+        Cookie[] cookies = request.getCookies();
+        String admin_token=this.translateCookie(cookies,"admin_token");
+        if(admin_token==null){
+            return Response.FAILWRONG().setMsg("身份验证错误");
+        }
+        String userid = tockenCache.getUserid(admin_token);
+
+        String file_image = "file"+fileid+"image"+imageid;
+
+        FileWindowModule fileWindowModule = fileWindowService.ExistFileWindow(file_image);
+        if(fileWindowModule!=null){
+            return Response.FAILWRONG().setMsg("关系已存在");
+        }
+         /**添加对象操作**/
+        FileWindowModule fileWindow = new FileWindowModule();
+        fileWindow.setFileid(Long.valueOf(fileid));
+        fileWindow.setImage_fileid(Long.valueOf(imageid));
+        fileWindow.setFile_image(file_image);
+        fileWindowModule.setViewed("false");
+        fileWindow.setModuleid(1000);
+        fileWindow.setWindowid(1000);
+        fileWindowService.AddFileWindow(fileWindow);
+
+/*添加日志说明*/
+        SysOperationLog sysOpera = new SysOperationLog();
+        sysOpera.setFileid(Long.valueOf(fileid));
+        sysOpera.setOperationtime(new Date());
+        sysOpera.setOpDesc(file.getFilename()+"/与/"+image.getFilename()+"绑定");
+        sysOpera.setFilefullname(file.getFilename()+"/与/"+image.getFilename()+"绑定");
+        sysOpera.setUserid(userid);
+        sysOperationService.AddOperation(sysOpera);
+
+        return Response.SUCCESSOK();
+    }
+
+    @DmcsController(authRequired = true)
+    @ApiOperation(value="deleteFileWindow",notes = "删除文件绑定")
+    @RequestMapping(value = "/deleteFileWindow", method = RequestMethod.POST)
+    public Response DeleteFileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
+        JSONObject o = JSONObject.parseObject(body);
+        String createid = o.getString("createid");
+        if(createid==null){
+            return Response.FAILWRONG().setMsg("信息丢失");
+        }
+        FileWindowModule fileWindow =  fileWindowService.SelectFileWindow(Long.valueOf(createid));
+        String admin_token = this.translateCookie(request.getCookies(),"admin_token");
+        String userid = tockenCache.getUserid(admin_token);
+
+        FileInfo file = fileInfoService.SelectFileInfo(fileWindow.getFileid());
+        FileInfo image = fileInfoService.SelectFileInfo(fileWindow.getImage_fileid());
+
+        if(userid==null||fileWindow==null){
+            return Response.FAILWRONG().setMsg("信息缺失");
+        }
+        fileWindowService.DeleteFileWindow(Long.valueOf(createid));
+
+        SysOperationLog sysOpe = new SysOperationLog();
+        sysOpe.setFileid(fileWindow.getFileid());
+        sysOpe.setOperationtime(new Date());
+        sysOpe.setFilefullname(file.getFilename()+"/与/"+image.getFilename()+"解绑");
+        sysOpe.setOpDesc(file.getFilename()+"/与/"+image.getFilename()+"解绑");
+        sysOpe.setUserid(userid);
+        sysOperationService.AddOperation(sysOpe);
+        return Response.SUCCESSOK();
+    }
+
+    @DmcsController(authRequired = true)
+    @ApiOperation(value="updateFileWindow",notes = "更改文件与窗口的绑定")
+    @RequestMapping(value = "/updateFileWindow", method = RequestMethod.POST)
+    public Response updateFilewindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
+
+        JSONObject o = JSONObject.parseObject(body);
+        String type = o.getString("type");
+        if(type=="view"){
+
+        }//改变文件的可视性
+        if(type=="common"){
+
+        }//改变文件的其它属性
+
+        return Response.FAILWRONG().setMsg("更新失败");
     }
 
     @DmcsController(authRequired = true)
@@ -235,6 +370,36 @@ public class FileController {
     @RequestMapping(value = "/webInformation", method = RequestMethod.POST)
     public Response WebInformation(@RequestBody String body, HttpServletRequest request) throws ParseException {
         return Response.FAILWRONG().setErrcode(0);
+    }
+
+    private String  produceToken(String Userid) {
+        String token = Userid + this.securitySault + System.currentTimeMillis();
+        String securetoken  = null;
+        try {
+            MessageDigest Digest= MessageDigest.getInstance("md5");
+            byte [] By=Digest.digest(token.getBytes());
+            securetoken = new  String(By);
+            securetoken = securetoken + "|" + (System.currentTimeMillis() + 1000*3600);
+            securetoken = new BASE64Encoder().encode(securetoken.getBytes());
+        }catch( Exception e) {
+            logger.error("fail to get md5 algorithm");
+        }
+        securetoken = URLEncoder.encode(securetoken);
+        return securetoken;
+    }
+
+    private String translateCookie(Cookie[] cookies, String cookname){
+        if(cookies==null||cookname==null){
+            return null;
+        }
+        String token =null;
+        for(Cookie cookie:cookies){
+            if(cookie.getName().equals(cookname)){
+                token = cookie.getValue();
+                token = URLDecoder.decode(token);
+            }
+        }
+        return token;
     }
 
 }
