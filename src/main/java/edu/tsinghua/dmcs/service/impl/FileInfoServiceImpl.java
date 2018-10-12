@@ -51,6 +51,10 @@ public class FileInfoServiceImpl implements FileInfoService{
         return fileInfoMapper.selectByFileid(fileid);
     }
 
+    public List<FileInfo> SelectFile(String filetype){
+        return fileInfoMapper.SelectFile(filetype);
+    }
+
     public List<FileInfo> GetFileInfo(){
         return fileInfoMapper.getFile();
     }
