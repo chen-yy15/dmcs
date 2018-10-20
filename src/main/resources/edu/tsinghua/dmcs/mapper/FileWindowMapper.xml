@@ -6,24 +6,36 @@
         <result column="fileid" property="fileid" jdbcType="BIGINT" />
         <result column="moduleid" property="moduleid" jdbcType="INTEGER" />
         <result column="windowid" property="windowid" jdbcType="INTEGER" />
-        <result column="image_fileid" property="image_fileid" jdbcType="BIGINT" />
+        <result column="imagefileid" property="imagefileid" jdbcType="BIGINT" />
         <result column="viewed" property="viewed" jdbcType="VARCHAR" />
-        <result column="file_image" property="file_image" jdbcType="VARCHAR" />
+        <result column="fileimage" property="fileimage" jdbcType="VARCHAR" />
+        <result column="filename" property="filename" jdbcType="VARCHAR" />
+        <result column="imagename" property="iamgename" jdbcType="VARCHAR" />
+        <result column="filesrc" property="filesrc" jdbcType="VARCHAR" />
+        <result column="imagesrc" property="imagesrc" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
-        createid,fileid,moduleid,windowid,image_fileid,viewed,file_image
+        createid,fileid,moduleid,windowid,imagefileid,viewed,fileimage,filename,imagename,filesrc,imagesrc
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         SELECT
-        <include refid="Base_Column_List"/>
+        createid,fileid,moduleid,windowid,imagefileid,viewed
         FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
     </select>
     <select id="selectFile_image" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List"/>
+        createid,fileid,moduleid,windowid,imagefileid,viewed
         FROM file_window_module
-        WHERE file_image = #{file_image, jdbcType=VARCHAR}
+        WHERE fileimage = #{fileimage, jdbcType=VARCHAR}
+    </select>
+    <select id="selectByModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        a.createid createid, a.moduleid moduleid, a.windowid windowid, a.viewed viewed, a.fileimage fileimage,
+        a.fileid fieid, a.imagefileid imagefileid, b.filename filename, ab.filename imagename,
+        b.filesrc filesrc, ab.filesrc imagesrc
+        FROM file_window_module a, file_info b, file_info ab
+        WHERE a.moduleid = #{moduleid, jdbcType=INTEGER} AND b.fileid = a.fileid  AND ab.fileid = a.imagefileid
     </select>
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM file_window_module
@@ -31,12 +43,12 @@
     </delete>
     <delete id="deleteFile_image" parameterType="java.lang.String">
         DELETE FROM file_window_module
-        WHERE file_image = #{file_image, jdbcType=VARCHAR}
+        WHERE fileimage = #{fileimage, jdbcType=VARCHAR}
     </delete>
     <insert id="addFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
-        INSERT INTO file_window_module(createid,fileid,moduleid,windowid,image_fileid,viewed,file_image)
+        INSERT INTO file_window_module(createid,fileid,moduleid,windowid,imagefileid,viewed,fileimage)
         VALUES(#{createid,jdbcType=BIGINT},#{fileid,jdbcType=BIGINT},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},
-        #{image_fileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR},#{file_image,jdbcType=VARCHAR})
+        #{imagefileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR},#{fileimage,jdbcType=VARCHAR})
     </insert>
     <update id="updateFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
         UPDATE file_window_module
@@ -50,8 +62,8 @@
             <if test="windowid !=null">
                 windowid = #{windowid,jdbcType=INTEGER}
             </if>
-            <if test="image_fileid !=null">
-                image_fileid = #{image_fileid,jdbcType=BIGINT}
+            <if test="imagefileid !=null">
+                imagefileid = #{imagefileid,jdbcType=BIGINT}
             </if>
             <if test="viewed !=null">
                 viewed = #{viewed,jdbcType=VARCHAR}
