@@ -423,7 +423,7 @@ public class UserRestController {
 	}
 	/*******/
 	/*******/
-	@DmcsController(loginRequired=true)
+	@DmcsController()
 	@ApiOperation(value="插入图片", notes="插入成功")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
 	public Response image(HttpServletRequest request) {
@@ -500,7 +500,7 @@ public class UserRestController {
 
 
 
-	@DmcsController(loginRequired=true)
+	@DmcsController()
 	@ApiOperation(value="用户登出", notes="true登出成功")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public Response logout(HttpServletRequest request, HttpServletResponse response) {
@@ -539,7 +539,7 @@ public class UserRestController {
 
 	}
 
-	@DmcsController(loginRequired=true)
+	@DmcsController()
 	@ApiOperation(value="获得用户信息", notes="获得用户信息")
 	@RequestMapping(value="/getuser",method = RequestMethod.POST)
 	public Response getUser(@RequestBody String body) throws ParseException {

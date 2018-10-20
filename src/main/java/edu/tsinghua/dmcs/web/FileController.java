@@ -267,6 +267,20 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
+    @ApiOperation(value="getFileImage",notes="获取文件与图片的关系")
+    @RequestMapping(value = "/getFileImage", method = RequestMethod.POST)
+    public Response GetFileImage(@RequestBody String body) throws ParseException {
+        JSONObject o = JSONObject.parseObject(body);
+        String module = o.getString("module");
+        Integer moduleid = Integer.valueOf(module);
+        if(moduleid ==null){
+            return Response.FAILWRONG().setMsg("信息丢失");
+        }
+        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
+        return Response.SUCCESSOK().setData(fileWindowModules);
+    }
+
+    @DmcsController(authRequired = true)
     @ApiOperation(value="fileWindow",notes="文件与图片绑定")
     @RequestMapping(value = "/fileWindow", method = RequestMethod.POST)
     public Response FileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
