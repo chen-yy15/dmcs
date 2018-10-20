@@ -12,11 +12,19 @@ public class FileWindowModule {
 
     private Integer windowid ;
 
-    private Long image_fileid ;
+    private Long imagefileid ;
 
     private String viewed;
 
-    private String file_image;
+    private String fileimage;
+
+    private String filename;
+
+    private String imagename;
+
+    private String filesrc;
+
+    private String imagesrc;
 
     public Long getCreateid() {return createid;}
 
@@ -34,16 +42,32 @@ public class FileWindowModule {
 
     public void setWindowid(Integer windowid) {this.windowid = windowid;}
 
-    public Long getImage_fileid() {return image_fileid;}
+    public Long getImage_fileid() {return imagefileid;}
 
-    public void setImage_fileid(Long image_fileid) {this.image_fileid = image_fileid;}
+    public void setImage_fileid(Long imagefileid) {this.imagefileid = imagefileid;}
 
     public String getViewed(){return viewed;}
 
     public void setViewed(String viewed) {this.viewed = viewed;}
 
-    public String getFile_image(){return file_image;}
+    public String getFile_image(){return fileimage;}
 
-    public void setFile_image(String file_image) {this.file_image = file_image;}
+    public void setFile_image(String fileimage) {this.fileimage = fileimage;}
+
+    public String getFilename(){return  filename;}
+
+    public void setFilename(String filename) {this.filename = filename;}
+
+    public String getImagename(){return  imagename;}
+
+    public void setImagename(String imagename){this.imagename = imagename;}
+
+    public String getFilesrc(){return filesrc;}
+
+    public void setFilesrc(String filesrc){this.filesrc = filesrc;}
+
+    public String getImagesrc(){return imagesrc;}
+
+    public void setImagesrc(String imagesrc){this.imagesrc = imagesrc;}
 
 }
