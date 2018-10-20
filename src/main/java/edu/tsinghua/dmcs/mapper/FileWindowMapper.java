@@ -3,6 +3,8 @@ package edu.tsinghua.dmcs.mapper;
 import edu.tsinghua.dmcs.entity.FileWindowModule;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * Created by caizj on 18-10-9.
  */
@@ -18,6 +20,8 @@ public interface FileWindowMapper {
     int updateFileWindow(FileWindowModule fileWindowModule);
 
     FileWindowModule selectById(Long createid);
+
+    List<FileWindowModule> selectByModuleId(Integer moduleid);
 
     FileWindowModule selectFile_image(String file_image);
 }
