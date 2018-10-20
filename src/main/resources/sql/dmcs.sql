@@ -338,10 +338,9 @@ CREATE TABLE `file_window_module`(
   `fileid` BIGINT(20) COMMENT '操作的文件编号',
   `moduleid` INT COMMENT '对应模块编号',
   `windowid` INT COMMENT '对应窗口',
-  `image_fileid` BIGINT(20) COMMENT '关联的图片',
-  `file_image`  VARCHAR(255) NOT NULL COMMENT '文件和图片关系',
+  `imagefileid` BIGINT(20) COMMENT '关联的图片',
+  `fileimage`  VARCHAR(255) NOT NULL COMMENT '文件和图片关系',
   `viewed` VARCHAR(25) COMMENT '可视性判断',
-  UNIQUE KEY (`file_image`),
   PRIMARY KEY(`createid`),
   FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`)ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -360,8 +359,7 @@ CREATE TABLE `sysOperation_log`(
   `operationtime` DATETIME COMMENT '操作时间',
   `opDesc` VARCHAR(255) COMMENT '操作描述',
   PRIMARY KEY(`logid`),
-  FOREIGN KEY(`userid`) REFERENCES user_information(`userid`) ON DELETE CASCADE ,
-  FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`) ON DELETE CASCADE
+  FOREIGN KEY(`userid`) REFERENCES user_information(`userid`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
@@ -402,6 +400,7 @@ DROP TABLE IF EXISTS `enum_name`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `enum_name`(
   `nameid` INT NOT NULL COMMENT '编号',
+  `bandid` INT NOT NULL COMMENT '绑定编号',
   `moduleType` VARCHAR(25) NOT NULL COMMENT '模块类型',
   `namedetail` VARCHAR(45) COMMENT '内容详情',
   PRIMARY KEY(`nameid`)
