@@ -6,6 +6,8 @@ package edu.tsinghua.dmcs.entity;
 public class EnumName {
     private  Integer nameid ;
 
+    private Integer bandid;
+
     private  String  moduleType ;
 
     private String namedetail ;
@@ -13,6 +15,10 @@ public class EnumName {
     public Integer getNameid() {return nameid;}
 
     public void setNameid(Integer nameid) {this.nameid = nameid;}
+
+    public Integer getBandid(){ return bandid; }
+
+    public void setBandid(Integer bandid) {this.bandid = bandid;}
 
     public String getModuleType(){return moduleType;}
 
