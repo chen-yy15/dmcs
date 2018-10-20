@@ -6,6 +6,8 @@ import edu.tsinghua.dmcs.service.FileWindowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by caizj on 18-10-10.
  */
@@ -42,5 +44,9 @@ public class FileWindowServiceImpl implements FileWindowService{
 
     public FileWindowModule ExistFileWindow(String file_image){
         return fileWindowMapper.selectFile_image(file_image);
+    }
+
+    public List<FileWindowModule> SelectFileWindowByModule(Integer moduleid){
+        return fileWindowMapper.selectByModuleId(moduleid);
     }
 }
