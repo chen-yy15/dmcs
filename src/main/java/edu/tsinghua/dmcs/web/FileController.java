@@ -272,7 +272,7 @@ public class FileController {
     public Response GetFileImage(@RequestBody String body) throws ParseException {
         JSONObject o = JSONObject.parseObject(body);
         String module = o.getString("module");
-        Integer moduleid = Integer.valueOf(module);
+        Integer moduleid = this.ChangeStringModuleid(module);
         if(moduleid ==null){
             return Response.FAILWRONG().setMsg("信息丢失");
         }
@@ -281,14 +281,17 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
-    @ApiOperation(value="fileWindow",notes="文件与图片绑定")
-    @RequestMapping(value = "/fileWindow", method = RequestMethod.POST)
+    @ApiOperation(value="addFileImage",notes="加入文件与图片绑定关系")
+    @RequestMapping(value = "/addFileImage", method = RequestMethod.POST)
     public Response FileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
         JSONObject o = JSONObject.parseObject(body);
+        String valueSelect = o.getString("valueSelect");
         String fileid = o.getString("fileid");
         String imageid = o.getString("imageid");
-        if(fileid==null||imageid==null){
-            return Response.FAILWRONG().setMsg("文件与图片绑定失败");
+        Integer moduleid = this.ChangeStringModuleid(valueSelect);
+
+        if(fileid==null||imageid==null||moduleid==0){
+            return Response.FAILWRONG().setMsg("发送信息丢失");
         }
         FileInfo file= fileInfoService.SelectFileInfo(Long.valueOf(fileid));
         FileInfo image = fileInfoService.SelectFileInfo(Long.valueOf(imageid));
@@ -303,20 +306,20 @@ public class FileController {
         }
         String userid = tockenCache.getUserid(admin_token);
 
-        String file_image = "file"+fileid+"image"+imageid;
+        String file_image = moduleid+"file"+fileid+"image"+imageid;
 
         FileWindowModule fileWindowModule = fileWindowService.ExistFileWindow(file_image);
         if(fileWindowModule!=null){
-            return Response.FAILWRONG().setMsg("关系已存在");
+            return Response.FAILWRONG().setErrcode(1);
         }
          /**添加对象操作**/
         FileWindowModule fileWindow = new FileWindowModule();
         fileWindow.setFileid(Long.valueOf(fileid));
         fileWindow.setImage_fileid(Long.valueOf(imageid));
         fileWindow.setFile_image(file_image);
-        fileWindowModule.setViewed("false");
-        fileWindow.setModuleid(1000);
-        fileWindow.setWindowid(1000);
+        fileWindow.setViewed("false");
+        fileWindow.setModuleid(moduleid);
+        fileWindow.setWindowid(0);
         fileWindowService.AddFileWindow(fileWindow);
 
 /*添加日志说明*/
@@ -328,7 +331,9 @@ public class FileController {
         sysOpera.setUserid(userid);
         sysOperationService.AddOperation(sysOpera);
 
-        return Response.SUCCESSOK();
+        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
+
+        return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
     @DmcsController(authRequired = true)
@@ -414,6 +419,33 @@ public class FileController {
             }
         }
         return token;
+    }
+
+    private Integer ChangeStringModuleid(String module) {
+       Integer moduleid = 0;
+       char a = module.charAt(0);
+       switch (a){
+           case 'a':
+               if(module.equals("aa"))
+                   moduleid = 1010;
+               if(module.equals("ab"))
+                   moduleid = 1020;
+               if(module.equals("ac"))
+                   moduleid = 1030;
+               if(module.equals("ad"))
+                   moduleid = 1040;
+               break;
+           case 'b':  moduleid = 2000; break;
+           case 'c':  moduleid = 3000; break;
+           case 'd':  moduleid = 4000; break;
+           case 'e':  moduleid = 5000; break;
+           case 'f':  moduleid = 6000; break;
+           case 'g':  moduleid = 7000; break;
+           case 'h':  moduleid = 8000; break;
+           case 'i':  moduleid = 9000; break;
+           default: moduleid = 0; break;
+       }
+       return moduleid;
     }
 
 }
