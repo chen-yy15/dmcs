@@ -178,7 +178,10 @@ public class UserRestController {
                 dmcs_token = URLDecoder.decode(dmcs_token);
                 String username = tockenCache.getUserNameByToken(dmcs_token);
                 if (username != null)
-                    return Response.FAILWRONG().setErrcode(10).setMsg("用户已登录");
+				{
+					User tem_U = userService.checkExistence(username);
+					return Response.SUCCESSOK().setData(tem_U);
+				}
             }
 		}
 		JSONObject o = JSONObject.parseObject(body);
