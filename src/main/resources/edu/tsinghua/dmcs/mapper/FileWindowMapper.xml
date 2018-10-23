@@ -10,7 +10,7 @@
         <result column="viewed" property="viewed" jdbcType="VARCHAR" />
         <result column="fileimage" property="fileimage" jdbcType="VARCHAR" />
         <result column="filename" property="filename" jdbcType="VARCHAR" />
-        <result column="imagename" property="iamgename" jdbcType="VARCHAR" />
+        <result column="imagename" property="imagename" jdbcType="VARCHAR" />
         <result column="filesrc" property="filesrc" jdbcType="VARCHAR" />
         <result column="imagesrc" property="imagesrc" jdbcType="VARCHAR" />
     </resultMap>
