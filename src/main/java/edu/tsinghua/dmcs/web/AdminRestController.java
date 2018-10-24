@@ -3,7 +3,9 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
-import edu.tsinghua.dmcs.entity.*;
+import edu.tsinghua.dmcs.entity.AdminGroup;
+import edu.tsinghua.dmcs.entity.AdminGroupUser;
+import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.AdminGroupService;
 import edu.tsinghua.dmcs.service.RoleService;
@@ -15,16 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -224,163 +224,6 @@ public class AdminRestController {
 		}
 		return Response.FAILWRONG();
 	}
-
-	@DmcsController(authRequired = true)
-	@ApiOperation(value="addocument",notes = "添加文件")
-	@RequestMapping(value = "/addocument",method = RequestMethod.POST)
-	public Response addocument(HttpServletRequest request) throws ParseException {
-		MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
-
-		MultipartFile image = params.getFile("image");
-		MultipartFile file = params.getFile("file");
-		String title=params.getParameter("title");
-		String description=params.getParameter("description");
-		Cookie[] cookies = params.getCookies();
-		//String identityNumber=params.getParameter("identityNumber");
-		System.out.println("title:"+title);
-		System.out.println("description:"+description);
-		String identityNumber=params.getParameter("identityNumber");
-		System.out.println("identityNumber:"+identityNumber);
-		String admin_token=null;
-		if(image!=null&&file!=null&&cookies!=null) {
-			for ( Cookie cookie:cookies) {
-				if(cookie.getName().equals("admin_token")){
-					 admin_token = cookie.getValue();
-					System.out.println(admin_token);
-				}
-			}
-			admin_token= URLDecoder.decode(admin_token);
-			String userid = tockenCache.getUserid(admin_token);
-			if(userid==null){
-				return Response.FAILWRONG().setMsg("身份验证失败");
-			}
-			if(userid!=null){
-				AdminGroup adminGroup = adminGroupService.selectUser(userid);
-				int tem = adminGroup.getAuthorityNumber();
-				int identity_int = Integer.parseInt(identityNumber);
-				if(tem == 0)
-					return Response.FAILWRONG().setMsg("权限错误");
-				int b = this.power(2, identity_int-1).intValue();
-				if((tem&b)!=b)
-					return Response.FAILWRONG().setMsg("权限错误");
-			}
-			try {
-				String imageName = image.getOriginalFilename();
-				String fileName = file.getOriginalFilename();
-				logger.info("上传图片名为：" + imageName);
-				logger.info("上传的文件名为：" + fileName);
-				// 设置文件存储路径
-				String IMAGEPATH = "http://39.104.208.4:80/home/dmcs/image/document/";
-				String imagePath = "//home/dmcs/image/document/";
-				String IMAGE_PATH = IMAGEPATH + imageName;
-				String image_path = imagePath + imageName;
-
-				String FILEPATH = "http://39.104.208.4:80/home/dmcs/file/document/";
-				String filePath = "//home/dmcs/file/docuemnt/";
-				String PATH = FILEPATH + fileName;
-				String path = filePath + fileName;
-				File dest_file = new File(path);
-				if (!dest_file.getParentFile().exists()) {
-					dest_file.getParentFile().mkdirs();// 新建文件夹
-				}
-				if (dest_file.createNewFile()) {
-					System.out.println("File is created");
-					dest_file.setExecutable(true);
-					dest_file.setReadable(true);
-					dest_file.setWritable(true);
-				}
-				// 检测是否存在目录
-				file.transferTo(dest_file);// 文件写入
-				/*******/
-				File dest_image = new File(image_path);
-				if (!dest_image.getParentFile().exists()) {
-					dest_image.getParentFile().mkdirs();
-				}
-				if (dest_image.createNewFile()) {
-					System.out.println("Image is created");
-					dest_image.setExecutable(true);
-					dest_image.setReadable(true);
-					dest_image.setWritable(true);
-				}
-				image.transferTo(dest_image);//图片写入
-				/****创建文件对象*/
-				TechDocument techdocu = new TechDocument();
-				techdocu.setDescription(description);
-				techdocu.setTitle(title);
-				techdocu.setDocument_addressd(PATH);
-				techdocu.setImage_address(IMAGE_PATH);
-				techdocu.setIdentityNumber(Integer.parseInt(identityNumber));
-				int num = techDocuService.addTechDocument(techdocu);
-				if (num != 0) {
-					List <TechDocument> techDocuments = techDocuService.queryDocuByNumber(Integer.parseInt(identityNumber));
-					return Response.SUCCESSOK().setData(techDocuments);
-				} else
-					return Response.FAILWRONG().setMsg("数据更新错误");
-
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-				return Response.FAILWRONG();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return Response.FAILWRONG();
-			}
-		}
-		return Response.SUCCESSOK();
-	}
-
-
-	@DmcsController(loginRequired = false)
-	@ApiOperation(value = "getdocument",notes = "获取文件信息")
-	@RequestMapping(value = "/getdocument",method = RequestMethod.POST)
-	public Response getDocument(@RequestBody String body) throws ParseException{
-		JSONObject o = JSONObject.parseObject(body);
-		String authority = o.getString("authority");
-		System.out.println("getDocument: "+body);
-		if(authority!=null){
-			List<TechDocument> techDocuments = techDocuService.queryDocuByNumber(Integer.parseInt(authority));
-			return Response.SUCCESSOK().setData(techDocuments);
-		}
-		return Response.FAILWRONG();
-	}
-
-	@DmcsController(loginRequired = false)
-	@ApiOperation(value="deletedocument", notes = "删除文件")
-	@RequestMapping(value = "deletedocument", method = RequestMethod.POST)
-	public Response deleteDocument(@RequestBody String body) throws ParseException {
-		JSONObject o = JSONObject.parseObject(body);
-		System.out.println("deleteDocument: " + body);
-		String authority_string = o.getString("authority");
-		String documentId = o.getString("documentId");
-		String cookie_info = o.getString("cookie");
-		JSONObject object = JSONObject.parseObject(cookie_info);
-		String admin_token = object.getString("admin_token");
-		if(authority_string==null||documentId==null||admin_token==null){
-			return Response.FAILWRONG().setMsg("信息丢失");
-		}
-		admin_token = URLDecoder.decode(admin_token);
-		String userid = tockenCache.getUserid(admin_token);
-		if(userid==null)
-			return Response.FAILWRONG().setMsg("身份验证失败");
-		AdminGroup adminGroup = adminGroupService.selectUser(userid);
-		if(adminGroup==null)
-			return Response.FAILWRONG().setMsg("无相关用户");
-		int tem = adminGroup.getAuthorityNumber();
-		int authority = Integer.parseInt(authority_string);
-		if(tem==0)
-			return Response.FAILWRONG().setMsg("无相关权限");
-		int b = this.power(2,authority-1).intValue();
-		if((tem&b)!=b)
-			return Response.FAILWRONG().setMsg("权限错误");
-		int num = 0;
-		Long ID = Long.parseLong(documentId);
-		num = techDocuService.deleteDevice(ID);
-		if(num==0){
-			return Response.FAILWRONG().setMsg("删除操作失败");
-		}
-		List<TechDocument> techDocuments = techDocuService.queryDocuByNumber(authority);
-		return Response.SUCCESSOK().setData(techDocuments);
-	}
-
 
 	private String  getToken(String Userid) {
 		String token = Userid + this.securitySault + System.currentTimeMillis();

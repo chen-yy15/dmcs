@@ -337,11 +337,12 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
-    @ApiOperation(value="deleteFileWindow",notes = "删除文件绑定")
-    @RequestMapping(value = "/deleteFileWindow", method = RequestMethod.POST)
+    @ApiOperation(value="deleteFileImage",notes = "删除文件绑定")
+    @RequestMapping(value = "/deleteFileImage", method = RequestMethod.POST)
     public Response DeleteFileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
         JSONObject o = JSONObject.parseObject(body);
         String createid = o.getString("createid");
+        String valueSelect = o.getString("valueSelect");
         if(createid==null){
             return Response.FAILWRONG().setMsg("信息丢失");
         }
@@ -351,9 +352,13 @@ public class FileController {
 
         FileInfo file = fileInfoService.SelectFileInfo(fileWindow.getFileid());
         FileInfo image = fileInfoService.SelectFileInfo(fileWindow.getImage_fileid());
-
-        if(userid==null||fileWindow==null){
+        Integer moduleid = this.ChangeStringModuleid(valueSelect);
+        Integer getModule = fileWindow.getModuleid();
+        if(userid==null || fileWindow==null){
             return Response.FAILWRONG().setMsg("信息缺失");
+        }
+        if(moduleid.intValue()!=getModule.intValue()){
+            return Response.FAILWRONG().setMsg("信息错误");
         }
         fileWindowService.DeleteFileWindow(Long.valueOf(createid));
 
