@@ -306,9 +306,9 @@ public class FileController {
         }
         String userid = tockenCache.getUserid(admin_token);
 
-        String file_image = moduleid+"file"+fileid+"image"+imageid;
+        String fileimage = moduleid+"file"+fileid+"image"+imageid;
 
-        FileWindowModule fileWindowModule = fileWindowService.ExistFileWindow(file_image);
+        FileWindowModule fileWindowModule = fileWindowService.ExistFileWindow(fileimage);
         if(fileWindowModule!=null){
             return Response.FAILWRONG().setErrcode(1);
         }
@@ -316,7 +316,7 @@ public class FileController {
         FileWindowModule fileWindow = new FileWindowModule();
         fileWindow.setFileid(Long.valueOf(fileid));
         fileWindow.setImage_fileid(Long.valueOf(imageid));
-        fileWindow.setFile_image(file_image);
+        fileWindow.setFile_image(fileimage);
         fileWindow.setViewed("false");
         fileWindow.setModuleid(moduleid);
         fileWindow.setWindowid(0);

@@ -32,7 +32,7 @@
     <select id="selectByModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT
         a.createid createid, a.moduleid moduleid, a.windowid windowid, a.viewed viewed, a.fileimage fileimage,
-        a.fileid fieid, a.imagefileid imagefileid, b.filename filename, ab.filename imagename,
+        a.fileid fileid, a.imagefileid imagefileid, b.filename filename, ab.filename imagename,
         b.filesrc filesrc, ab.filesrc imagesrc
         FROM file_window_module a, file_info b, file_info ab
         WHERE a.moduleid = #{moduleid, jdbcType=INTEGER} AND b.fileid = a.fileid  AND ab.fileid = a.imagefileid
