@@ -35,7 +35,7 @@
 		from user_information
 		where username = #{username_mobile_email,jdbcType=VARCHAR} OR usertelephone = #{username_mobile_email, jdbcType=VARCHAR} OR useremail = #{username_mobile_email, jdbcType=VARCHAR}
 	</select>
-	<select id="selectByuserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="selectByuserid" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
 		from user_information

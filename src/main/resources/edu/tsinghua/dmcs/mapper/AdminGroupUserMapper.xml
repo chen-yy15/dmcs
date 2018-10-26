@@ -8,16 +8,27 @@
         <result column="userEmail" property="userEmail" jdbcType="VARCHAR" />
         <result column="userworkPlace" property="userworkPlace" jdbcType="VARCHAR" />
         <result column="userTelephone" property="userTelephone" jdbcType="VARCHAR" />
-        <result column="authorityNumber" property="authorityNumber" jdbcType="INTEGER" />
+        <result column="auth1" property="auth1" jdbcType="VARCHAR" />
+        <result column="auth2" property="auth2" jdbcType="VARCHAR" />
+        <result column="auth3" property="auth3" jdbcType="VARCHAR" />
+        <result column="auth4" property="auth4" jdbcType="VARCHAR" />
+        <result column="auth5" property="auth5" jdbcType="VARCHAR" />
+        <result column="auth6" property="auth6" jdbcType="VARCHAR" />
+        <result column="auth7" property="auth7" jdbcType="VARCHAR" />
+        <result column="auth8" property="auth8" jdbcType="VARCHAR" />
+        <result column="auth9" property="auth9" jdbcType="VARCHAR" />
+        <result column="auth10" property="auth10" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-        userid, avatar, userName, userEmail, userworkPlace, userTelephone, authorityNumber
+        userid, avatar, userName, userEmail, userworkPlace, userTelephone, auth1,auth2,auth3,auth4,auth5,auth6,auth7,auth8,auth9,auth10
     </sql>
     <select id="queryselect" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select
-        d.userid userid, d.authorityNumber authorityNumber, m.avatar avatar, m.userName userName, m.userEmail userEmail,
+        d.userid userid,
+        d.auth1 auth1, d.auth2 auth2, d.auth3 auth3, d.auth4 auth4, d.auth5 auth5,d.auth6 auth6,d.auth7 auth7,d.auth8 auth8,d.auth9 auth9,d.auth10 auth10,
+        m.avatar avatar, m.userName userName, m.userEmail userEmail,
         m.userworkPlace userworkPlace, m.userTelephone userTelephone
         from admin_group_zero d, user_information m
-        where d.userid = m.userid and d.authorityNumber != 1023
+        where d.userid = m.userid and d.auth10 != 'true'
     </select>
 </mapper>

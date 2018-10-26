@@ -3,24 +3,61 @@
 <mapper namespace="edu.tsinghua.dmcs.mapper.AdminGroupMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.AdminGroup" >
         <id column="userid" property="userid" jdbcType="VARCHAR" />
-        <result column="authorityNumber" property="authorityNumber" jdbcType="INTEGER" />
+        <result column="auth1" property="auth1" jdbcType="VARCHAR" />
+        <result column="auth2" property="auth2" jdbcType="VARCHAR" />
+        <result column="auth3" property="auth3" jdbcType="VARCHAR" />
+        <result column="auth4" property="auth4" jdbcType="VARCHAR" />
+        <result column="auth5" property="auth5" jdbcType="VARCHAR" />
+        <result column="auth6" property="auth6" jdbcType="VARCHAR" />
+        <result column="auth7" property="auth7" jdbcType="VARCHAR" />
+        <result column="auth8" property="auth8" jdbcType="VARCHAR" />
+        <result column="auth9" property="auth9" jdbcType="VARCHAR" />
+        <result column="auth10" property="auth10" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List" >
-        userid, authorityNumber
+        userid, auth1,auth2,auth3,auth4,auth5,auth6,auth7,auth8,auth9,auth10
     </sql>
     <delete id="deleteByuserid" parameterType="java.lang.String" >
         delete from admin_group_zero
         where userid = #{userid,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="edu.tsinghua.dmcs.entity.AdminGroup" >
-        insert into admin_group_zero ( userid, authorityNumber)
-        values ( #{userid,jdbcType=VARCHAR}, #{authorityNumber,jdbcType=INTEGER} )
+        insert into admin_group_zero ( userid,auth1,auth2,auth3,auth4,auth5,auth6,auth7,auth8,auth9,auth10)
+        values ( #{userid,jdbcType=VARCHAR},#{auth1,jdbcType=VARCHAR},#{auth2,jdbcType=VARCHAR},#{auth3,jdbcType=VARCHAR},#{auth4,jdbcType=VARCHAR},#{auth5,jdbcType=VARCHAR},
+         #{auth6,jdbcType=VARCHAR},#{auth7,jdbcType=VARCHAR},#{auth8,jdbcType=VARCHAR},#{auth9,jdbcType=VARCHAR},#{auth10,jdbcType=VARCHAR})
     </insert>
     <update id="updateByuserid" parameterType="edu.tsinghua.dmcs.entity.AdminGroup" >
         update admin_group_zero
         <set >
-            <if test="authorityNumber != null" >
-                authorityNumber = #{authorityNumber,jdbcType=INTEGER},
+            <if test="auth1 != null" >
+                auth1 = #{auth1,jdbcType=VARCHAR},
+            </if>
+            <if test="auth2 != null" >
+                auth2 = #{auth2,jdbcType=VARCHAR},
+            </if>
+            <if test="auth3 != null" >
+                auth3 = #{auth3,jdbcType=VARCHAR},
+            </if>
+            <if test="auth4 != null" >
+                auth4 = #{auth4,jdbcType=VARCHAR},
+            </if>
+            <if test="auth5 != null" >
+                auth5 = #{auth5,jdbcType=VARCHAR},
+            </if>
+            <if test="auth6 != null" >
+                auth6 = #{auth6,jdbcType=VARCHAR},
+            </if>
+            <if test="auth7 != null" >
+                auth7 = #{auth7,jdbcType=VARCHAR},
+            </if>
+            <if test="auth8 != null" >
+                auth8 = #{auth8,jdbcType=VARCHAR},
+            </if>
+            <if test="auth9 != null" >
+                auth9 = #{auth9,jdbcType=VARCHAR},
+            </if>
+            <if test="auth10 != null" >
+                auth10 = #{auth10,jdbcType=VARCHAR},
             </if>
         </set>
         where userid = #{userid,jdbcType=VARCHAR}
@@ -29,6 +66,6 @@
         select
         <include refid="Base_Column_List" />
         from admin_group_zero
-        where userid = #{authorityNumber, jdbcType=VARCHAR}
+        where userid = #{userid, jdbcType=VARCHAR}
     </select>
 </mapper>
