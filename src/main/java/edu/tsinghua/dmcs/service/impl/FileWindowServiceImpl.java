@@ -49,4 +49,9 @@ public class FileWindowServiceImpl implements FileWindowService{
     public List<FileWindowModule> SelectFileWindowByModule(Integer moduleid){
         return fileWindowMapper.selectByModuleId(moduleid);
     }
+
+    public List<FileWindowModule> NoSelectFileWindow(){
+        return fileWindowMapper.selectCommonFileWindow();
+    }
 }
+
