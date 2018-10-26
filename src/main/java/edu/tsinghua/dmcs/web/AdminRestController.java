@@ -8,8 +8,6 @@ import edu.tsinghua.dmcs.entity.AdminGroupUser;
 import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.AdminGroupService;
-import edu.tsinghua.dmcs.service.RoleService;
-import edu.tsinghua.dmcs.service.TechDocuService;
 import edu.tsinghua.dmcs.service.UserService;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
@@ -37,17 +35,13 @@ import java.util.List;
 public class AdminRestController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AdminRestController.class);
-	
-	@Autowired
-	private RoleService roleService;
+
 	@Autowired
 	private AdminGroupService adminGroupService;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	TockenCache tockenCache;
-	@Autowired
-	private TechDocuService techDocuService;
 
 	@Value("${security.sault.login}")
 	private String securitySault;
@@ -80,7 +74,16 @@ public class AdminRestController {
 		}//判断用户是否已经存在
 		AdminGroup adminGroup = new AdminGroup();
 		adminGroup.setUserid(userid);
-		adminGroup.setAuthorityNumber(0);
+		adminGroup.setAuth1("false");
+		adminGroup.setAuth2("false");
+		adminGroup.setAuth3("false");
+		adminGroup.setAuth4("false");
+		adminGroup.setAuth5("false");
+		adminGroup.setAuth6("false");
+		adminGroup.setAuth7("false");
+		adminGroup.setAuth8("false");
+		adminGroup.setAuth9("false");
+		adminGroup.setAuth10("false");
 		int num = adminGroupService.addAdminuser(adminGroup);
 		if( num!=0 ) { //需要对人的身份信息进行更新
 			User user = userService.getUserByuserid(userid);
@@ -97,7 +100,7 @@ public class AdminRestController {
 	@ApiOperation(value="deleteAdminuser", notes="删除管理员")
 	@RequestMapping(value = "/deleteAdminuser", method = RequestMethod.POST)
 	public Response deleteAdminuser(@RequestBody String body) throws ParseException {
-		//JSONArray o = JSON.parseArray(body);
+
 		JSONObject o = JSONObject.parseObject(body);
 		System.out.println("deleteAdminuser: "+body);
 		JSONArray userids = o.getJSONArray("userids");
@@ -148,10 +151,26 @@ public class AdminRestController {
 		for (;i<Users.size();i++){
 			JSONObject object = (JSONObject) Users.get(i);
 			String userid = object.getString("userid");
-			String auth_string = object.getString("authority");
+			String auth1 = object.getString("auth1");
+			String auth2 = object.getString("auth2");
+			String auth3 = object.getString("auth3");
+			String auth4 = object.getString("auth4");
+			String auth5 = object.getString("auth5");
+			String auth6 = object.getString("auth6");
+			String auth7 = object.getString("auth7");
+			String auth8 = object.getString("auth8");
+			String auth9 = object.getString("auth9");
 			AdminGroup adminGroup = adminGroupService.selectUser(userid);
 			if(adminGroup!=null){
-				adminGroup.setAuthorityNumber(Integer.parseInt(auth_string));
+				adminGroup.setAuth1(auth1);
+				adminGroup.setAuth2(auth2);
+				adminGroup.setAuth3(auth3);
+				adminGroup.setAuth4(auth4);
+				adminGroup.setAuth5(auth5);
+				adminGroup.setAuth6(auth6);
+				adminGroup.setAuth7(auth7);
+				adminGroup.setAuth8(auth8);
+				adminGroup.setAuth9(auth9);
 				int num = adminGroupService.updateAdminuser(adminGroup);
 				if(num==0)
 					fail++;

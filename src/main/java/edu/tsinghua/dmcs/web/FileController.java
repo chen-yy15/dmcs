@@ -369,7 +369,9 @@ public class FileController {
         sysOpe.setOpDesc(file.getFilename()+"/与/"+image.getFilename()+"解绑");
         sysOpe.setUserid(userid);
         sysOperationService.AddOperation(sysOpe);
-        return Response.SUCCESSOK();
+
+        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
+        return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
     @DmcsController(authRequired = true)
