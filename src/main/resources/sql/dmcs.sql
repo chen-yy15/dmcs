@@ -370,7 +370,16 @@ DROP TABLE IF EXISTS `admin_group_zero`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin_group_zero`(
   `userid` varchar(45) NOT NULL COMMENT '用户系统号/用户系统号',
-  `authorityNumber` int NOT NULL COMMENT '用户权限',
+  `auth1` VARCHAR(20) DEFAULT 'false' COMMENT '权限1',
+  `auth2` VARCHAR(20) DEFAULT 'false' COMMENT '权限2',
+  `auth3` VARCHAR(20) DEFAULT 'false' COMMENT '权限3',
+  `auth4` VARCHAR(20) DEFAULT 'false' COMMENT '权限4',
+  `auth5` VARCHAR(20) DEFAULT 'false' COMMENT '权限5',
+  `auth6` VARCHAR(20) DEFAULT 'false' COMMENT '权限6',
+  `auth7` VARCHAR(20) DEFAULT 'false' COMMENT '权限7',
+  `auth8` VARCHAR(20) DEFAULT 'false' COMMENT '权限8',
+  `auth9` VARCHAR(20) DEFAULT 'false' COMMENT '权限9',
+  `auth10` VARCHAR(20) DEFAULT 'false' COMMENT '权限10',
   PRIMARY KEY (`userid`),
   FOREIGN KEY(`userid`) references user_information(`userid`) ON DELETE cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
