@@ -51,7 +51,7 @@ public class AdminGroupServiceImpl implements AdminGroupService {
     public int checkifhost(String userid){
         int num = 0 ;
         AdminGroup adminGroup = adminGroupMapper.selectByuserid(userid);
-        if(adminGroup.getAuthorityNumber()==1023){
+        if(adminGroup.getAuth10().equals("true")){
             num = 1;
         }
         return num;
