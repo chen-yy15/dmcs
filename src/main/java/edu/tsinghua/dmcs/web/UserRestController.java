@@ -299,7 +299,7 @@ public class UserRestController {
                     }
                     String number = this.getNumber();
                     tockenCache.setTokenForUser(number, u.getUsername());
-                    String content = "http://39.104.208/#/user/login" + "?" + "verify="+number;
+                    String content = "http://127.0.0.1:8000/#/user/login" + "?" + "verify="+number;
                     emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
                     return Response.SUCCESSOK();
                 } catch (Exception e) {
@@ -321,7 +321,7 @@ public class UserRestController {
         try {
             String number = this.getNumber(); //目前获得了令牌信息
             tockenCache.setTokenForUser(number, username);
-            String content = "http://39.104.208/#/user/login" + "?" + number;
+            String content = "http://127.0.0.1:8000/#/user/login" + "?" + number;
             emailService.sendSimEmail("caizj15@qq.com", "注册邮件", content);
             return Response.SUCCESSOK();
         } catch (Exception e) {

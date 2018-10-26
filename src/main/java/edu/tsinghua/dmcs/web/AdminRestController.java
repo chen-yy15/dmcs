@@ -89,8 +89,10 @@ public class AdminRestController {
 			User user = userService.getUserByuserid(userid);
 			if( user!=null ){
 				user.setCurrentAuthority("admin");
-				if(userService.update(user)!=0)
-					return Response.SUCCESSOK();
+				if(userService.update(user)!=0){
+					List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
+					return Response.SUCCESSOK().setData(adminGroupUsers);	//将数据返回从而实现实时的更新;
+				}
 			}
 		}
 		return Response.FAILWRONG().setMsg("用户添加失败");
@@ -176,8 +178,10 @@ public class AdminRestController {
 					fail++;
 			}
 		}
-		if(fail==0)
-		    return Response.SUCCESSOK().setMsg("更新成功");
+		if(fail==0) {
+			List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
+			return Response.SUCCESSOK().setMsg("更新成功").setData(adminGroupUsers);
+		}
 		return Response.FAILWRONG().setMsg(fail+"个用户更新失败");
 	}
 
@@ -195,7 +199,7 @@ public class AdminRestController {
 		if( checkifhost == 0 )
 			return Response.FAILWRONG().setMsg("身份不正确");
 		List<AdminGroupUser> adminGroupUsers = adminGroupService.selectadmingroup();
-
+		// 邮件未注册的用户无法被选出
 		return Response.SUCCESSOK().setData(adminGroupUsers);
 		//这里需要返回用户和表的全部信息
 		//return Response.FAILWRONG().setMsg("信息获取失败");

@@ -27,7 +27,7 @@
 	<select id="nogetuser" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select userid, currentAuthority, avatar, username, realname, useremail, emailcheckedflag,usertelephone,userworkplace
 		from user_information
-		where userid != #{userid, jdbcType=VARCHAR}
+		where userid != #{userid, jdbcType=VARCHAR} AND emailcheckedflag != 'false'
 	</select>
 	<select id="selectByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select

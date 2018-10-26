@@ -29,6 +29,6 @@
         m.avatar avatar, m.userName userName, m.userEmail userEmail,
         m.userworkPlace userworkPlace, m.userTelephone userTelephone
         from admin_group_zero d, user_information m
-        where d.userid = m.userid and d.auth10 != 'true'
+        where d.userid = m.userid and d.auth10 != 'true' and m.emailcheckedflag != 'false'
     </select>
 </mapper>
