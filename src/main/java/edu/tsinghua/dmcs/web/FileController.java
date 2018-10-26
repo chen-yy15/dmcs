@@ -281,6 +281,14 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
+    @ApiOperation(value="getCommonFileImage",notes="获取一般的文件信息")
+    @RequestMapping(value = "/getCommonFileImage", method = RequestMethod.GET)
+    public Response GetCommonFileImage() throws ParseException {
+        List<FileWindowModule> fileWindowModules = fileWindowService.NoSelectFileWindow();
+        return Response.SUCCESSOK().setData(fileWindowModules);
+    }
+
+    @DmcsController(authRequired = true)
     @ApiOperation(value="addFileImage",notes="加入文件与图片绑定关系")
     @RequestMapping(value = "/addFileImage", method = RequestMethod.POST)
     public Response FileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
