@@ -23,5 +23,7 @@ public interface FileWindowMapper {
 
     List<FileWindowModule> selectByModuleId(Integer moduleid);
 
+    List<FileWindowModule> selectCommonFileWindow();
+
     FileWindowModule selectFile_image(String fileimage);
 }
