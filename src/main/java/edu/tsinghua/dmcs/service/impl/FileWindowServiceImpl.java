@@ -42,10 +42,6 @@ public class FileWindowServiceImpl implements FileWindowService{
         return fileWindowMapper.selectById(createid);
     }
 
-    public FileWindowModule ExistFileWindow(String fileimage){
-        return fileWindowMapper.selectFile_image(fileimage);
-    }
-
     public List<FileWindowModule> SelectFileWindowByModule(Integer moduleid){
         return fileWindowMapper.selectByModuleId(moduleid);
     }

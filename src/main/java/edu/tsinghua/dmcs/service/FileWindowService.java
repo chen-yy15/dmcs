@@ -19,7 +19,5 @@ public interface FileWindowService {
 
     public List<FileWindowModule> SelectFileWindowByModule(Integer moduleid);
 
-    public FileWindowModule ExistFileWindow(String fileimage);
-
     public List<FileWindowModule> NoSelectFileWindow();
 }
