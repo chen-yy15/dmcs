@@ -13,8 +13,6 @@ public interface FileWindowMapper {
 
     int deleteById(Long createid);
 
-    int deleteFile_image(String fileimage);
-
     int addFileWindow(FileWindowModule fileWindowModule);
 
     int updateFileWindow(FileWindowModule fileWindowModule);
@@ -25,5 +23,4 @@ public interface FileWindowMapper {
 
     List<FileWindowModule> selectCommonFileWindow();
 
-    FileWindowModule selectFile_image(String fileimage);
 }
