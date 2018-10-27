@@ -194,22 +194,15 @@ public class FileController {
         JSONObject o = JSONObject.parseObject(body);
         System.out.println("删除文件: "+body);
         String fileid = o.getString("fileid");
+        String type = o.getString("type");
         Long Fileid = Long.valueOf(fileid);
         FileInfo fileInfo = fileInfoService.SelectFileInfo(Fileid);
         if(fileInfo==null){
             return Response.FAILWRONG().setMsg("文件不存在");
         }
         Cookie[] cookies = request.getCookies();
-        String admin_token=null;
-        if(cookies!=null){
-            for ( Cookie cookie:cookies) {
-                if(cookie.getName().equals("admin_token")){
-                    admin_token = cookie.getValue();
-                    admin_token = URLDecoder.decode(admin_token);
-                    System.out.println(admin_token);
-                }
-            }
-        }
+        String admin_token=this.translateCookie(cookies,"admin_token");
+
         if(admin_token==null)
             return Response.FAILWRONG().setMsg("权限验证错误");
         String userid = tockenCache.getUserid(admin_token);
@@ -232,7 +225,15 @@ public class FileController {
         if(num==0){
             return Response.FAILWRONG().setMsg("记录更新失败");
         }
-        return Response.SUCCESSOK();
+        if(type.equals("file")){
+            List<FileInfo> fileInfos = fileInfoService.SelectFile("file");
+            return Response.SUCCESSOK().setData(fileInfos);
+        }
+        if(type.equals("image")) {
+            List<FileInfo> fileInfos = fileInfoService.SelectFile("image");
+            return Response.SUCCESSOK().setData(fileInfos);
+        }
+        return Response.FAILWRONG();
     }
 
     @DmcsController(authRequired = true)
@@ -291,56 +292,90 @@ public class FileController {
     @DmcsController(authRequired = true)
     @ApiOperation(value="addFileImage",notes="加入文件与图片绑定关系")
     @RequestMapping(value = "/addFileImage", method = RequestMethod.POST)
-    public Response FileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        JSONObject o = JSONObject.parseObject(body);
-        String valueSelect = o.getString("valueSelect");
-        String fileid = o.getString("fileid");
-        String imageid = o.getString("imageid");
-        Integer moduleid = this.ChangeStringModuleid(valueSelect);
+    public Response FileWindow( HttpServletRequest request) throws ParseException {
 
-        if(fileid==null||imageid==null||moduleid==0){
-            return Response.FAILWRONG().setMsg("发送信息丢失");
+        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+        MultipartFile file = params.getFile("file");
+        MultipartFile image = params.getFile("image");
+        String fileimageDescirp = params.getParameter("description");
+        Cookie[] cookies = params.getCookies();
+
+        if(file==null || image ==null ||cookies ==null){
+            return Response.FAILWRONG().setMsg("信息缺失");
         }
-        FileInfo file= fileInfoService.SelectFileInfo(Long.valueOf(fileid));
-        FileInfo image = fileInfoService.SelectFileInfo(Long.valueOf(imageid));
-        if(file==null||image==null){
-            return Response.FAILWRONG().setMsg("文件不存在");
+        System.out.println("description:"+fileimageDescirp);
+
+        String dmcstoken = this.translateCookie(cookies,"dmcstoken");
+
+        String username = tockenCache.getUserNameByToken(dmcstoken);
+        if(username==null){
+            return Response.FAILWRONG().setMsg("身份验证失败");
+        }
+        FileWindowModule fileWindowModule =new FileWindowModule();
+        fileWindowModule.setFileimagedescrip(fileimageDescirp);
+        fileWindowModule.setInsertUser(username);
+        fileWindowModule.setOrderid(0);
+        fileWindowModule.setModuleid(0);
+        fileWindowModule.setWindowid(0);
+
+        try {
+            String fileName, imageName;
+            String FILEPATH, IMAGEPATH;
+
+            fileName = file.getOriginalFilename();
+            imageName = image.getOriginalFilename();
+            logger.info("上传的文件名为：" + fileName);
+            logger.info("上传图片名为：" + imageName);
+            FILEPATH = "/home/dmcs/file/fileWindow/";
+            FILEPATH = FILEPATH + fileName;
+
+            IMAGEPATH = "/home/dmcs/image/fileWindow/";
+            IMAGEPATH = IMAGEPATH + imageName;
+
+            File destfile = new File(FILEPATH);
+            File destimage = new File(IMAGEPATH);
+
+            if (!destfile.getParentFile().exists()) {
+                destfile.getParentFile().mkdirs();
+            }
+            if (!destimage.getParentFile().exists()) {
+                destimage.getParentFile().mkdirs();
+            }
+
+            if (destfile.createNewFile()) {
+                System.out.println("File is created");
+                destfile.setExecutable(true);
+                destfile.setWritable(true);
+                destfile.setReadable(true);
+            }
+            if (destimage.createNewFile()) {
+                System.out.println("ImageFile is created");
+                destimage.setExecutable(true);
+                destimage.setReadable(true);
+                destimage.setWritable(true);
+            }
+
+            file.transferTo(destfile);
+            fileWindowModule.setFilename(fileName);
+            fileWindowModule.setFilesrc(FILEPATH);
+
+            image.transferTo(destimage);
+            fileWindowModule.setImagename(imageName);
+            fileWindowModule.setImagesrc(IMAGEPATH);
+            fileWindowModule.setViewed("false");
+            int num = fileWindowService.AddFileWindow(fileWindowModule);
+            if(num == 0){
+                return Response.FAILWRONG().setMsg("插入失败");
+            }
+        }catch (IllegalStateException e) {
+            e.printStackTrace();
+            return Response.FAILWRONG();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.FAILWRONG();
         }
 
-        Cookie[] cookies = request.getCookies();
-        String admin_token=this.translateCookie(cookies,"admin_token");
-        if(admin_token==null){
-            return Response.FAILWRONG().setMsg("身份验证错误");
-        }
-        String userid = tockenCache.getUserid(admin_token);
-
-        String fileimage = moduleid+"file"+fileid+"image"+imageid;
-
-        FileWindowModule fileWindowModule = fileWindowService.ExistFileWindow(fileimage);
-        if(fileWindowModule!=null){
-            return Response.FAILWRONG().setErrcode(1);
-        }
-         /**添加对象操作**/
-        FileWindowModule fileWindow = new FileWindowModule();
-        fileWindow.setFileid(Long.valueOf(fileid));
-        fileWindow.setImage_fileid(Long.valueOf(imageid));
-        fileWindow.setFile_image(fileimage);
-        fileWindow.setViewed("false");
-        fileWindow.setModuleid(moduleid);
-        fileWindow.setWindowid(0);
-        fileWindowService.AddFileWindow(fileWindow);
-
-/*添加日志说明*/
-        SysOperationLog sysOpera = new SysOperationLog();
-        sysOpera.setFileid(Long.valueOf(fileid));
-        sysOpera.setOperationtime(new Date());
-        sysOpera.setOpDesc(file.getFilename()+"/与/"+image.getFilename()+"绑定");
-        sysOpera.setFilefullname(file.getFilename()+"/与/"+image.getFilename()+"绑定");
-        sysOpera.setUserid(userid);
-        sysOperationService.AddOperation(sysOpera);
-
-        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
-
+        List<FileWindowModule> fileWindowModules = fileWindowService.NoSelectFileWindow();
         return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
@@ -350,35 +385,36 @@ public class FileController {
     public Response DeleteFileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
         JSONObject o = JSONObject.parseObject(body);
         String createid = o.getString("createid");
-        String valueSelect = o.getString("valueSelect");
         if(createid==null){
             return Response.FAILWRONG().setMsg("信息丢失");
         }
         FileWindowModule fileWindow =  fileWindowService.SelectFileWindow(Long.valueOf(createid));
+
         String admin_token = this.translateCookie(request.getCookies(),"admin_token");
         String userid = tockenCache.getUserid(admin_token);
 
-        FileInfo file = fileInfoService.SelectFileInfo(fileWindow.getFileid());
-        FileInfo image = fileInfoService.SelectFileInfo(fileWindow.getImage_fileid());
-        Integer moduleid = this.ChangeStringModuleid(valueSelect);
-        Integer getModule = fileWindow.getModuleid();
         if(userid==null || fileWindow==null){
             return Response.FAILWRONG().setMsg("信息缺失");
         }
-        if(moduleid.intValue()!=getModule.intValue()){
-            return Response.FAILWRONG().setMsg("信息错误");
+
+        File file = new File(fileWindow.getFilesrc());
+        File image = new File(fileWindow.getImagesrc());
+        if(file.delete() && image.delete() ){
+            logger.info(fileWindow.getFilesrc()+" 文件删除");
+            logger.info(fileWindow.getImagesrc()+" 图片删除");
         }
+
         fileWindowService.DeleteFileWindow(Long.valueOf(createid));
 
         SysOperationLog sysOpe = new SysOperationLog();
-        sysOpe.setFileid(fileWindow.getFileid());
+        sysOpe.setFileid(fileWindow.getCreateid());
         sysOpe.setOperationtime(new Date());
-        sysOpe.setFilefullname(file.getFilename()+"/与/"+image.getFilename()+"解绑");
-        sysOpe.setOpDesc(file.getFilename()+"/与/"+image.getFilename()+"解绑");
+        sysOpe.setFilefullname(fileWindow.getFilename());
+        sysOpe.setOpDesc(fileWindow.getFilename()+" /与/ "+fileWindow.getImagename()+"删除");
         sysOpe.setUserid(userid);
         sysOperationService.AddOperation(sysOpe);
 
-        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
+        List<FileWindowModule> fileWindowModules = fileWindowService.NoSelectFileWindow();
         return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
