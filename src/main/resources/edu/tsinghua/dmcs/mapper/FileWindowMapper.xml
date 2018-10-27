@@ -27,6 +27,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM file_window_module
+        WHERE moduleid = 0
     </select>
     <select id="selectByModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT
@@ -48,34 +49,34 @@
         UPDATE file_window_module
         <set>
             <if test="moduleid !=null">
-                moduleid = #{moduleid,jdbcType=INTEGER}
+                moduleid = #{moduleid,jdbcType=INTEGER},
             </if>
             <if test="windowid !=null">
-                windowid = #{windowid,jdbcType=INTEGER}
+                windowid = #{windowid,jdbcType=INTEGER},
             </if>
             <if test="orderid !=null">
-                orderid = #{orderid,jdbcType=INTEGER}
+                orderid = #{orderid,jdbcType=INTEGER},
             </if>
             <if test="filename !=null">
-                filename = #{filename,jdbcType=VARCHAR}
+                filename = #{filename,jdbcType=VARCHAR},
             </if>
             <if test="filesrc !=null">
-                filesrc = #{filesrc,jdbcType=VARCHAR}
+                filesrc = #{filesrc,jdbcType=VARCHAR},
             </if>
             <if test="imagename !=null">
-                imagename = #{imagename,jdbcType=VARCHAR}
+                imagename = #{imagename,jdbcType=VARCHAR},
             </if>
             <if test="imagesrc !=null">
-                imagesrc = #{imagesrc,jdbcType=VARCHAR}
+                imagesrc = #{imagesrc,jdbcType=VARCHAR},
             </if>
             <if test="fileimagedescrip !=null">
-                fileimagedescrip = #{fileimagedescrip,jdbcType=VARCHAR}
+                fileimagedescrip = #{fileimagedescrip,jdbcType=VARCHAR},
             </if>
             <if test="viewed !=null">
-                viewed = #{viewed,jdbcType=VARCHAR}
+                viewed = #{viewed,jdbcType=VARCHAR},
             </if>
             <if test="insertUser !=null">
-                insertUser = #{insertUser,jdbcType=VARCHAR}
+                insertUser = #{insertUser,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE createid = #{createid, jdbcType=BIGINT}

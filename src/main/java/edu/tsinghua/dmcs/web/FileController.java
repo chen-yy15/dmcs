@@ -418,21 +418,46 @@ public class FileController {
         return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
+    // 这里包括文章与窗口的绑定操作， 文章与窗口关系的删除
     @DmcsController(authRequired = true)
-    @ApiOperation(value="updateFileWindow",notes = "更改文件与窗口的绑定")
-    @RequestMapping(value = "/updateFileWindow", method = RequestMethod.POST)
-    public Response updateFilewindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
+    @ApiOperation(value="updateFileImage",notes="更改图片与文章的关系")
+    @RequestMapping(value = "/updateFileImage", method = RequestMethod.POST)
+    public Response UpdateFileWindow(@RequestBody String body, HttpServletRequest request) throws ParseException {
 
         JSONObject o = JSONObject.parseObject(body);
-        String type = o.getString("type");
-        if(type=="view"){
+        String createid = o.getString("createid");
+        String valueSelect = o.getString("valueSelect");
+        Integer moduleid = this.ChangeStringModuleid(valueSelect);
+        if(createid == null ){
+            return Response.FAILWRONG().setMsg("信息错误");
+        }
+        FileWindowModule fileWindowModule = fileWindowService.SelectFileWindow(Long.valueOf(createid));
+        if(fileWindowModule == null) {
+            return Response.FAILWRONG().setMsg("信息错误");
+        }
+        Integer oldmoduleid = fileWindowModule.getModuleid();
+        fileWindowModule.setModuleid(moduleid);
+        fileWindowService.UpdateFileWindow(fileWindowModule);
 
-        }//改变文件的可视性
-        if(type=="common"){
 
-        }//改变文件的其它属性
+        /* 日志记录操作 */
 
-        return Response.FAILWRONG().setMsg("更新失败");
+        Cookie[] cookies = request.getCookies();
+        String admin_token = this.translateCookie(cookies,"admin_token");
+        String userid = tockenCache.getUserid(admin_token);
+
+
+        SysOperationLog sysOpe = new SysOperationLog();
+        sysOpe.setFileid(fileWindowModule.getCreateid());
+        sysOpe.setOperationtime(new Date());
+        sysOpe.setFilefullname(fileWindowModule.getFilename());
+
+        sysOpe.setOpDesc(fileWindowModule.getFilename()+" /与窗口 "+valueSelect+ (moduleid.equals(0)? "解绑":"绑定"));
+        sysOpe.setUserid(userid);
+        sysOperationService.AddOperation(sysOpe);
+
+        List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid.equals(0)?oldmoduleid:moduleid);
+        return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
     @DmcsController(authRequired = true)
