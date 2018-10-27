@@ -4,35 +4,33 @@ package edu.tsinghua.dmcs.entity;
  * Created by caizj on 18-10-9.
  */
 public class FileWindowModule {
-    private Long createid ;
 
-    private Long  fileid ;
+    private Long createid ;
 
     private Integer moduleid ;
 
     private Integer windowid ;
 
-    private Long imagefileid ;
-
-    private String viewed;
-
-    private String fileimage;
+    private Integer orderid;
 
     private String filename;
 
-    private String imagename;
-
     private String filesrc;
 
+    private String imagename;
+
     private String imagesrc;
+
+    private String fileimagedescrip;
+
+    private String viewed;
+
+    private String insertUser;
 
     public Long getCreateid() {return createid;}
 
     public void setCreateid(Long createid) {this.createid = createid;}
 
-    public Long getFileid() {return fileid;}
-
-    public void setFileid(Long fileid) {this.fileid = fileid;}
 
     public Integer getModuleid() {return moduleid;}
 
@@ -42,17 +40,9 @@ public class FileWindowModule {
 
     public void setWindowid(Integer windowid) {this.windowid = windowid;}
 
-    public Long getImage_fileid() {return imagefileid;}
+    public Integer getOrderid() {return orderid;}
 
-    public void setImage_fileid(Long imagefileid) {this.imagefileid = imagefileid;}
-
-    public String getViewed(){return viewed;}
-
-    public void setViewed(String viewed) {this.viewed = viewed;}
-
-    public String getFile_image(){return fileimage;}
-
-    public void setFile_image(String fileimage) {this.fileimage = fileimage;}
+    public void setOrderid(Integer order) {this.orderid = order;}
 
     public String getFilename(){return  filename;}
 
@@ -69,5 +59,17 @@ public class FileWindowModule {
     public String getImagesrc(){return imagesrc;}
 
     public void setImagesrc(String imagesrc){this.imagesrc = imagesrc;}
+
+    public String getFileimagedescrip() {return fileimagedescrip;}
+
+    public void setFileimagedescrip(String fileimagedescrip) { this.fileimagedescrip = fileimagedescrip; }
+
+    public String getViewed(){return viewed;}
+
+    public void setViewed(String viewed) {this.viewed = viewed;}
+
+    public String getInsertUser(){return  insertUser;}
+
+    public void setInsertUser(String insertUser) {this.insertUser = insertUser;}
 
 }
