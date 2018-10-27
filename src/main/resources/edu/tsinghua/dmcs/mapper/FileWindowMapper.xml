@@ -3,78 +3,79 @@
 <mapper namespace="edu.tsinghua.dmcs.mapper.FileWindowMapper">
     <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.FileWindowModule">
         <id column="createid" property="createid" jdbcType="BIGINT" />
-        <result column="fileid" property="fileid" jdbcType="BIGINT" />
         <result column="moduleid" property="moduleid" jdbcType="INTEGER" />
         <result column="windowid" property="windowid" jdbcType="INTEGER" />
-        <result column="imagefileid" property="imagefileid" jdbcType="BIGINT" />
-        <result column="viewed" property="viewed" jdbcType="VARCHAR" />
-        <result column="fileimage" property="fileimage" jdbcType="VARCHAR" />
+        <result column="orderid" property="orderid" jdbcType="INTEGER" />
         <result column="filename" property="filename" jdbcType="VARCHAR" />
-        <result column="imagename" property="imagename" jdbcType="VARCHAR" />
         <result column="filesrc" property="filesrc" jdbcType="VARCHAR" />
-        <result column="imagesrc" property="imagesrc" jdbcType="VARCHAR" />
+        <result column="imagename" property="imagename" jdbcType="VARCHAR" />
+        <result column="imagesrc"  property="imagesrc" jdbcType="VARCHAR" />
+        <result column="fileimagedescrip" property="fileimagedescrip" jdbcType="VARCHAR" />
+        <result column="viewed" property="viewed" jdbcType="VARCHAR" />
+        <result column="insertUser" property="insertUser" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Base_Column_List">
-        createid,fileid,moduleid,windowid,imagefileid,viewed,fileimage,filename,imagename,filesrc,imagesrc
+        createid,moduleid,windowid,orderid,filename,filesrc,imagename,imagesrc,fileimagedescrip,viewed,insertUser
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         SELECT
-        createid,fileid,moduleid,windowid,imagefileid,viewed
+        <include refid="Base_Column_List"/>
         FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
     </select>
-    <select id="selectFile_image" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT
-        createid,fileid,moduleid,windowid,imagefileid,viewed
-        FROM file_window_module
-        WHERE fileimage = #{fileimage, jdbcType=VARCHAR}
-    </select>
     <select id="selectCommonFileWindow" resultMap="BaseResultMap">
         SELECT
-        a.createid createid, a.moduleid moduleid, a.windowid windowid, a.viewed viewed, a.fileimage fileimage,
-        a.fileid fileid, a.imagefileid imagefileid, b.filename filename, ab.filename imagename,
-        b.filesrc filesrc, ab.filesrc imagesrc
-        FROM file_window_module a, file_info b, file_info ab
-        WHERE a.moduleid != 0 AND b.fileid = a.fileid  AND ab.fileid = a.imagefileid
+        <include refid="Base_Column_List"/>
+        FROM file_window_module
     </select>
     <select id="selectByModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT
-        a.createid createid, a.moduleid moduleid, a.windowid windowid, a.viewed viewed, a.fileimage fileimage,
-        a.fileid fileid, a.imagefileid imagefileid, b.filename filename, ab.filename imagename,
-        b.filesrc filesrc, ab.filesrc imagesrc
-        FROM file_window_module a, file_info b, file_info ab
-        WHERE a.moduleid = #{moduleid, jdbcType=INTEGER} AND b.fileid = a.fileid  AND ab.fileid = a.imagefileid
+        <include refid="Base_Column_List"/>
+        FROM file_window_module
+        WHERE moduleid = #{moduleid, jdbcType=INTEGER}
     </select>
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
     </delete>
-    <delete id="deleteFile_image" parameterType="java.lang.String">
-        DELETE FROM file_window_module
-        WHERE fileimage = #{fileimage, jdbcType=VARCHAR}
-    </delete>
     <insert id="addFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
-        INSERT INTO file_window_module(createid,fileid,moduleid,windowid,imagefileid,viewed,fileimage)
-        VALUES(#{createid,jdbcType=BIGINT},#{fileid,jdbcType=BIGINT},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},
-        #{imagefileid,jdbcType=BIGINT},#{viewed,jdbcType=VARCHAR},#{fileimage,jdbcType=VARCHAR})
+        INSERT INTO file_window_module(createid,moduleid,windowid,orderid,filename,filesrc,imagename,imagesrc,fileimagedescrip,viewed,insertUser)
+        VALUES (#{createid,jdbcType=BIGINT},#{moduleid,jdbcType=INTEGER},#{windowid,jdbcType=INTEGER},#{orderid,jdbcType=INTEGER},
+        #{filename,jdbcType=VARCHAR},#{filesrc,jdbcType=VARCHAR},#{imagename,jdbcType=VARCHAR},#{imagesrc,jdbcType=VARCHAR},
+        #{fileimagedescrip,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},#{insertUser,jdbcType=VARCHAR})
     </insert>
     <update id="updateFileWindow" parameterType="edu.tsinghua.dmcs.entity.FileWindowModule">
         UPDATE file_window_module
         <set>
-            <if test="fileid !=null">
-                fileid = #{fileid,jdbcType=BIGINT}
-            </if>
             <if test="moduleid !=null">
                 moduleid = #{moduleid,jdbcType=INTEGER}
             </if>
             <if test="windowid !=null">
                 windowid = #{windowid,jdbcType=INTEGER}
             </if>
-            <if test="imagefileid !=null">
-                imagefileid = #{imagefileid,jdbcType=BIGINT}
+            <if test="orderid !=null">
+                orderid = #{orderid,jdbcType=INTEGER}
+            </if>
+            <if test="filename !=null">
+                filename = #{filename,jdbcType=VARCHAR}
+            </if>
+            <if test="filesrc !=null">
+                filesrc = #{filesrc,jdbcType=VARCHAR}
+            </if>
+            <if test="imagename !=null">
+                imagename = #{imagename,jdbcType=VARCHAR}
+            </if>
+            <if test="imagesrc !=null">
+                imagesrc = #{imagesrc,jdbcType=VARCHAR}
+            </if>
+            <if test="fileimagedescrip !=null">
+                fileimagedescrip = #{fileimagedescrip,jdbcType=VARCHAR}
             </if>
             <if test="viewed !=null">
                 viewed = #{viewed,jdbcType=VARCHAR}
+            </if>
+            <if test="insertUser !=null">
+                insertUser = #{insertUser,jdbcType=VARCHAR}
             </if>
         </set>
         WHERE createid = #{createid, jdbcType=BIGINT}

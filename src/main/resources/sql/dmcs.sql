@@ -335,14 +335,17 @@ DROP TABLE IF EXISTS `file_window_module`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_window_module`(
   `createid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `fileid` BIGINT(20) COMMENT '操作的文件编号',
   `moduleid` INT COMMENT '对应模块编号',
   `windowid` INT COMMENT '对应窗口',
-  `imagefileid` BIGINT(20) COMMENT '关联的图片',
-  `fileimage`  VARCHAR(255) NOT NULL COMMENT '文件和图片关系',
+  `orderid` INT COMMENT '排序情况',
+  `filename` VARCHAR(255) DEFAULT NULL COMMENT '文件名',
+  `filesrc` VARCHAR(255) DEFAULT NULL COMMENT '文件地址',
+  `imagename` VARCHAR(255) DEFAULT NULL COMMENT '图片名',
+  `imagesrc` VARCHAR(255) DEFAULT NULL COMMENT '图片地址',
+  `fileimagedescrip` VARCHAR(255) DEFAULT NULL COMMENT '图片与文件关系描述',
   `viewed` VARCHAR(25) COMMENT '可视性判断',
-  PRIMARY KEY(`createid`),
-  FOREIGN KEY(`fileid`) REFERENCES file_info(`fileid`)ON DELETE CASCADE
+  `insertUser` VARCHAR(45) NOT NULL COMMENT '插入用户名',
+  PRIMARY KEY(`createid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
