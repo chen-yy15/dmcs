@@ -15,6 +15,8 @@ public interface FileWindowService {
 
     public int UpdateFileWindow(FileWindowModule fileWindowModule);
 
+    public int GetNumberOfModuleid(Integer moduleid);
+
     public FileWindowModule SelectFileWindow(Long createid);
 
     public List<FileWindowModule> SelectFileWindowByModule(Integer moduleid);
