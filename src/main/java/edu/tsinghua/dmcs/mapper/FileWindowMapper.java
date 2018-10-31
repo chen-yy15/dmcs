@@ -17,6 +17,8 @@ public interface FileWindowMapper {
 
     int updateFileWindow(FileWindowModule fileWindowModule);
 
+    int countByModuleId(Integer moduleid);
+
     FileWindowModule selectById(Long createid);
 
     List<FileWindowModule> selectByModuleId(Integer moduleid);
