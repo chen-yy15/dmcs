@@ -38,6 +38,10 @@ public class FileWindowServiceImpl implements FileWindowService{
         return num;
     }
 
+    public int GetNumberOfModuleid(Integer moduleid){
+        return fileWindowMapper.countByModuleId(moduleid);
+    }
+
     public FileWindowModule SelectFileWindow(Long createid){
         return fileWindowMapper.selectById(createid);
     }
