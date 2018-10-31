@@ -33,6 +33,12 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM file_window_module
+        WHERE moduleid = #{moduleid, jdbcType=INTEGER} ORDER  BY orderid ASC
+    </select>
+    <select id="countByModuleId" resultType="Integer" parameterType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM file_window_module
         WHERE moduleid = #{moduleid, jdbcType=INTEGER}
     </select>
     <delete id="deleteById" parameterType="java.lang.Long">
