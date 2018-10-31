@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sun.misc.BASE64Encoder;
@@ -428,6 +431,7 @@ public class FileController {
         String createid = o.getString("createid");
         String valueSelect = o.getString("valueSelect");
         Integer moduleid = this.ChangeStringModuleid(valueSelect);
+        // 当moduleid = 0时，表明删除文件与窗口的绑定操作。当moduleid !=0 时，表明添加文件与窗口的绑定操作。
         if(createid == null ){
             return Response.FAILWRONG().setMsg("信息错误");
         }
@@ -436,6 +440,26 @@ public class FileController {
             return Response.FAILWRONG().setMsg("信息错误");
         }
         Integer oldmoduleid = fileWindowModule.getModuleid();
+        if(moduleid.equals(0)){
+            fileWindowModule.setViewed("false");
+            int oldorderid = fileWindowModule.getOrderid();
+            //删除关系时，需要对列表中的记录进行重新的刷新操作。
+            List<FileWindowModule> fileWindowModuleList = fileWindowService.SelectFileWindowByModule(oldmoduleid);
+            for(FileWindowModule fileWindow: fileWindowModuleList){
+                int getid = fileWindow.getOrderid();
+                if(getid>oldorderid) {
+                    fileWindow.setOrderid(getid-1);
+                    fileWindowService.UpdateFileWindow(fileWindow);
+                }
+            }
+
+            fileWindowModule.setOrderid(0);
+        }
+        else {
+            int num = fileWindowService.GetNumberOfModuleid(moduleid);
+            fileWindowModule.setOrderid(num+1);
+        }
+        //选择目前有多少条记录，则插入
         fileWindowModule.setModuleid(moduleid);
         fileWindowService.UpdateFileWindow(fileWindowModule);
 
