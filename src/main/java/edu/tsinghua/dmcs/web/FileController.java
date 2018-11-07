@@ -1,10 +1,9 @@
 package edu.tsinghua.dmcs.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
-import edu.tsinghua.dmcs.entity.FileInfo;
-import edu.tsinghua.dmcs.entity.FileWindowModule;
-import edu.tsinghua.dmcs.entity.SysOperationLog;
+import edu.tsinghua.dmcs.entity.*;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.FileInfoService;
 import edu.tsinghua.dmcs.service.FileWindowService;
@@ -277,8 +276,8 @@ public class FileController {
         JSONObject o = JSONObject.parseObject(body);
         String module = o.getString("module");
         Integer moduleid = this.ChangeStringModuleid(module);
-        if(moduleid ==null){
-            return Response.FAILWRONG().setMsg("信息丢失");
+        if(moduleid == 0){
+            return Response.SUCCESSOK();
         }
         List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(moduleid);
         return Response.SUCCESSOK().setData(fileWindowModules);
@@ -485,6 +484,57 @@ public class FileController {
     }
 
     @DmcsController(authRequired = true)
+    @ApiOperation(value = "updaFIOrdVie", notes = "更改文件的可视性和顺序")
+    @RequestMapping(value = "/updaFIOrdVie", method = RequestMethod.POST)
+    public Response UpdaFIOrdVie(@RequestBody String body, HttpServletRequest request){
+        JSONObject o = JSONObject.parseObject(body);
+        String module =o.getString("module");
+
+        JSONArray FilImas = o.getJSONArray("fileImages");
+        if(FilImas == null){
+            return Response.FAILWRONG().setMsg("信息缺失");
+        }
+        int i =0;
+        int fail=0;
+        for (;i<FilImas.size();i++){
+            JSONObject object = (JSONObject) FilImas.get(i);
+
+            String createid_Str = object.getString("createid");
+            String orderid_Str = object.getString("orderid");
+            String viewed = object.getString("viewed");
+
+            FileWindowModule fileWindowModule = fileWindowService.SelectFileWindow(Long.valueOf(createid_Str));
+            if(fileWindowModule!=null){
+                fileWindowModule.setOrderid(Integer.valueOf(orderid_Str));
+                fileWindowModule.setViewed(viewed);
+                int num = fileWindowService.UpdateFileWindow(fileWindowModule);
+                if(num==0)
+                    fail++;
+            }
+        }
+
+        Cookie[] cookies = request.getCookies();
+        String admin_token = this.translateCookie(cookies,"admin_token");
+        String userid = tockenCache.getUserid(admin_token);
+
+
+
+        SysOperationLog sysOpe = new SysOperationLog();
+        sysOpe.setFileid(this.ChangeStringModuleid(module).longValue());
+        sysOpe.setFilefullname(module);
+        sysOpe.setOpDesc("change orderid or viewed of window: "+ module);
+        sysOpe.setUserid(userid);
+        sysOperationService.AddOperation(sysOpe);
+
+        if(fail==0) {
+            List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(this.ChangeStringModuleid(module));
+            return Response.SUCCESSOK().setMsg("更新成功").setData(fileWindowModules);
+        }
+
+        return Response.SUCCESSOK();
+    }
+
+    @DmcsController(authRequired = true)
     @ApiOperation(value= "webInformation", notes = "窗口信息发布")
     @RequestMapping(value = "/webInformation", method = RequestMethod.POST)
     public Response WebInformation(@RequestBody String body, HttpServletRequest request) throws ParseException {
@@ -523,6 +573,9 @@ public class FileController {
 
     private Integer ChangeStringModuleid(String module) {
        Integer moduleid = 0;
+       if(module == null) {
+           return moduleid;
+       }
        char a = module.charAt(0);
        switch (a){
            case 'a':
