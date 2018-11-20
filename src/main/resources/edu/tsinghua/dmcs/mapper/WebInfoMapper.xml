@@ -5,12 +5,13 @@
         <id column="infid" property="infid" jdbcType="BIGINT" />
         <result column="inftxt" property="inftxt" jdbcType="VARCHAR" />
         <result column="viewed" property="viewed" jdbcType="VARCHAR" />
+        <result column="linksrc" property="linksrc" jdbcType="VARCHAR" />
         <result column="inserUser" property="inserUser" jdbcType="VARCHAR" />
         <result column="insertTime" property="insertTime" jdbcType="TIMESTAMP" />
         <result column="outTime" property="outTime" jdbcType="TIMESTAMP" />
     </resultMap>
     <sql id="Base_Column_List">
-        infid,inftxt,viewed,inserUser,insertTime,outTime
+        infid,inftxt,viewed,linksrc,inserUser,insertTime,outTime
     </sql>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -29,7 +30,7 @@
     </delete>
     <insert id="addWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
         insert into user_information (infid,inftxt,viewed,inserUser,insertTime,outTime)
-        values (#{infid,jdbcType=BIGINT},#{inftxt,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},
+        values (#{infid,jdbcType=BIGINT},#{inftxt,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},#{linksrc,jdbcType=VARCHAR},
         #{inserUser,jdbcType=VARCHAR},#{insertTime,jdbcType=TIMESTAMP},#{outTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="updateWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
@@ -40,6 +41,9 @@
             </if>
             <if test="viewed !=null">
                 viewed = #{viewed,jdbcType=VARCHAR},
+            </if>
+            <if test="linksrc !=null">
+                linksrc = #{linksrc, jdbcType=VARCHAR},
             </if>
             <if test="inserUser !=null">
                 inserUser = #{inserUser,jdbcType=VARCHAR},

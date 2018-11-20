@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-
+<mapper namespace="edu.tsinghua.dmcs.mapper.EnumnameMapper">
+    <resultMap id="BaseResultMap" type="edu.tsinghua.dmcs.entity.EnumName" >
+        <id column="nameid" property="nameid" jdbcType="INTEGER" />
+        <result column="bandid" property="bandid" jdbcType="INTEGER" />
+        <result column="moduleType" property="moduleType" jdbcType="VARCHAR" />
+        <result column="namedetail" property="namedetail" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        nameid, bandid, moduleType, namedetail
+    </sql>
+    <select id="GetFirPageEnums" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM enum_name
+        WHERE moduleType = 'firstpage'
+    </select>
+    <select id="getEnumNameByid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM enum_name
+        WHERE nameid = #{nameid, jdbcType=INTEGER}
+    </select>
+    <update id="UpdateNamedetail" parameterType="edu.tsinghua.dmcs.entity.EnumName">
+       UPDATE enum_name
+       <set>
+           <if test="namedetail !=null">
+               namedetail = #{namedetail,jdbcType=VARCHAR},
+           </if>
+       </set>
+        WHERE nameid = #{nameid,jdbcType=INTEGER}
+    </update>
 </mapper>
