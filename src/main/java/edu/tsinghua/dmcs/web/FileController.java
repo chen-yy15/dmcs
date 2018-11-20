@@ -3,12 +3,15 @@ package edu.tsinghua.dmcs.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
-import edu.tsinghua.dmcs.entity.*;
+import edu.tsinghua.dmcs.entity.FileInfo;
+import edu.tsinghua.dmcs.entity.FileWindowModule;
+import edu.tsinghua.dmcs.entity.SysOperationLog;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.FileInfoService;
 import edu.tsinghua.dmcs.service.FileWindowService;
 import edu.tsinghua.dmcs.service.SysOperationService;
 import edu.tsinghua.dmcs.service.UserService;
+import edu.tsinghua.dmcs.util.CommonTool;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +42,7 @@ import java.util.List;
 @RequestMapping(value="/dmcs/api/v1/file")
 public class FileController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdminRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileInfoService fileInfoService;
@@ -50,6 +50,8 @@ public class FileController {
     private UserService userService;
     @Autowired
     TockenCache tockenCache;
+    @Autowired
+    CommonTool commonTool;
     @Autowired
     private SysOperationService sysOperationService;
     @Autowired
@@ -173,7 +175,7 @@ public class FileController {
             }
         }
         String userid = tockenCache.getUserid(admin_token);
-        String filemanage = this.produceToken(userid);
+        String filemanage = commonTool.ProduceToken(userid,this.securitySault);
         if(filemanage!=null){
             try{
                 Cookie cookie = new Cookie("managefile",filemanage);
@@ -203,7 +205,7 @@ public class FileController {
             return Response.FAILWRONG().setMsg("文件不存在");
         }
         Cookie[] cookies = request.getCookies();
-        String admin_token=this.translateCookie(cookies,"admin_token");
+        String admin_token=commonTool.translateCookie(cookies,"admin_token");
 
         if(admin_token==null)
             return Response.FAILWRONG().setMsg("权限验证错误");
@@ -275,7 +277,7 @@ public class FileController {
     public Response GetFileImage(@RequestBody String body) throws ParseException {
         JSONObject o = JSONObject.parseObject(body);
         String module = o.getString("module");
-        Integer moduleid = this.ChangeStringModuleid(module);
+        Integer moduleid = commonTool.ChangeStringModuleid(module);
         if(moduleid == 0){
             return Response.SUCCESSOK();
         }
@@ -307,7 +309,7 @@ public class FileController {
         }
         System.out.println("description:"+fileimageDescirp);
 
-        String dmcstoken = this.translateCookie(cookies,"dmcstoken");
+        String dmcstoken = commonTool.translateCookie(cookies,"dmcstoken");
 
         String username = tockenCache.getUserNameByToken(dmcstoken);
         if(username==null){
@@ -392,7 +394,7 @@ public class FileController {
         }
         FileWindowModule fileWindow =  fileWindowService.SelectFileWindow(Long.valueOf(createid));
 
-        String admin_token = this.translateCookie(request.getCookies(),"admin_token");
+        String admin_token = commonTool.translateCookie(request.getCookies(),"admin_token");
         String userid = tockenCache.getUserid(admin_token);
 
         if(userid==null || fileWindow==null){
@@ -429,7 +431,7 @@ public class FileController {
         JSONObject o = JSONObject.parseObject(body);
         String createid = o.getString("createid");
         String valueSelect = o.getString("valueSelect");
-        Integer moduleid = this.ChangeStringModuleid(valueSelect);
+        Integer moduleid = commonTool.ChangeStringModuleid(valueSelect);
         // 当moduleid = 0时，表明删除文件与窗口的绑定操作。当moduleid !=0 时，表明添加文件与窗口的绑定操作。
         if(createid == null ){
             return Response.FAILWRONG().setMsg("信息错误");
@@ -466,7 +468,7 @@ public class FileController {
         /* 日志记录操作 */
 
         Cookie[] cookies = request.getCookies();
-        String admin_token = this.translateCookie(cookies,"admin_token");
+        String admin_token = commonTool.translateCookie(cookies,"admin_token");
         String userid = tockenCache.getUserid(admin_token);
 
 
@@ -514,91 +516,23 @@ public class FileController {
         }
 
         Cookie[] cookies = request.getCookies();
-        String admin_token = this.translateCookie(cookies,"admin_token");
+        String admin_token = commonTool.translateCookie(cookies,"admin_token");
         String userid = tockenCache.getUserid(admin_token);
 
 
 
         SysOperationLog sysOpe = new SysOperationLog();
-        sysOpe.setFileid(this.ChangeStringModuleid(module).longValue());
+        sysOpe.setFileid(commonTool.ChangeStringModuleid(module).longValue());
         sysOpe.setFilefullname(module);
         sysOpe.setOpDesc("change orderid or viewed of window: "+ module);
         sysOpe.setUserid(userid);
         sysOperationService.AddOperation(sysOpe);
 
         if(fail==0) {
-            List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(this.ChangeStringModuleid(module));
+            List<FileWindowModule> fileWindowModules = fileWindowService.SelectFileWindowByModule(commonTool.ChangeStringModuleid(module));
             return Response.SUCCESSOK().setMsg("更新成功").setData(fileWindowModules);
         }
 
         return Response.SUCCESSOK();
     }
-
-    @DmcsController(authRequired = true)
-    @ApiOperation(value= "webInformation", notes = "窗口信息发布")
-    @RequestMapping(value = "/webInformation", method = RequestMethod.POST)
-    public Response WebInformation(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        return Response.FAILWRONG().setErrcode(0);
-    }
-
-    private String  produceToken(String Userid) {
-        String token = Userid + this.securitySault + System.currentTimeMillis();
-        String securetoken  = null;
-        try {
-            MessageDigest Digest= MessageDigest.getInstance("md5");
-            byte [] By=Digest.digest(token.getBytes());
-            securetoken = new  String(By);
-            securetoken = securetoken + "|" + (System.currentTimeMillis() + 1000*3600);
-            securetoken = new BASE64Encoder().encode(securetoken.getBytes());
-        }catch( Exception e) {
-            logger.error("fail to get md5 algorithm");
-        }
-        securetoken = URLEncoder.encode(securetoken);
-        return securetoken;
-    }
-
-    private String translateCookie(Cookie[] cookies, String cookname){
-        if(cookies==null||cookname==null){
-            return null;
-        }
-        String token =null;
-        for(Cookie cookie:cookies){
-            if(cookie.getName().equals(cookname)){
-                token = cookie.getValue();
-                token = URLDecoder.decode(token);
-            }
-        }
-        return token;
-    }
-
-    private Integer ChangeStringModuleid(String module) {
-       Integer moduleid = 0;
-       if(module == null) {
-           return moduleid;
-       }
-       char a = module.charAt(0);
-       switch (a){
-           case 'a':
-               if(module.equals("aa"))
-                   moduleid = 1010;
-               if(module.equals("ab"))
-                   moduleid = 1020;
-               if(module.equals("ac"))
-                   moduleid = 1030;
-               if(module.equals("ad"))
-                   moduleid = 1040;
-               break;
-           case 'b':  moduleid = 2000; break;
-           case 'c':  moduleid = 3000; break;
-           case 'd':  moduleid = 4000; break;
-           case 'e':  moduleid = 5000; break;
-           case 'f':  moduleid = 6000; break;
-           case 'g':  moduleid = 7000; break;
-           case 'h':  moduleid = 8000; break;
-           case 'i':  moduleid = 9000; break;
-           default: moduleid = 0; break;
-       }
-       return moduleid;
-    }
-
 }

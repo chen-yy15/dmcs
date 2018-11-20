@@ -9,6 +9,7 @@ import edu.tsinghua.dmcs.entity.User;
 import edu.tsinghua.dmcs.interceptor.DmcsController;
 import edu.tsinghua.dmcs.service.AdminGroupService;
 import edu.tsinghua.dmcs.service.UserService;
+import edu.tsinghua.dmcs.util.CommonTool;
 import edu.tsinghua.dmcs.util.TockenCache;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -19,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.List;
 
@@ -42,6 +40,9 @@ public class AdminRestController {
 	private UserService userService;
 	@Autowired
 	TockenCache tockenCache;
+	@Autowired
+	CommonTool commonTool;
+
 
 	@Value("${security.sault.login}")
 	private String securitySault;
@@ -52,7 +53,7 @@ public class AdminRestController {
 	@RequestMapping(value = "/addAdminuser", method = RequestMethod.POST)
 	public Response addAdminuser(@RequestBody String body) throws ParseException {
 		JSONObject o = JSONObject.parseObject(body);
-		System.out.println("addAdminuser: "+body);
+		logger.info("addAdminuser: "+body);
 		if(o == null ){
 			return Response.FAILWRONG().setMsg("发送失败");
 		}
@@ -220,7 +221,7 @@ public class AdminRestController {
 		   }//首次登录采用账号Userid登录
 		   if(admin_token==null) {
 			   try {
-				   String token = this.getToken(adminGroup.getUserid());
+				   String token = commonTool.ProduceToken(adminGroup.getUserid(),this.securitySault);
 				   String tem_token = URLEncoder.encode(token);
 				   Cookie cookie = new Cookie("admin_token", tem_token);
 				   cookie.setMaxAge(3600);
@@ -247,30 +248,4 @@ public class AdminRestController {
 		}
 		return Response.FAILWRONG();
 	}
-
-	private String  getToken(String Userid) {
-		String token = Userid + this.securitySault + System.currentTimeMillis();
-		String securetoken  = null;
-		try {
-			MessageDigest Digest= MessageDigest.getInstance("md5");
-			byte [] bs=Digest.digest(token.getBytes());
-			securetoken = new  String(bs);
-			securetoken = securetoken + "|" + (System.currentTimeMillis() + 1000*3600);
-			securetoken = new BASE64Encoder().encode(securetoken.getBytes());
-		}catch( Exception e) {
-			logger.error("fail to get md5 algorithm");
-		}
-		return securetoken;
-	}
-	public static BigInteger power(int a, int b){
-		BigInteger result = BigInteger.valueOf(1);
-		int i=0;
-		while(i<b){
-			result=result.multiply(BigInteger.valueOf(a));
-			i++;
-		}
-		return result;
-	}
-
-
 }
