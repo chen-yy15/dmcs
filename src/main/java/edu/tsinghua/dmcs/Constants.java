@@ -43,6 +43,7 @@ public interface Constants {
 
 	public static final String RC_AUTH_REQUIRED_MSG = "无权限操作";
 
+	public static final String RC_FIRST_PAGE = "firstpage";
 
 
 }
