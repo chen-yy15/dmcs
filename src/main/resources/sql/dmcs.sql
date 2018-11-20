@@ -397,6 +397,7 @@ CREATE TABLE `web_information`(
   `infid` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `inftxt` VARCHAR(255) COMMENT '公告内容',
   `viewed` VARCHAR(25) COMMENT '可视性设置false/true',
+  `linksrc` VARCHAR(255) COMMENT '链接文章',
   `inserUser` VARCHAR(45) COMMENT '插入用户',
   `insertTime` DATETIME COMMENT '插入时间',
   `outTime` DATETIME COMMENT '过期时间',
