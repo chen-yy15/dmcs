@@ -12,6 +12,8 @@ public class WebInformation {
 
     private String viewed;
 
+    private String linksrc;
+
     private String inserUser;
 
     private Date insertTime;
@@ -29,6 +31,10 @@ public class WebInformation {
     public String getViewed() {return viewed;}
 
     public void setViewed(String viewed) {this.viewed = viewed;}
+
+    public String getLinksrc() {return linksrc;}
+
+    public void setLinksrc(String linksrc) {this.linksrc=linksrc;}
 
     public String getInserUser() {return inserUser;}
 

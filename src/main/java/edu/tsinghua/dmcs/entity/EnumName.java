@@ -8,7 +8,7 @@ public class EnumName {
 
     private Integer bandid;
 
-    private  String  moduleType ;
+    private  String  moduleType ; //
 
     private String namedetail ;
 
