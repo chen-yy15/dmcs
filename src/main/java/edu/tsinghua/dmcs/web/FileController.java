@@ -166,14 +166,7 @@ public class FileController {
         String admin_token=null;
         if(cookies==null)
             return Response.FAILWRONG();
-        if(cookies!=null){
-            for(Cookie cookie:cookies){
-                if(cookie.getName().equals("admin_token")){
-                    admin_token = cookie.getValue();
-                    admin_token = URLDecoder.decode(admin_token);
-                }
-            }
-        }
+        admin_token = commonTool.translateCookie(cookies,"admin_token");
         String userid = tockenCache.getUserid(admin_token);
         String filemanage = commonTool.ProduceToken(userid,this.securitySault);
         if(filemanage!=null){
