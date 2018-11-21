@@ -44,6 +44,14 @@ public class EnumNameWebInfoServiceImpl implements EnumNameWebInfoService {
         return num;
     }
 
+    public int UpdateWebInfoVT(WebInformation webInformation){
+        int num = 0;
+        if(webInformation!=null) {
+            num = webInfoMapper.updateWebInfoVT(webInformation);
+        }
+        return num;
+    }
+
     public WebInformation SelectWebInfo(Long infid){
         return webInfoMapper.selectById(infid);
     }

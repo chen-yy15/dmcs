@@ -16,6 +16,8 @@ public interface EnumNameWebInfoService {
 
     public int UpdateWebInfo(WebInformation webInformation);
 
+    public int UpdateWebInfoVT(WebInformation webInformation); //仅更改可视性和内容
+
     public WebInformation SelectWebInfo(Long infid);
 
     public List<WebInformation> GetWebInfo();
