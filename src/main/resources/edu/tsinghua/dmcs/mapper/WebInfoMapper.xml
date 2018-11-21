@@ -29,7 +29,7 @@
          WHERE infid = #{infid, jdbcType=BIGINT}
     </delete>
     <insert id="addWebInfo" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
-        insert into user_information (infid,inftxt,viewed,inserUser,insertTime,outTime)
+        insert into web_information (infid,inftxt,viewed,linksrc,inserUser,insertTime,outTime)
         values (#{infid,jdbcType=BIGINT},#{inftxt,jdbcType=VARCHAR},#{viewed,jdbcType=VARCHAR},#{linksrc,jdbcType=VARCHAR},
         #{inserUser,jdbcType=VARCHAR},#{insertTime,jdbcType=TIMESTAMP},#{outTime,jdbcType=TIMESTAMP})
     </insert>
@@ -53,6 +53,18 @@
             </if>
             <if test="outTime != null">
                 outTime = #{outTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE infid = #{infid,jdbcType=BIGINT}
+    </update>
+    <update id="updateWebInfoVT" parameterType="edu.tsinghua.dmcs.entity.WebInformation">
+        UPDATE web_information
+        <set>
+            <if test="inftxt !=null">
+                inftxt = #{inftxt,jdbcType=VARCHAR},
+            </if>
+            <if test="viewed !=null">
+                viewed = #{viewed,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE infid = #{infid,jdbcType=BIGINT}
