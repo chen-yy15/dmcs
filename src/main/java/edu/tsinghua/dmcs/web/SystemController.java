@@ -1,5 +1,6 @@
 package edu.tsinghua.dmcs.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import edu.tsinghua.dmcs.Response;
 import edu.tsinghua.dmcs.entity.EnumName;
@@ -74,6 +75,15 @@ public class SystemController {
         return Response.SUCCESSOK().setData(enumNames);
     }
 
+    /***获取网站全部公告内容**/
+    @DmcsController(authRequired = true)
+    @ApiOperation(value="getwebinfo", notes = "获取网站全部公告的内容")
+    @RequestMapping(value = "/getwebinfo", method = RequestMethod.GET)
+    public Response GetWebInfo(){
+        List<WebInformation> webInformations = enumNameWebInfoService.GetWebInfo();
+        return Response.SUCCESSOK().setData(webInformations);
+    }
+
     @DmcsController(authRequired = true)
     @ApiOperation(value= "addwebInfo", notes = "添加网站公告信息")
     @RequestMapping(value = "/addwebInfo", method = RequestMethod.POST)
@@ -132,35 +142,45 @@ public class SystemController {
     }
 
     @DmcsController(authRequired = true)
-    @ApiOperation(value= "changeWebInfoView", notes = "改变窗口的可视性")
-    @RequestMapping(value = "/changeWebInfoView", method = RequestMethod.POST)
+    @ApiOperation(value= "updateWebinfo", notes = "改变窗口的可视性")
+    @RequestMapping(value = "/updateWebinfo", method = RequestMethod.POST)
     public Response ChangeViewInfo(@RequestBody String body, HttpServletRequest request) throws ParseException {
-        logger.info(body);
+        logger.info("改变窗口的可视性");
         JSONObject o = JSONObject.parseObject(body);
-        String infid_Str = o.getString("infid");
-        Long infid = Long.valueOf(infid_Str);
-        String viewed = o.getString("viewed");
-        if(infid==null)
-            return Response.FAILWRONG().setData(0);
-        if(!viewed.equals("false")&&!viewed.equals("true"))
-            return Response.FAILWRONG().setData(0);
-        WebInformation webinfo = enumNameWebInfoService.SelectWebInfo(infid); //获得对象
-        if(webinfo==null)
-            return Response.FAILWRONG().setData(0);
-        webinfo.setViewed(viewed);
-        enumNameWebInfoService.UpdateWebInfo(webinfo);
+        JSONArray WEBINFOS = o.getJSONArray("webinfos");
+        if(WEBINFOS == null)
+            return Response.FAILWRONG().setMsg("信息丢失");
 
-        Cookie[] cookies = request.getCookies(); //获取用户的信息
+        Cookie[] cookies = request.getCookies();
         String admin_token = commonTool.translateCookie(cookies,"admin_token");
         String userid = tockenCache.getUserid(admin_token);
 
-        SysOperationLog sysope =new SysOperationLog();
-        sysope.setFileid(0-infid);
-        sysope.setOperationtime(new Date());
-        sysope.setUserid(userid);
-        sysope.setFilefullname(webinfo.getInftxt());
-        sysope.setOpDesc("更改可视性: 从"+viewed+"到"+(viewed.equals("false")?"true":"false"));
-        sysOperationService.AddOperation(sysope);
+        int i =0;
+        int fail = 0;
+        for(;i<WEBINFOS.size();i++){
+            JSONObject webinfo = (JSONObject) WEBINFOS.get(i);
+
+            String infid_Str = webinfo.getString("infid");
+            Long infid = Long.valueOf(infid_Str);
+            String inftxt = webinfo.getString("inftxt");
+            String viewed = webinfo.getString("viewed");
+            WebInformation w = enumNameWebInfoService.SelectWebInfo(infid);
+            if(w!=null) {
+                if(!w.getInftxt().equals(inftxt) || !w.getViewed().equals(viewed)){
+                    SysOperationLog sysope = new SysOperationLog();
+                    sysope.setFileid(0-infid);
+                    sysope.setOperationtime(new Date());
+                    sysope.setUserid(userid);
+                    sysope.setFilefullname(w.getInftxt());
+                    sysope.setOpDesc("更改可视性或公告内容");
+                    sysOperationService.AddOperation(sysope); //日志记录s
+                }
+                w.setViewed(viewed);
+                w.setInftxt(inftxt);
+                if(enumNameWebInfoService.UpdateWebInfoVT(w)==0) //更改并判断是否正常
+                    fail++;
+            }
+        }
 
         List<WebInformation> webinfos = enumNameWebInfoService.GetWebInfo();
         return Response.SUCCESSOK().setData(webinfos);
