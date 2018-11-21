@@ -17,6 +17,8 @@ public interface WebInfoMapper {
 
     int updateWebInfo(WebInformation webInformation);
 
+    int updateWebInfoVT(WebInformation webInformation);
+
     WebInformation selectById(Long infid);
 
     List<WebInformation> getWebInfo();
