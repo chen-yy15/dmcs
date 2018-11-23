@@ -60,6 +60,10 @@ public class EnumNameWebInfoServiceImpl implements EnumNameWebInfoService {
         return webInfoMapper.getWebInfo();
     }
 
+    public List<WebInformation> GetShowWebInfo(){
+        return webInfoMapper.getShowWebInfo();
+    }
+
     public int UpdateNamedetail(EnumName enumName){
         int num = 0;
         if(enumName!=null){

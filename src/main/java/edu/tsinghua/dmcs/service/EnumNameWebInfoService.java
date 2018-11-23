@@ -22,6 +22,8 @@ public interface EnumNameWebInfoService {
 
     public List<WebInformation> GetWebInfo();
 
+    public List<WebInformation> GetShowWebInfo();
+
     public int UpdateNamedetail(EnumName enumName);
 
     public EnumName GetEnumNameByid(Integer nameid);
