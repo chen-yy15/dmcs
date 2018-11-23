@@ -22,4 +22,6 @@ public interface WebInfoMapper {
     WebInformation selectById(Long infid);
 
     List<WebInformation> getWebInfo();
+
+    List<WebInformation> getShowWebInfo();
 }
