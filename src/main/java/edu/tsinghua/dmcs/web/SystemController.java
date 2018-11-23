@@ -76,6 +76,14 @@ public class SystemController {
     }
 
     /***获取网站全部公告内容**/
+    @DmcsController(loginRequired = false)
+    @ApiOperation(value="getShowWebinfo", notes = "获取公布的公告信息")
+    @RequestMapping(value = "/getShowWebinfo", method = RequestMethod.GET)
+    public Response GetShowWebinfo() {
+        List<WebInformation> webInformations = enumNameWebInfoService.GetShowWebInfo();
+        return Response.SUCCESSOK().setData(webInformations);
+    }
+
     @DmcsController(authRequired = true)
     @ApiOperation(value="getwebinfo", notes = "获取网站全部公告的内容")
     @RequestMapping(value = "/getwebinfo", method = RequestMethod.GET)
