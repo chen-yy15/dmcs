@@ -24,6 +24,12 @@
         <include refid="Base_Column_List" />
         from web_information
     </select>
+    <select id="getShowWebInfo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        from web_information
+        WHERE viewed = 'true'
+    </select>
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM web_information
          WHERE infid = #{infid, jdbcType=BIGINT}
