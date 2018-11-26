@@ -528,4 +528,15 @@ public class FileController {
 
         return Response.SUCCESSOK();
     }
+
+    @DmcsController(loginRequired = false)
+    @ApiOperation(value = "getPageList", notes = "获取首页文件")
+    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    public Response GetPageList(@RequestBody String body, HttpServletRequest request) throws ParseException{
+        JSONObject o = JSONObject.parseObject(body);
+        String valueSelect = o.getString("valueSelect");
+        Integer moduleid = commonTool.ChangeStringModuleid(valueSelect);
+        List<FileWindowModule> fileWindowModules=fileWindowService.SelectPageListByModule(moduleid);
+        return Response.SUCCESSOK().setData(fileWindowModules);
+    }
 }

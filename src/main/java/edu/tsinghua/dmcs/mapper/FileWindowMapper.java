@@ -23,6 +23,8 @@ public interface FileWindowMapper {
 
     List<FileWindowModule> selectByModuleId(Integer moduleid);
 
+    List<FileWindowModule> selectPageList(Integer moduleid); /* 获取对应的moduelid下对应的文章即可 */
+
     List<FileWindowModule> selectCommonFileWindow();
 
 }
