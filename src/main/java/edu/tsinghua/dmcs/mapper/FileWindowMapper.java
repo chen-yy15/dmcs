@@ -27,4 +27,5 @@ public interface FileWindowMapper {
 
     List<FileWindowModule> selectCommonFileWindow();
 
+    List<FileWindowModule> getFirstPageList();
 }

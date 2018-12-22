@@ -24,4 +24,6 @@ public interface FileWindowService {
     public List<FileWindowModule> NoSelectFileWindow();
 
     public List<FileWindowModule>  SelectPageListByModule(Integer moduleid);
+
+    public List<FileWindowModule>  GetFirstPageList();
 }

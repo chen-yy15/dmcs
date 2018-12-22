@@ -539,4 +539,12 @@ public class FileController {
         List<FileWindowModule> fileWindowModules=fileWindowService.SelectPageListByModule(moduleid);
         return Response.SUCCESSOK().setData(fileWindowModules);
     }
+
+    @DmcsController(loginRequired = false)
+    @ApiOperation(value = "getFirstPageList", notes = "获得首页模块的文件")
+    @RequestMapping(value = "/getFirstPageList", method = RequestMethod.GET)
+    public Response GetFirstPageList(){
+        List<FileWindowModule> fileWindowModules=fileWindowService.GetFirstPageList();
+        return Response.SUCCESSOK().setData(fileWindowModules);
+    }
 }

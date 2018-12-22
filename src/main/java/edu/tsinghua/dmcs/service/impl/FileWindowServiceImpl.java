@@ -57,5 +57,9 @@ public class FileWindowServiceImpl implements FileWindowService{
     public List<FileWindowModule>  SelectPageListByModule(Integer moduleid){
         return fileWindowMapper.selectPageList(moduleid);
     }
+
+    public List<FileWindowModule>  GetFirstPageList(){
+        return fileWindowMapper.getFirstPageList();
+    }
 }
 

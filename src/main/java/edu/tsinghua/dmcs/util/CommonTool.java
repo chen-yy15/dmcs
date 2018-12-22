@@ -64,6 +64,8 @@ public class CommonTool {
                     moduleid = 1030;
                 if(module.equals("ad"))
                     moduleid = 1040;
+                if(module.equals("ae"))
+                    moduleid = 1050;
                 break;
             case 'b':  moduleid = 2000; break;
             case 'c':  moduleid = 3000; break;
