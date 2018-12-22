@@ -47,6 +47,12 @@
         FROM file_window_module
         WHERE moduleid = #{moduleid, jdbcType=INTEGER} AND viewed='true' ORDER  BY orderid ASC
     </select>
+    <select id="getFirstPageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid = "Base_Column_List"/>
+        FROM file_window_module
+        WHERE moduleid &lt; 2000 AND viewed = 'true' ORDER BY orderid ASC
+    </select>
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM file_window_module
         WHERE createid = #{createid, jdbcType=BIGINT}
