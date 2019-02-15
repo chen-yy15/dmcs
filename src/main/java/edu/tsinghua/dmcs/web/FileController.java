@@ -29,6 +29,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.text.ParseException;
@@ -286,14 +287,19 @@ public class FileController {
         return Response.SUCCESSOK().setData(fileWindowModules);
     }
 
+    //在这个模块需要完成图片，文件以及图片文件的绑定上传。
+    //但是通过统一的模块进行处理，发现一些逻辑没办法实现，需要进行分开处理，这个自己需要进行很好的安排。
     @DmcsController(authRequired = true)
     @ApiOperation(value="addFileImage",notes="加入文件与图片绑定关系")
     @RequestMapping(value = "/addFileImage", method = RequestMethod.POST)
     public Response FileWindow( HttpServletRequest request) throws ParseException {
 
         MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
-        MultipartFile file = params.getFile("file");
-        MultipartFile image = params.getFile("image");
+        MultipartFile file = params.getFile("file");   // 存储在目录 '/home/dmcs/file/fileWindow' 下
+        MultipartFile image = params.getFile("image"); // 存储在目录 '/home/dmcs/image/fileWindow'下
+        List<MultipartFile> shortimages =params.getFiles("shortimage"); // 存储在目录'/home/dmcs/image/shortimages'下
+
+
         String fileimageDescirp = params.getParameter("description");
         Cookie[] cookies = params.getCookies();
 
@@ -316,7 +322,7 @@ public class FileController {
         fileWindowModule.setWindowid(0);
 
         try {
-            String fileName, imageName;
+            String fileName, imageName, fileFirstName;
             String FILEPATH, IMAGEPATH;
 
             fileName = file.getOriginalFilename();
@@ -324,6 +330,10 @@ public class FileController {
             logger.info("上传的文件名为：" + fileName);
             logger.info("上传图片名为：" + imageName);
             FILEPATH = "/home/dmcs/file/fileWindow/";
+            fileFirstName= fileName.substring(0,fileName.lastIndexOf("."));
+            System.out.println(fileFirstName);
+
+            FILEPATH = FILEPATH + fileFirstName+"/"; // 存储地址 /home/dmcs/image/fileWindow/filename/filename.suffixname
             FILEPATH = FILEPATH + fileName;
 
             IMAGEPATH = "/home/dmcs/image/fileWindow/";
@@ -364,6 +374,36 @@ public class FileController {
             if(num == 0){
                 return Response.FAILWRONG().setMsg("插入失败");
             }
+
+            // 附件图片插入程序
+            num = 0;
+            String shortImagePath, shortImageName,suffinxName;
+            String SHORTIMAGEPATH;
+            shortImagePath= "/home/dmcs/file/fileWindow/"+fileFirstName+"/";;
+
+
+            for( MultipartFile item:shortimages){
+                shortImageName = item.getOriginalFilename();
+                suffinxName = shortImageName.substring(shortImageName.lastIndexOf(".") + 1);
+                logger.info("上传文件: "+fileName+" 附加图片"+shortImageName);
+                SHORTIMAGEPATH = shortImagePath + shortImageName;
+                File destShortImage = new File(SHORTIMAGEPATH);
+
+                if(!destShortImage.getParentFile().exists()) {
+                    destShortImage.getParentFile().mkdirs();
+                }
+                if(destShortImage.createNewFile()) {
+                    logger.info("文件"+shortImagePath+"created");
+                    destShortImage.setExecutable(true);
+                    destShortImage.setWritable(true);
+                    destShortImage.setReadable(true);
+                }
+                item.transferTo(destShortImage);
+                num ++;
+            }
+            if(num<shortimages.size())
+                logger.error("pictures were fewer !!!");
+
         }catch (IllegalStateException e) {
             e.printStackTrace();
             return Response.FAILWRONG();
@@ -393,13 +433,21 @@ public class FileController {
         if(userid==null || fileWindow==null){
             return Response.FAILWRONG().setMsg("信息缺失");
         }
-
-        File file = new File(fileWindow.getFilesrc());
         File image = new File(fileWindow.getImagesrc());
-        if(file.delete() && image.delete() ){
-            logger.info(fileWindow.getFilesrc()+" 文件删除");
-            logger.info(fileWindow.getImagesrc()+" 图片删除");
-        }
+        image.delete(); // 删除图片
+
+        // 删除文件所在的目录
+
+        String filename = fileWindow.getFilename();
+        filename = filename.substring(0,filename.lastIndexOf("."));
+        String FilePath = "/home/dmcs/file/fileWindow/"+filename+"/";
+
+       try{
+           this.deletefile(FilePath);
+           logger.info("已删除文件"+FilePath);
+       }catch(Exception e) {
+           e.printStackTrace();
+       }
 
         fileWindowService.DeleteFileWindow(Long.valueOf(createid));
 
@@ -546,5 +594,30 @@ public class FileController {
     public Response GetFirstPageList(){
         List<FileWindowModule> fileWindowModules=fileWindowService.GetFirstPageList();
         return Response.SUCCESSOK().setData(fileWindowModules);
+    }
+
+    public static boolean deletefile(String delpath) throws Exception {
+        try{
+            File file = new File(delpath);
+            if (!file.isDirectory()) {
+                file.delete();
+            } else if (file.isDirectory()) {
+                String[] filelist = file.list();
+                for (int i = 0; i < filelist.length; i++) {
+                    File delfile = new File(delpath + filelist[i]);
+                    if (!delfile.isDirectory()) {
+                        delfile.delete();
+                        System.out.println(delfile.getAbsolutePath() + "删除文件成功");
+                    } else if (delfile.isDirectory()) {
+                        deletefile(delpath + filelist[i]);
+                    }
+                }
+                System.out.println(file.getAbsolutePath() + "删除成功");
+                file.delete();
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("deletefile() Exception:" + e.getMessage());
+        }
+        return true;
     }
 }

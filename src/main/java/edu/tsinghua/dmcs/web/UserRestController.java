@@ -137,7 +137,7 @@ public class UserRestController {
 		u.setEmailCheckedFlag("false");
 		u.setRealname(null);
 		u.setUserIdNumber(null);
-		u.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");
+		u.setAvatar("/image/ZiESqWwCXBRQoaPONSJe.png");      //设置为固定值，即为默认值
 		u.setUserTelephone_1(null);
 		u.setUserworkPlace(workPlace);
 		u.setUserWeixin(null);
@@ -147,11 +147,11 @@ public class UserRestController {
 		if(num==0)
 			return Response.FAILWRONG().setErrcode(4).setMsg("注册失败");
 		u.setPassword(null);
-		/*****添加头像****/
+		/*****添加头像*****/
 
 		Avatar avatar = new Avatar();
 		avatar.setUserId(userId);
-		avatar.setAvatar("http://39.104.208.4:80/image/ZiESqWwCXBRQoaPONSJe.png");
+		avatar.setAvatar("/image/ZiESqWwCXBRQoaPONSJe.png");
 		avatar.setSelectFlag("true");
 		avatarService.AddAvatar(avatar);
 
@@ -467,9 +467,9 @@ public class UserRestController {
 			//logger.info("文件的后缀名为：" + suffixName);
 
 			// 设置文件存储路径
-				String FILEPATH = "http://39.104.208.4:80/home/dmcs/image/usr";//实际存储
-			String filePath = "//home/dmcs/image/usr";//存储到硬盘上
-				String PATH = FILEPATH + fileName;
+				// String FILEPATH = "http://39.104.208.4:80/home/dmcs/image/usr";//实际存储
+			String filePath = "/home/dmcs/image/usr";//存储到硬盘上
+				// String PATH = FILEPATH + fileName;
 			String path = filePath +fileName;
 
 			File dest = new File(path);
@@ -485,7 +485,7 @@ public class UserRestController {
 			}
 			// 检测是否存在目录
 			file.transferTo(dest);// 文件写入
-			u.setAvatar(PATH);
+			u.setAvatar(path);
 			u.setPassword(null);
 			int num  = userService.update(u);
 			if(num==0)

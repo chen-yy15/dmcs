@@ -330,6 +330,9 @@ CREATE TABLE `file_info`(
 --
 -- Table structure for table file_window_module
 --
+--
+-- 这里主要是利用这个file_window_module模块完成file_image_module进行绑定操作
+--
 DROP TABLE IF EXISTS `file_window_module`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -422,7 +425,7 @@ CREATE TABLE `enum_name`(
 --
 -- Table structure for
 --
-/**************************************************************************/Lq
+/**************************************************************************/
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
